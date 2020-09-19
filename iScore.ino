@@ -69,8 +69,6 @@ Personal Score Board II
 #define SCREEN_STATS_PLAYER_TOP_Y 13
 #define SCREEN_STATS_PLAYER_BOTTOM_Y 31
 
-#define SCREEN_STATS_SCORE_TIME_X 20
-
 #define SCREEN_STATS_SCORE_LEFT_X 40
 #define SCREEN_STATS_SCORE_TOP_Y 15
 #define SCREEN_STATS_SCORE_BOTTOM_Y 33
@@ -81,6 +79,9 @@ Personal Score Board II
 #define SCREEN_STATS_POINTS_LINE1_X 37
 #define SCREEN_STATS_POINTS_LINE2_X 54
 #define SCREEN_STATS_POINTS_LINE3_X 71
+
+#define SCREEN_TIME_X 10
+#define SCREEN_TIME_Y 15
 
 // offset from screen margins
 #define SCREEN_MARGIN_OFFSET_X 4
@@ -97,13 +98,14 @@ Personal Score Board II
 // The application states
 #define APP_STATE_UNDEF 0
 #define APP_STATE_STARTING 1
-#define APP_STATE_SET_PLAYERS 2
-#define APP_STATE_SET_SERVE 3
-#define APP_STATE_PLAYING 4
-#define APP_STATE_WINNING 5
-#define APP_STATE_PAUSING 6
+#define APP_STATE_SET_SERVE 2
+#define APP_STATE_PLAYING 3
+#define APP_STATE_WINNING 4
+#define APP_STATE_PAUSING 5
+#define APP_STATE_PAUSING_TIME 6
 #define APP_STATE_STATS 7
-#define APP_STATE_CONFIG_DOUBLES 8
+#define APP_STATE_STATS_TIME 8
+#define APP_STATE_CONFIG_DOUBLES 9
 
 // The button states
 // pressed are odd values so that
@@ -111,7 +113,6 @@ Personal Score Board II
 // the button was pressed
 #define BUT_STATE_UNPRESSED 0
 #define BUT_STATE_PRESSED 1
-#define BUT_STATE_LONG_PRESSED 3
 
 // The number of milliseconds for a long press
 #define LONG_PRESS_TIME 500
@@ -466,10 +467,6 @@ void printButtonState(uint8_t buttonState)
   {
     display.print("p ");
   }
-  else if (buttonState == BUT_STATE_LONG_PRESSED)
-  {
-    display.print("l ");
-  }
   else
   {
     display.print("u ");
@@ -483,13 +480,8 @@ uint8_t readButtonState(bool prevState, bool currState)
   // then the button was released (so it had been pressed)
   if (prevState != currState && currState == false)
   {
-    // check how long the button had been pressed
-    // if(bounce.previousDuration() > LONG_PRESS_TIME) {
-    //   return BUT_STATE_LONG_PRESSED;
-    // } else {
     return BUT_STATE_PRESSED;
   }
-  //}
   return BUT_STATE_UNPRESSED;
 }
 
@@ -529,11 +521,17 @@ void performAction()
   case APP_STATE_PAUSING:
     performActionPausing();
     break;
+  case APP_STATE_PAUSING_TIME:
+    performActionPausingTime();
+    break;
   case APP_STATE_WINNING:
     performActionWinning();
     break;
   case APP_STATE_STATS:
     performActionStats();
+    break;
+  case APP_STATE_STATS_TIME:
+    performActionStatsTime();
     break;
   }
 }
@@ -541,12 +539,6 @@ void performAction()
 // perform the default action for all app states
 void performActionDefault()
 {
-  // if(buttonStateMode == BUT_STATE_LONG_PRESSED) {
-  //     appState = APP_STATE_STARTING;
-  //     resetScorepad();
-  //     modelChanged = true;
-  //     return;
-  // }
 }
 
 // deform the action for the App_Starting state
@@ -598,7 +590,7 @@ void performActionSettingServe()
   // JHW Temp
   appState = APP_STATE_PLAYING;
   // appState = APP_STATE_WINNING;
-  winner = THEM;
+  // winner = THEM;
   modelChanged = true;
 }
 
@@ -619,8 +611,8 @@ void performActionPlaying()
 
   if (buttonStateBack == BUT_STATE_PRESSED)
   {
-    // We want to go back but we have only just started playing
-    if (scorepadIdx == 255)
+    // We want to go back and no points have been scored
+    if (scorepadIdx == 0)
     {
       appState = APP_STATE_SET_SERVE;
       resetScorepad();
@@ -838,6 +830,34 @@ void performActionStats()
     return;
   }
 
+  if (buttonStateMode == BUT_STATE_PRESSED)
+  {
+    appState = APP_STATE_STATS_TIME;
+    modelChanged = true;
+    return;
+  }
+
+  // us or them restart
+  if (buttonStateUs == BUT_STATE_PRESSED || buttonStateThem == BUT_STATE_PRESSED)
+  {
+    appState = APP_STATE_SET_SERVE;
+    resetScorepad();
+    modelChanged = true;
+    return;
+  }
+}
+
+// perform the action for the App_Stats_time state
+// must set modelChanged if the model is changed by this action
+void performActionStatsTime()
+{
+  if (buttonStateBack == BUT_STATE_PRESSED)
+  {
+    appState = APP_STATE_STATS;
+    modelChanged = true;
+    return;
+  }
+
   // us or them restart
   if (buttonStateUs == BUT_STATE_PRESSED || buttonStateThem == BUT_STATE_PRESSED)
   {
@@ -855,6 +875,34 @@ void performActionPausing()
   if (buttonStateBack == BUT_STATE_PRESSED)
   {
     appState = APP_STATE_PLAYING;
+    modelChanged = true;
+    return;
+  }
+
+  if (buttonStateMode == BUT_STATE_PRESSED)
+  {
+    appState = APP_STATE_PAUSING_TIME;
+    modelChanged = true;
+    return;
+  }
+
+  // us or them restart
+  if (buttonStateUs == BUT_STATE_PRESSED || buttonStateThem == BUT_STATE_PRESSED)
+  {
+    appState = APP_STATE_SET_SERVE;
+    resetScorepad();
+    modelChanged = true;
+    return;
+  }
+}
+
+// perform the action for the App_Pausing_Time state
+// must set modelChanged if the model in changed by this action
+void performActionPausingTime()
+{
+  if (buttonStateBack == BUT_STATE_PRESSED)
+  {
+    appState = APP_STATE_PAUSING;
     modelChanged = true;
     return;
   }
@@ -1048,7 +1096,6 @@ inline bool hasServe(uint8_t index, uint8_t who)
 // update the display according to the state
 void updateDisplay()
 {
-
   // clear the display
   clearDisplay();
 
@@ -1068,6 +1115,10 @@ void updateDisplay()
     // points
     drawStatsScreen(true);
     break;
+  case APP_STATE_PAUSING_TIME:
+    // draw the playing time
+    drawPlayingTimeScreen();
+    break;
   case APP_STATE_WINNING:
     // draw the winning screen without the running
     // points
@@ -1077,6 +1128,10 @@ void updateDisplay()
     // draw the stats screen without the running
     // points
     drawStatsScreen(false);
+    break;
+  case APP_STATE_STATS_TIME:
+    // draw the playing time
+    drawPlayingTimeScreen();
     break;
   }
 
@@ -1203,10 +1258,28 @@ void drawStatsScreen(bool runningPoints)
   drawStatsFrame();
   drawStatsPlayers();
   drawStatsGrid();
-  printTime(playingTime);
   drawStatsGameScoresAt(SCREEN_STATS_SCORE_LEFT_X, SCREEN_STATS_SCORE_TOP_Y, THEM, runningPoints);
   drawStatsGameScoresAt(SCREEN_STATS_SCORE_LEFT_X, SCREEN_STATS_SCORE_BOTTOM_Y, US, runningPoints);
 
+  drawRestart();
+
+  // display.setTextSize(1);
+  // display.print(F(LBL_WINNER));
+  // display.println(LBL_PLAYER[winner]);
+
+  // display.print(LBL_PLAYER[US]);
+  // printGameScores(US, runningPoints);
+  // display.print(LBL_PLAYER[THEM]);
+  // printGameScores(THEM, runningPoints);
+  // display.print(F(LBL_PLAYING_TIME));
+  // printTime(playingTime);
+}
+
+// draw the playing time screen
+void drawPlayingTimeScreen()
+{
+  drawTimeFrame();
+  printTime(playingTime);
   drawRestart();
 
   // display.setTextSize(1);
@@ -1306,23 +1379,24 @@ void drawStatsGameScoresAt(uint8_t x, uint8_t y, uint8_t who, bool runningPoints
 void printTime(unsigned long millis)
 {
 
-  display.setFont(liberationSans_8ptFontInfo);
+  display.setFont(liberationSans_10ptFontInfo);
 
   unsigned long secs = millis / 1000;
 
   uint8_t value = numberOfHours(secs);
-  tPoint pos = printAt(SCREEN_STATS_SCORE_TIME_X, 0, LBL_PLAYING_TIME);
+  tPoint pos = printAt(SCREEN_TIME_X, SCREEN_TIME_Y, LBL_PLAYING_TIME);
   if (value != 0)
   {
-    pos = print2DigitsZeroPaddedAt(SCREEN_STATS_SCORE_TIME_X, 0, value);
-    pos = printAt(pos.x, 0, LBL_SEPARATOR);
+    pos = print2DigitsZeroPaddedAt(pos.x, SCREEN_TIME_Y, value);
+    pos = printAt(pos.x, SCREEN_TIME_Y, LBL_SEPARATOR);
   }
 
   value = numberOfMinutes(secs);
-  pos = print2DigitsZeroPaddedAt(pos.x, 0, value);
-  pos = printAt(pos.x, 0, LBL_SEPARATOR);
+  pos = print2DigitsZeroPaddedAt(pos.x, SCREEN_TIME_Y, value);
+  pos = printAt(pos.x, SCREEN_TIME_Y, LBL_SEPARATOR);
   value = numberOfSeconds(secs);
-  print2DigitsZeroPaddedAt(pos.x, 0, value);
+
+  print2DigitsZeroPaddedAt(pos.x, SCREEN_TIME_Y, value);
 }
 
 // draw the battery icon
@@ -1559,6 +1633,22 @@ void drawButtonLabels()
   display.drawLine(SCREEN_BUTTON_RIGHT_MARGIN_X, SCREEN_MENU_MARGIN_Y, SCREEN_BUTTON_RIGHT_MARGIN_X, SCREEN_END_Y, TS_8b_Gray);
 }
 
+// draw the Time frame
+void drawTimeFrame()
+{
+  drawTimeMenu();
+  drawButtonLabels();
+}
+
+// draw the button labels
+void drawTimeMenu()
+{
+  drawBatteryIcon(SCREEN_BATTERY_X, SCREEN_START_Y);
+  drawImageAt(SCREEN_START_X, SCREEN_START_Y, img_Time);
+  display.drawLine(SCREEN_START_X, SCREEN_MENU_MARGIN_Y, SCREEN_END_X, SCREEN_MENU_MARGIN_Y, TS_8b_Gray);
+  display.drawLine(SCREEN_BUTTON_LEFT_MARGIN_X, SCREEN_END_Y, SCREEN_BUTTON_RIGHT_MARGIN_X, SCREEN_END_Y, TS_8b_Gray);
+}
+
 /////////////////////////////////////////////
 // Convenience functions for printing numbers
 /////////////////////////////////////////////
@@ -1573,6 +1663,7 @@ tPoint print2DigitsZeroPaddedAt(uint8_t x, uint8_t y, uint8_t value)
   itoa(tens, buffer, 10);
   tPoint pos = printAt(x, y, buffer);
   uint8_t units = value % 10;
+  itoa(units, buffer, 10);
   pos = printAt(pos.x, y, buffer);
 
   // if(value < 100) {

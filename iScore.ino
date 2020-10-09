@@ -1,16 +1,31 @@
-// #include <Adafruit_SPITFT.h>
-// #include <Adafruit_SPITFT_Macros.h>
-// #include <gfxfont.h>
-
 /*********************************************************************
-Personal Score Board II
+iScore
 *********************************************************************/
+
+/*
+Copyright (C) 2020 Jason Hewitt
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+*/
 
 // #include <Wire.h>
 // #include <SPI.h>
+#include <stdlib.h>
 #include <TinyScreen.h>
 
 #include "iScore.h"
+#include "tinyScreenBattery.h"
 #include "fonts/TinyFont.h"
 #include "fonts/windings3.h"
 #include "images/images.h"
@@ -269,11 +284,15 @@ static const tImage *IMG_STATS_PLAYER[][4] = {{&img_Happy_blue, &img_Happy_green
 // create the display
 // Adafruit_SSD1306 Display(OLED_MOSI, OLED_CLK, OLED_DC, OLED_RESET, OLED_CS);
 
+//Get the display to be used
 //Library must be passed the board type
 //TinyScreenDefault for TinyScreen shields
 //TinyScreenAlternate for alternate address TinyScreen shields
 //TinyScreenPlus for TinyScreen+
 TinyScreen display = TinyScreen(TinyScreenPlus);
+
+// get the TinyScreenBattery
+TinyScreenBattery battery = TinyScreenBattery();
 
 // Labels for the buttons
 #define LBL_BUT_MODE "MODE"
@@ -310,8 +329,8 @@ uint8_t buttonStateBack = BUT_STATE_UNPRESSED;
 uint8_t buttonStateUs = BUT_STATE_UNPRESSED;
 uint8_t buttonStateThem = BUT_STATE_UNPRESSED;
 
-// battery state
-uint8_t currentPctBat = 0;
+// current battery state
+uint8_t batteryState = 0;
 
 // the score pad
 uint8_t scorepad[SCOREPAD_MAX_SIZE][3];
@@ -366,13 +385,6 @@ void setupdisplay()
 ////////////////////////////////////////////////
 void loop()
 {
-  // unsigned long time = millis();
-
-  if (appState == APP_STATE_STARTING)
-  {
-    // updateBatteryState();
-  }
-
   // update the button states
   updateButtonStates();
 
@@ -386,13 +398,21 @@ void loop()
     updateDisplay();
   }
 
-  delay(5000);
+  // unsigned long time = millis();
+  updateBatteryState();
+
+  if (modelChanged)
+  {
+    drawBatteryIcon(SCREEN_BATTERY_X, SCREEN_START_Y);
+  }
+
+  delay(50);
 
   // any changes to the model will have been handled
   modelChanged = false;
 
   // Display current battery voltage
-  float voltage = getBattVoltage();
+  float voltage = battery.getVCC();
   printDebug(voltage);
 
   //  Serial.print("Loop Time");
@@ -405,21 +425,16 @@ void loop()
 ///////////////////////
 
 // handle updating the battery state
-// void updateBatteryState() {
-//   // read the raw value from the pin
-//   float fvbat = analogRead(VBATPIN);
+void updateBatteryState()
+{
+  uint8_t newState = battery.getState();
 
-//   // convert it to raw volatage ()
-//   fvbat = (fvbat * 2 * 3.3); // we divided by 2, so multiply back, Multiply by 3.3V, our reference voltage
-//   uint8_t pctBat = ((fvbat / MAX_VBAT) * 100); // calculate the percentage
-
-//   // check if the change in voltage is bigger
-//   // than 10 %
-//   if(abs(currentPctBat - pctBat) >= 10) {
-//     currentPctBat = pctBat;
-//     modelChanged = true;
-//   }
-// }
+  if (batteryState != newState)
+  {
+    batteryState = newState;
+    modelChanged = true;
+  }
+}
 
 ///////////////////////////
 // Handle the Button states
@@ -1169,8 +1184,6 @@ void drawStartScreen()
   // draw the press to start
   display.setFont(liberationSans_8ptFontInfo);
   printAtCentered(50, LBL_TO_START_PRESS);
-
-  drawBatteryIcon(SCREEN_BATTERY_X, SCREEN_START_Y);
 }
 
 // draw the setting serve screen
@@ -1407,16 +1420,25 @@ void printTime(unsigned long millis)
 void drawBatteryIcon(uint8_t x, uint8_t y)
 {
   uint8_t height = 8;
-  uint8_t width = 13;
+  uint8_t width = 12;
 
   // Draw the border
   display.drawRect(x, y, width, height, TSRectangleNoFill, TS_8b_White);
   // draw the contact at the end
   display.drawLine(x + width, y + 2, x + width, y + 5, TS_8b_White);
-  // get the current value of the battery 0 to width - 3 (0 to 100%)
-  uint8_t charge = 5;
-  // draw the contents
-  display.drawRect(x + 1, y + 1, charge, height - 2, TSRectangleFilled, TS_8b_Red);
+
+  // change the colour depending on the charge
+  uint16_t colour = TS_8b_Green;
+  if (batteryState <= 2)
+  {
+    colour = TS_8b_Red;
+  }
+
+  // clear the battery content
+  display.drawRect(x + 1, y + 1, 10, height - 2, TSRectangleFilled, TS_8b_Black);
+
+  // draw the content
+  display.drawRect(x + 1, y + 1, batteryState, height - 2, TSRectangleFilled, colour);
 }
 
 // draw the playing frame
@@ -1560,7 +1582,6 @@ void drawStatsPlayers()
 // draw the button labels
 void drawPlayingMenu()
 {
-  drawBatteryIcon(SCREEN_BATTERY_X, SCREEN_START_Y);
   drawImageAt(SCREEN_START_X, SCREEN_START_Y, img_Play);
   display.drawLine(SCREEN_START_X, SCREEN_MENU_MARGIN_Y, SCREEN_END_X, SCREEN_MENU_MARGIN_Y, TS_8b_Gray);
   display.drawLine(SCREEN_BUTTON_LEFT_MARGIN_X, SCREEN_END_Y, SCREEN_BUTTON_RIGHT_MARGIN_X, SCREEN_END_Y, TS_8b_Gray);
@@ -1601,7 +1622,6 @@ void drawStatsFrame()
 // draw the button labels
 void drawStatsMenu()
 {
-  drawBatteryIcon(SCREEN_BATTERY_X, SCREEN_START_Y);
   drawImageAt(SCREEN_START_X, SCREEN_START_Y, img_Stats);
   display.drawLine(SCREEN_START_X, SCREEN_MENU_MARGIN_Y, SCREEN_END_X, SCREEN_MENU_MARGIN_Y, TS_8b_Gray);
   display.drawLine(SCREEN_BUTTON_LEFT_MARGIN_X, SCREEN_END_Y, SCREEN_BUTTON_RIGHT_MARGIN_X, SCREEN_END_Y, TS_8b_Gray);
@@ -1647,7 +1667,6 @@ void drawTimeFrame()
 // draw the button labels
 void drawTimeMenu()
 {
-  drawBatteryIcon(SCREEN_BATTERY_X, SCREEN_START_Y);
   drawImageAt(SCREEN_START_X, SCREEN_START_Y, img_Time);
   display.drawLine(SCREEN_START_X, SCREEN_MENU_MARGIN_Y, SCREEN_END_X, SCREEN_MENU_MARGIN_Y, TS_8b_Gray);
   display.drawLine(SCREEN_BUTTON_LEFT_MARGIN_X, SCREEN_END_Y, SCREEN_BUTTON_RIGHT_MARGIN_X, SCREEN_END_Y, TS_8b_Gray);
@@ -1805,7 +1824,7 @@ tPoint drawImageAt(uint8_t x, uint8_t y, tImage image)
 void printDebug(char *buffer)
 {
 
-  display.setFont(tiny_6ptFontInfo);
+  display.setFont(liberationSans_10ptFontInfo);
   display.setCursor(10, 0);
   display.print(buffer);
 }
@@ -1813,7 +1832,7 @@ void printDebug(char *buffer)
 // prints debug info
 void printDebug(int number)
 {
-  display.setFont(tiny_6ptFontInfo);
+  display.setFont(liberationSans_10ptFontInfo);
   display.setCursor(20, 0);
   display.print(number);
 }
@@ -1824,57 +1843,4 @@ void printDebug(float number)
   display.setFont(liberationSans_10ptFontInfo);
   display.setCursor(20, 0);
   display.print(number);
-}
-
-// Battery
-// This function gets the battery VCC internally, you can checkout this link
-// if you want to know more about how:
-// http://atmel.force.com/support/articles/en_US/FAQ/ADC-example
-float getVCC()
-{
-  SYSCTRL->VREF.reg |= SYSCTRL_VREF_BGOUTEN;
-  while (ADC->STATUS.bit.SYNCBUSY == 1)
-    ;
-  ADC->SAMPCTRL.bit.SAMPLEN = 0x1;
-  while (ADC->STATUS.bit.SYNCBUSY == 1)
-    ;
-  ADC->INPUTCTRL.bit.MUXPOS = 0x19; // Internal bandgap input
-  while (ADC->STATUS.bit.SYNCBUSY == 1)
-    ;
-  ADC->CTRLA.bit.ENABLE = 0x01; // Enable ADC
-  while (ADC->STATUS.bit.SYNCBUSY == 1)
-    ;
-  ADC->SWTRIG.bit.START = 1;   // Start conversion
-  ADC->INTFLAG.bit.RESRDY = 1; // Clear the Data Ready flag
-  while (ADC->STATUS.bit.SYNCBUSY == 1)
-    ;
-  ADC->SWTRIG.bit.START = 1; // Start the conversion again to throw out first value
-  while (ADC->INTFLAG.bit.RESRDY == 0)
-    ; // Waiting for conversion to complete
-  uint32_t valueRead = ADC->RESULT.reg;
-  while (ADC->STATUS.bit.SYNCBUSY == 1)
-    ;
-  ADC->CTRLA.bit.ENABLE = 0x00; // Disable ADC
-  while (ADC->STATUS.bit.SYNCBUSY == 1)
-    ;
-  SYSCTRL->VREF.reg &= ~SYSCTRL_VREF_BGOUTEN;
-
-  float vcc = (1.1 * 1023.0) / valueRead;
-  return vcc;
-}
-
-// Calculate the battery voltage
-float getBattVoltage(void)
-{
-  const int VBATTpin = A4;
-  float VCC = getVCC();
-
-  // Use resistor division and math to get the voltage
-  float resistorDiv = 0.5;
-  float ADCres = 1023.0;
-  float battVoltageReading = analogRead(VBATTpin);
-  battVoltageReading = analogRead(VBATTpin); // Throw out first value
-  float battVoltage = VCC * battVoltageReading / ADCres / resistorDiv;
-
-  return battVoltage;
 }

@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 #include <TinyScreen.h>
-#include "tinyScreenBattery.h"
+#include "TinyScreenBattery.h"
 
 /*
   Constructor

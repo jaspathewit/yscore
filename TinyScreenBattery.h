@@ -15,8 +15,8 @@ limitations under the License.
 
 */
 
-#ifndef tinyScreenBattery_h
-#define tinyScreenBattery_h
+#ifndef TinyScreenBattery_h
+#define TinyScreenBattery_h
 
 #define TINYSCREEN_REV_UNKNOWN 0
 #define TINYSCREEN_REV_3 1

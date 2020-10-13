@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data type="font" name="MarVoSym_10pt">
+    <family>MarVoSym</family>
+    <size>10</size>
+    <ascent>12</ascent>
+    <descent>3</descent>
+    <style>Regular</style>
+    <widthType>proportional</widthType>
+    <antialiasing>true</antialiasing>
+    <foreground>ffffffff</foreground>
+    <background>ff000000</background>
+    <multiplicityWidth>1</multiplicityWidth>
+    <multiplicityHeight>1</multiplicityHeight>
+    <string>·º»¶</string>
+    <converted></converted>
+    <chars>
+        <char character="·" code="00b7">
+            <picture format="png">iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAcklEQVQYlZWPsQ3AIBADnRBRsAA7sQg1ze+AxAqswhAUFLAFCzhFkiIKTSy5OUu2vAEgFtpXEAB2Y8w6iTEy50xrLe/ayyklkuSckyJCrfU7eDTGoHOOn/HWGnrvOB5Qa0UIAaWUC4gIvfdUSr3Gt98HTywLQnICGFOmAAAAAElFTkSuQmCC</picture>
+        </char>
+        <char character="º" code="00ba">
+            <picture format="png">iVBORw0KGgoAAAANSUhEUgAAAAcAAAALCAYAAACzkJeoAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAdUlEQVQYlZXQsQ0DIQxAUROQ6KnYgY5dGIMB2IOJGIEFmIANQD/F6aIkp4uUX/q5sKxEBLnpcQf/off+soCIEGOk944xhnP2wtYaADnnT0wpcTbnxDl3oLWWMQbv1VoPLKXw3VqLEAJKa41S6nLl3lvUrw89AX8FWwBbxvlKAAAAAElFTkSuQmCC</picture>
+        </char>
+        <char character="»" code="00bb">
+            <picture format="png">iVBORw0KGgoAAAANSUhEUgAAAAcAAAALCAYAAACzkJeoAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAb0lEQVQYlZ3QsQ3DIABE0XPkioIlEBswABJbsJEZhgHomYQpaPgpIktJLCtSfvua022S0E2PO/iJe0pJ3vsLtNakGCPfjTEwxiBJ1Fo/MOfMORTnHHNOAHrvJ7xQEqUU1lqEEK5oreU4jndg+/uEJ/eZU3ExAUumAAAAAElFTkSuQmCC</picture>
+        </char>
+        <char character="¶" code="00b6">
+            <picture format="png">iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAdElEQVQYlZWPsQ3DIBREzxaVd6BgCyZgG9ayXDMIruh/ywR0PBeJIktxirzyTrqnWyShB9an8GexbZv0nkISzjlyztRa+RQpJVprAJgZCiFQSuGOmbH23nWep8YYXy4k4b1n33fmnK+pu1wSMUaO42D5++AFe9JNVPPErlAAAAAASUVORK5CYII=</picture>
+        </char>
+    </chars>
+</data>

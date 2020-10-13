@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data type="font" name="MarVoSym_10pt">
+    <family>MarVoSym</family>
+    <size>12</size>
+    <ascent>15</ascent>
+    <descent>3</descent>
+    <style>Regular</style>
+    <widthType>proportional</widthType>
+    <antialiasing>true</antialiasing>
+    <foreground>ffffffff</foreground>
+    <background>ff000000</background>
+    <multiplicityWidth>1</multiplicityWidth>
+    <multiplicityHeight>1</multiplicityHeight>
+    <string>·º»¶</string>
+    <converted>/home/jason/development/arduino/iScore/fonts/MarVoSym_10pt.h</converted>
+    <chars>
+        <char character="·" code="00b7">
+            <picture format="png">iVBORw0KGgoAAAANSUhEUgAAAAgAAAAOCAYAAAASVl2WAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAlElEQVQYlbWQsQnDMBREn0UwmsC9CvXawI17G7SBwQMYeRrNoBUEWkCVwZV2UYpAwCE2aXLwq3v8O64BKjcSd+ZvgNYaKeU1MI4jx3Fgrb2OUEoRQiClhDHmukPf9+Sc8d7Tdd33kkII5nnGOQfA4xOIMbKuK/u+nz+UUpimiWEY3iYAy7LUbdtq27aV16qna/j71E9UMitZRe2rFQAAAABJRU5ErkJggg==</picture>
+        </char>
+        <char character="º" code="00ba">
+            <picture format="png">iVBORw0KGgoAAAANSUhEUgAAAAgAAAAOCAYAAAASVl2WAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAgElEQVQYlbWQwQ3DIBAEF3QNUAV0gigGQSk0gztBFIPE5hERhdhyXp7n7Tz2VgEgbtB34QOCMQbGmE1Q+CpZSgEA5Jw3iQBoreUYg2MMOue47h+h1srFcRy74L3nLyGEtyAibK2dhN47RYSIMZ7CRUqJSmtNra/nmHPub/4d6ooXUvN2jw4rA/sAAAAASUVORK5CYII=</picture>
+        </char>
+        <char character="»" code="00bb">
+            <picture format="png">iVBORw0KGgoAAAANSUhEUgAAAAgAAAAOCAYAAAASVl2WAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAgklEQVQYlbWQsQ3DMBAD6cC/wY8hdRpC6zy0izWVBtAUGuAFME0sA0ngKmF7V5DcABA3edzB3wh7zhkppa+wtQaEEDjn5HvmnIwxEgB4HMeHUGslXgupqhxjLDjGoKpeAgCa2RLM7ISXICLsvbP3ThFZwn42dneUUkAS7r6WbPj71U+3JHRACt0FtQAAAABJRU5ErkJggg==</picture>
+        </char>
+        <char character="¶" code="00b6">
+            <picture format="png">iVBORw0KGgoAAAANSUhEUgAAAAgAAAAOCAYAAAASVl2WAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAiElEQVQYlbWQsQkEIRRE/ypGimADRgYWYi8L24qJpdiKWIVgA2Iwl5wLd7tsctzAi+YxfP5GRKCHsKfyN8F7T0IIovcNJ8YYpJQw54RSCqfAOcdxHOi9Y+UUQgioteI7SimQtRallEv5scAYw77vaK3dCwutNWKMGGPcCwvnHHLOkFJio7+/+gWRq4I/wWdqHQAAAABJRU5ErkJggg==</picture>
+        </char>
+    </chars>
+</data>

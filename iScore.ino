@@ -22,40 +22,21 @@ limitations under the License.
 // #include <Wire.h>
 // #include <SPI.h>
 #include <stdlib.h>
-#include <TinyScreen.h>
 
 #include "iScore.h"
-#include "tinyScreenBattery.h"
-#include "fonts/TinyFont.h"
-#include "fonts/windings3.h"
+
+#include "TinyScreenExt.h"
+#include "TinyScreenBattery.h"
+#include "fonts/SansSerif_8pt.h"
+#include "fonts/SansSerif_10pt.h"
+#include "fonts/SansSerif_12pt.h"
+#include "fonts/MarVoSym_10pt.h"
+
+//#include "fonts/TinyFont.h"
+//#include "fonts/windings3.h"
 #include "images/images.h"
 
-// macros from DateTime.h
-/* Useful Constants */
-#define SECS_PER_MIN (60UL)
-#define SECS_PER_HOUR (3600UL)
-#define SECS_PER_DAY (SECS_PER_HOUR * 24L)
-
-/* Useful Macros for getting elapsed time */
-#define numberOfSeconds(_time_) (_time_ % SECS_PER_MIN)
-#define numberOfMinutes(_time_) ((_time_ / SECS_PER_MIN) % SECS_PER_MIN)
-#define numberOfHours(_time_) ((_time_ % SECS_PER_DAY) / SECS_PER_HOUR)
-#define elapsedDays(_time_) (_time_ / SECS_PER_DAY)
-
-// The maximum value when the battery is fully charged
-#define MAX_VBAT 4321
-
 // Screen dimensions and locations
-#define SCREEN_WIDTH 96
-#define SCREEN_WIDTH_HALF SCREEN_WIDTH / 2
-#define SCREEN_HEIGHT 64
-#define SCREEN_HEIGHT_HALF SCREEN_HEIGHT / 2
-
-#define SCREEN_START_X 0
-#define SCREEN_END_X 95
-#define SCREEN_START_Y 0
-#define SCREEN_END_Y 95
-
 #define SCREEN_MENU_MARGIN_Y 10
 
 #define SCREEN_BATTERY_X 82
@@ -101,8 +82,6 @@ limitations under the License.
 // offset from screen margins
 #define SCREEN_MARGIN_OFFSET_X 4
 #define SCREEN_MARGIN_OFFSET_Y 6
-// offset between two characters on the same line
-#define SCREEN_CHAR_OFFSET 2
 
 // button state
 #define BUTTON_MODE TSButtonUpperLeft
@@ -140,7 +119,7 @@ limitations under the License.
 #define LBL_BATTERY "Bat: "
 
 #define LBL_WHOSERVES "Who serves?"
-#define LBL_RESTART "Restart "
+#define LBL_RESTART " Restart "
 
 #define LBL_SEPARATOR ":"
 #define LBL_SPACE " "
@@ -148,24 +127,21 @@ limitations under the License.
 #define LBL_PERCENT "%"
 
 // define the modifyable labels
-#define LBL_US "US  "
-#define LBL_THEM "THEM"
-#define LBL_NONE "NONE"
-#define LBL_US_THEM "US    THEM"
+#define LBL_US " US  "
+#define LBL_THEM " THEM"
+#define LBL_NONE " NONE"
 
 #define LBL_YOU "YOU "
-#define LBL_WINNER "Winner: "
-#define LBL_PLAYING_TIME "Time: "
+#define LBL_PLAYING_TIME "Time Played"
 
-// "text" when it is in windings3 font are the
+// "text" when it is in MarVoSym font are the
 // Up Down left and right arrows
-#define LBL_UP_ARROW "p"
-#define LBL_DOWN_ARROW "q"
-#define LBL_LEFT_ARROW "t"
-#define LBL_RIGHT_ARROW "u"
+#define LBL_UP_ARROW "C"
+#define LBL_DOWN_ARROW "D"
+#define LBL_LEFT_ARROW "A"
+#define LBL_RIGHT_ARROW "B"
 
-#define LBL_ALL_ARROW "tupq"
-#define LBL_UPDOWN_ARROW "pq"
+#define LBL_UPDOWN_ARROW "CD"
 
 // Array of pointers to the digit images
 // makes it easier to map between 0-9
@@ -289,7 +265,7 @@ static const tImage *IMG_STATS_PLAYER[][4] = {{&img_Happy_blue, &img_Happy_green
 //TinyScreenDefault for TinyScreen shields
 //TinyScreenAlternate for alternate address TinyScreen shields
 //TinyScreenPlus for TinyScreen+
-TinyScreen display = TinyScreen(TinyScreenPlus);
+TinyScreenExt display = TinyScreenExt(TinyScreenPlus);
 
 // get the TinyScreenBattery
 TinyScreenBattery battery = TinyScreenBattery();
@@ -403,7 +379,7 @@ void loop()
 
   if (modelChanged)
   {
-    drawBatteryIcon(SCREEN_BATTERY_X, SCREEN_START_Y);
+    drawBatteryIcon(SCREEN_BATTERY_X, display.yMin);
   }
 
   delay(50);
@@ -412,8 +388,8 @@ void loop()
   modelChanged = false;
 
   // Display current battery voltage
-  float voltage = battery.getVCC();
-  printDebug(voltage);
+  //float voltage = battery.getVCC();
+  //printDebug(voltage);
 
   //  Serial.print("Loop Time");
   //  Serial.print(millis() - time);
@@ -468,7 +444,7 @@ void updateButtonStates()
 
 void printButtonStates()
 {
-  display.setFont(liberationSans_8ptFontInfo);
+  display.setFont(SansSerif_8pt);
   display.setCursor(0, 50);
   display.print("M ");
   printButtonState(buttonStateMode);
@@ -1172,17 +1148,17 @@ void clearDisplay()
 // draw the start screen
 void drawStartScreen()
 {
-  display.setFont(tiny_6ptFontInfo);
-  tPoint point = printAt(0, 0, LBL_COPYRIGHT);
+  display.setFont(SansSerif_8pt);
+  display.printAt(0, 0, LBL_COPYRIGHT);
 
   // draw the logo
-  point = drawImageAt(0, 14, img_BT32x32);
+  display.drawImageAt(0, 14, &img_BT32x32);
 
   // draw the name appname
-  point = drawImageAt(32, 16, img_AppName63x22);
+  display.drawImageAt(32, 16, &img_AppName63x22);
 
   // draw the press to start
-  display.setFont(liberationSans_8ptFontInfo);
+  display.setFont(SansSerif_12pt);
   printAtCentered(50, LBL_TO_START_PRESS);
 }
 
@@ -1196,32 +1172,25 @@ void drawSettingServeScreen()
 // draw the who serves
 void drawWhoServes()
 {
-  display.setFont(liberationSans_8ptFontInfo);
-  tPoint pos = printAt(SCREEN_BUTTON_LEFT_MARGIN_X + SCREEN_MARGIN_OFFSET_X,
-                       SCREEN_MENU_MARGIN_Y + SCREEN_MARGIN_OFFSET_Y, LBL_WHOSERVES);
+  display.setFont(SansSerif_10pt);
+  tPoint pos = display.printAt(SCREEN_BUTTON_LEFT_MARGIN_X + SCREEN_MARGIN_OFFSET_X,
+                               SCREEN_MENU_MARGIN_Y + SCREEN_MARGIN_OFFSET_Y, LBL_WHOSERVES);
 
-  display.setFont(wingdings3_8ptFontInfo);
+  display.setFont(MarVoSym_10pt);
   uint8_t y = pos.y;
-  pos = printAt(SCREEN_BUTTON_LEFT_MARGIN_X + SCREEN_MARGIN_OFFSET_X,
-                y, LBL_UP_ARROW);
+  pos = display.printAt(SCREEN_BUTTON_LEFT_MARGIN_X + SCREEN_MARGIN_OFFSET_X,
+                        y, LBL_UP_ARROW);
 
-  display.setFont(liberationSans_8ptFontInfo);
-  pos = printAt(pos.x + SCREEN_CHAR_OFFSET,
-                y, LBL_THEM);
+  display.setFont(SansSerif_10pt);
+  pos = display.printAt(pos.x, y, LBL_THEM);
 
-  display.setFont(wingdings3_8ptFontInfo);
+  display.setFont(MarVoSym_10pt);
   y = pos.y;
-  pos = printAt(SCREEN_BUTTON_LEFT_MARGIN_X + SCREEN_MARGIN_OFFSET_X,
-                y, LBL_DOWN_ARROW);
+  pos = display.printAt(SCREEN_BUTTON_LEFT_MARGIN_X + SCREEN_MARGIN_OFFSET_X,
+                        y, LBL_DOWN_ARROW);
 
-  display.setFont(liberationSans_8ptFontInfo);
-  printAt(pos.x + SCREEN_CHAR_OFFSET,
-          y, LBL_US);
-
-  //display.setFont(liberationSans_10ptFontInfo);
-  // printAtCentered(20, LBL_WHOSERVES);
-  // display.println(LBL_WHOSERVES);
-  // display.println(F(LBL_US_THEM));
+  display.setFont(SansSerif_12pt);
+  display.printAt(pos.x, y, LBL_US);
 }
 
 // draw the playing screen
@@ -1232,10 +1201,6 @@ void drawPlayingScreen()
   drawPlayingServe();
   drawPlayingPlayers();
   drawPlayingScore();
-
-  // display.setTextSize(2);
-  // printPlayingLineFor(scorepadIdx, US);
-  // printPlayingLineFor(scorepadIdx, THEM);
 }
 
 // draw the winningscreen
@@ -1244,29 +1209,18 @@ void drawWinningScreen()
   drawPlayingFrame();
   drawWinningPlayers();
   drawRestart();
-
-  // display.setTextSize(2);
-  // printPlayingLineFor(scorepadIdx, US);
-  // printPlayingLineFor(scorepadIdx, THEM);
 }
 
 // draw the restart
 void drawRestart()
 {
+  display.setFont(MarVoSym_10pt);
+  uint8_t y = (display.yMax - 2) - display.getFontHeight();
+  tPoint pos = display.printAt(SCREEN_BUTTON_LEFT_MARGIN_X + SCREEN_MARGIN_OFFSET_X,
+                               50, LBL_UPDOWN_ARROW);
 
-  display.setFont(wingdings3_8ptFontInfo);
-  uint8_t y = (SCREEN_END_Y - 2) - display.getFontHeight();
-  tPoint pos = printAt(SCREEN_BUTTON_LEFT_MARGIN_X + SCREEN_MARGIN_OFFSET_X,
-                       50, LBL_UPDOWN_ARROW);
-
-  display.setFont(liberationSans_8ptFontInfo);
-  printAt(pos.x + SCREEN_CHAR_OFFSET,
-          50, LBL_RESTART);
-
-  //display.setFont(liberationSans_10ptFontInfo);
-  // printAtCentered(20, LBL_WHOSERVES);
-  // display.println(LBL_WHOSERVES);
-  // display.println(F(LBL_US_THEM));
+  display.setFont(SansSerif_10pt);
+  display.printAt(pos.x, 50, LBL_RESTART);
 }
 
 // draw the stats screen
@@ -1279,17 +1233,6 @@ void drawStatsScreen(bool runningPoints)
   drawStatsGameScoresAt(SCREEN_STATS_SCORE_LEFT_X, SCREEN_STATS_SCORE_BOTTOM_Y, US, runningPoints);
 
   drawRestart();
-
-  // display.setTextSize(1);
-  // display.print(F(LBL_WINNER));
-  // display.println(LBL_PLAYER[winner]);
-
-  // display.print(LBL_PLAYER[US]);
-  // printGameScores(US, runningPoints);
-  // display.print(LBL_PLAYER[THEM]);
-  // printGameScores(THEM, runningPoints);
-  // display.print(F(LBL_PLAYING_TIME));
-  // printTime(playingTime);
 }
 
 // draw the playing time screen
@@ -1298,42 +1241,11 @@ void drawPlayingTimeScreen()
   drawTimeFrame();
   printTime(playingTime);
   drawRestart();
-
-  // display.setTextSize(1);
-  // display.print(F(LBL_WINNER));
-  // display.println(LBL_PLAYER[winner]);
-
-  // display.print(LBL_PLAYER[US]);
-  // printGameScores(US, runningPoints);
-  // display.print(LBL_PLAYER[THEM]);
-  // printGameScores(THEM, runningPoints);
-  // display.print(F(LBL_PLAYING_TIME));
-  // printTime(playingTime);
 }
 
 ///////////////////////////////////////////
 // Print components and elements of screens
 ///////////////////////////////////////////
-
-// print the line of the playing screen
-void printPlayingLineFor(uint8_t index, uint8_t who)
-{
-  // uint8_t games = getGames(index, who);
-  // uint8_t points = getPoints(index, who);
-
-  // char * serve = LBL_SPACE;
-  // // get the serve symbol
-  // if(hasServe(index, who)) {
-  //   serve = LBL_SERVE[who][points % 2];
-  // }
-
-  // display.print(LBL_PLAYER[who]);
-  // display.print(serve);
-  // print2DigitsZeroPadded(games);
-  // display.print(F(LBL_SEPARATOR));
-  // print2DigitsZeroPadded(points);
-  // display.println();
-}
 
 // draw the game scores for the given player
 // if the running Points is true the last value
@@ -1367,50 +1279,25 @@ void drawStatsGameScoresAt(uint8_t x, uint8_t y, uint8_t who, bool runningPoints
 
     draw2DigitsZeroPaddedAt(pos.x, y, points, IMG_SMALL_DIGIT);
   }
-
-  // display.print(F(LBL_SPACE));
-  // uint8_t i;
-  // for(i = 0; i < SUMMARYPAD_MAX_SIZE; i++ ) {
-  //   uint8_t index = summarypad[i];
-  //   if (index == NULL_SCOREPAD_IDX) {
-  //     break;
-  //   }
-
-  //   if(i != 0) {
-  //     display.print(F(LBL_SEPARATOR));
-  //   }
-  //   print2DigitsZeroPadded(getPoints(index,who));
-  // }
-
-  // if (runningPoints) {
-  //   if(i != 0) {
-  //     display.print(F(LBL_SEPARATOR));
-  //   }
-  //   print2DigitsZeroPadded(getPoints(scorepadIdx,who));
-  // }
-
-  // display.println();
 }
 
-// draw the playing time
+// print a time given in millis
 void printTime(unsigned long millis)
 {
-
-  display.setFont(liberationSans_10ptFontInfo);
-
+  display.setFont(SansSerif_12pt);
   unsigned long secs = millis / 1000;
 
   uint8_t value = numberOfHours(secs);
-  tPoint pos = printAt(SCREEN_TIME_X, SCREEN_TIME_Y, LBL_PLAYING_TIME);
+  tPoint pos = display.printAt(SCREEN_TIME_X, SCREEN_TIME_Y, LBL_PLAYING_TIME);
   if (value != 0)
   {
     pos = print2DigitsZeroPaddedAt(pos.x, SCREEN_TIME_Y, value);
-    pos = printAt(pos.x, SCREEN_TIME_Y, LBL_SEPARATOR);
+    pos = display.printAt(pos.x, SCREEN_TIME_Y, LBL_SEPARATOR);
   }
 
   value = numberOfMinutes(secs);
   pos = print2DigitsZeroPaddedAt(pos.x, SCREEN_TIME_Y, value);
-  pos = printAt(pos.x, SCREEN_TIME_Y, LBL_SEPARATOR);
+  pos = display.printAt(pos.x, SCREEN_TIME_Y, LBL_SEPARATOR);
   value = numberOfSeconds(secs);
 
   print2DigitsZeroPaddedAt(pos.x, SCREEN_TIME_Y, value);
@@ -1455,9 +1342,9 @@ void drawPlayingGrid()
   display.drawLine(SCREEN_BUTTON_LEFT_MARGIN_X, SCREEN_MIDDLE_LINE_Y, SCREEN_BUTTON_RIGHT_MARGIN_X, SCREEN_MIDDLE_LINE_Y, TS_8b_Gray);
 
   // vertical (games)
-  display.drawLine(SCREEN_GAMES_LINE_X, SCREEN_MENU_MARGIN_Y, SCREEN_GAMES_LINE_X, SCREEN_END_Y, TS_8b_Gray);
+  display.drawLine(SCREEN_GAMES_LINE_X, SCREEN_MENU_MARGIN_Y, SCREEN_GAMES_LINE_X, display.yMax, TS_8b_Gray);
   // vertical (points)
-  display.drawLine(SCREEN_POINTS_LINE_X, SCREEN_MENU_MARGIN_Y, SCREEN_POINTS_LINE_X, SCREEN_END_Y, TS_8b_Gray);
+  display.drawLine(SCREEN_POINTS_LINE_X, SCREEN_MENU_MARGIN_Y, SCREEN_POINTS_LINE_X, display.yMax, TS_8b_Gray);
 }
 
 // draw the playing score
@@ -1479,14 +1366,6 @@ void drawPlayingScoreGames()
   drawDigitAt(SCREEN_GAMES_LINE_X + SCREEN_MARGIN_OFFSET_X,
               SCREEN_MIDDLE_LINE_Y + SCREEN_MARGIN_OFFSET_Y,
               games, IMG_DIGIT);
-
-  // drawImageAt(SCREEN_GAMES_LINE_X + SCREEN_MARGIN_OFFSET_X,
-  //  SCREEN_MENU_MARGIN_Y + SCREEN_MARGIN_OFFSET_Y,
-  // *IMG_DIGIT[0]);
-
-  // drawImageAt(SCREEN_GAMES_LINE_X + SCREEN_MARGIN_OFFSET_X,
-  // SCREEN_MIDDLE_LINE_Y + SCREEN_MARGIN_OFFSET_Y,
-  // *IMG_DIGIT[0]);
 }
 
 // draw the current points for each team
@@ -1501,20 +1380,6 @@ void drawPlayingScorePoints()
   draw2DigitsZeroPaddedAt(SCREEN_POINTS_LINE_X + SCREEN_MARGIN_OFFSET_X,
                           SCREEN_MIDDLE_LINE_Y + SCREEN_MARGIN_OFFSET_Y,
                           points, IMG_DIGIT);
-
-  // tPoint pos = drawImageAt(SCREEN_POINTS_LINE_X + SCREEN_MARGIN_OFFSET_X,
-  // SCREEN_MENU_MARGIN_Y + SCREEN_MARGIN_OFFSET_Y,
-  //  *IMG_DIGIT[2]);
-  // drawImageAt(pos.x + SCREEN_DIGIT_OFFSET,
-  // SCREEN_MENU_MARGIN_Y + SCREEN_MARGIN_OFFSET_Y,
-  // *IMG_DIGIT[1]);
-
-  // pos = drawImageAt(SCREEN_POINTS_LINE_X + SCREEN_MARGIN_OFFSET_X,
-  // SCREEN_MIDDLE_LINE_Y + SCREEN_MARGIN_OFFSET_Y,
-  // *IMG_DIGIT[2]);
-  // drawImageAt(pos.x + SCREEN_DIGIT_OFFSET,
-  // SCREEN_MIDDLE_LINE_Y + SCREEN_MARGIN_OFFSET_Y,
-  // *IMG_DIGIT[1]);
 }
 
 void drawPlayingServe()
@@ -1539,52 +1404,50 @@ void drawPlayingServe()
   //   serve = LBL_SERVE[who][points % 2];
   // }
 
-  drawImageAt(SCREEN_SERVE_X, SCREEN_SERVE_Y, *IMG_SERVE[serving][points % 2]);
+  display.drawImageAt(SCREEN_SERVE_X, SCREEN_SERVE_Y, IMG_SERVE[serving][points % 2]);
 }
 
 // draw the players playing the game
 void drawPlayingPlayers()
 {
-
   // get the Player details
   uint8_t playerImges = scorepad[scorepadIdx][PLAYER];
 
-  drawImageAt(SCREEN_PLAYER_LEFT_X,
-              SCREEN_PLAYER_TOP_Y, *IMG_PLAYER[playerImges][0]);
+  display.drawImageAt(SCREEN_PLAYER_LEFT_X,
+                      SCREEN_PLAYER_TOP_Y, IMG_PLAYER[playerImges][0]);
 
-  drawImageAt(SCREEN_PLAYER_RIGHT_X,
-              SCREEN_PLAYER_TOP_Y, *IMG_PLAYER[playerImges][1]);
+  display.drawImageAt(SCREEN_PLAYER_RIGHT_X,
+                      SCREEN_PLAYER_TOP_Y, IMG_PLAYER[playerImges][1]);
 
-  drawImageAt(SCREEN_PLAYER_LEFT_X,
-              SCREEN_PLAYER_BOTTOM_Y, *IMG_PLAYER[playerImges][2]);
+  display.drawImageAt(SCREEN_PLAYER_LEFT_X,
+                      SCREEN_PLAYER_BOTTOM_Y, IMG_PLAYER[playerImges][2]);
 
-  drawImageAt(SCREEN_PLAYER_RIGHT_X,
-              SCREEN_PLAYER_BOTTOM_Y, *IMG_PLAYER[playerImges][3]);
+  display.drawImageAt(SCREEN_PLAYER_RIGHT_X,
+                      SCREEN_PLAYER_BOTTOM_Y, IMG_PLAYER[playerImges][3]);
 }
 
 // draw the players stats
 void drawStatsPlayers()
 {
+  display.drawImageAt(SCREEN_STATS_PLAYER_LEFT_X,
+                      SCREEN_STATS_PLAYER_TOP_Y, IMG_STATS_PLAYER[winner][0]);
 
-  drawImageAt(SCREEN_STATS_PLAYER_LEFT_X,
-              SCREEN_STATS_PLAYER_TOP_Y, *IMG_STATS_PLAYER[winner][0]);
+  display.drawImageAt(SCREEN_STATS_PLAYER_RIGHT_X,
+                      SCREEN_STATS_PLAYER_TOP_Y, IMG_STATS_PLAYER[winner][1]);
 
-  drawImageAt(SCREEN_STATS_PLAYER_RIGHT_X,
-              SCREEN_STATS_PLAYER_TOP_Y, *IMG_STATS_PLAYER[winner][1]);
+  display.drawImageAt(SCREEN_STATS_PLAYER_LEFT_X,
+                      SCREEN_STATS_PLAYER_BOTTOM_Y, IMG_STATS_PLAYER[winner][2]);
 
-  drawImageAt(SCREEN_STATS_PLAYER_LEFT_X,
-              SCREEN_STATS_PLAYER_BOTTOM_Y, *IMG_STATS_PLAYER[winner][2]);
-
-  drawImageAt(SCREEN_STATS_PLAYER_RIGHT_X,
-              SCREEN_STATS_PLAYER_BOTTOM_Y, *IMG_STATS_PLAYER[winner][3]);
+  display.drawImageAt(SCREEN_STATS_PLAYER_RIGHT_X,
+                      SCREEN_STATS_PLAYER_BOTTOM_Y, IMG_STATS_PLAYER[winner][3]);
 }
 
 // draw the button labels
 void drawPlayingMenu()
 {
-  drawImageAt(SCREEN_START_X, SCREEN_START_Y, img_Play);
-  display.drawLine(SCREEN_START_X, SCREEN_MENU_MARGIN_Y, SCREEN_END_X, SCREEN_MENU_MARGIN_Y, TS_8b_Gray);
-  display.drawLine(SCREEN_BUTTON_LEFT_MARGIN_X, SCREEN_END_Y, SCREEN_BUTTON_RIGHT_MARGIN_X, SCREEN_END_Y, TS_8b_Gray);
+  display.drawImageAt(display.xMin, display.yMin, &img_Play);
+  display.drawLine(display.xMin, SCREEN_MENU_MARGIN_Y, display.xMax, SCREEN_MENU_MARGIN_Y, TS_8b_Gray);
+  display.drawLine(SCREEN_BUTTON_LEFT_MARGIN_X, display.yMax, SCREEN_BUTTON_RIGHT_MARGIN_X, display.yMax, TS_8b_Gray);
 }
 
 // draw the winning players of the match
@@ -1592,24 +1455,24 @@ void drawWinningPlayers()
 {
 
   // draw the trophy
-  tPoint trophyPos = drawImageAt(SCREEN_BUTTON_LEFT_MARGIN_X + 12,
-                                 SCREEN_MENU_MARGIN_Y + SCREEN_MARGIN_OFFSET_X,
-                                 img_Trophy);
+  tPoint trophyPos = display.drawImageAt(SCREEN_BUTTON_LEFT_MARGIN_X + 12,
+                                         SCREEN_MENU_MARGIN_Y + SCREEN_MARGIN_OFFSET_X,
+                                         &img_Trophy);
 
   // draw the players
-  tPoint pos = drawImageAt(trophyPos.x + SCREEN_MARGIN_OFFSET_X,
-                           SCREEN_MENU_MARGIN_Y + SCREEN_MARGIN_OFFSET_Y,
-                           *IMG_WINNING_PLAYER[winner][0]);
+  tPoint pos = display.drawImageAt(trophyPos.x + SCREEN_MARGIN_OFFSET_X,
+                                   SCREEN_MENU_MARGIN_Y + SCREEN_MARGIN_OFFSET_Y,
+                                   IMG_WINNING_PLAYER[winner][0]);
 
   // draw the players
-  pos = drawImageAt(pos.x + SCREEN_MARGIN_OFFSET_X,
-                    SCREEN_MENU_MARGIN_Y + SCREEN_MARGIN_OFFSET_Y,
-                    *IMG_WINNING_PLAYER[winner][1]);
+  pos = display.drawImageAt(pos.x + SCREEN_MARGIN_OFFSET_X,
+                            SCREEN_MENU_MARGIN_Y + SCREEN_MARGIN_OFFSET_Y,
+                            IMG_WINNING_PLAYER[winner][1]);
 
-  display.setFont(liberationSans_8ptFontInfo);
-  printAt(trophyPos.x + SCREEN_MARGIN_OFFSET_X,
-          pos.y + SCREEN_MARGIN_OFFSET_Y,
-          LBL_PLAYER[winner]);
+  display.setFont(SansSerif_12pt);
+  display.printAt(trophyPos.x + SCREEN_MARGIN_OFFSET_X,
+                  pos.y + SCREEN_MARGIN_OFFSET_Y,
+                  LBL_PLAYER[winner]);
 }
 
 // draw the Stats frame
@@ -1622,9 +1485,9 @@ void drawStatsFrame()
 // draw the button labels
 void drawStatsMenu()
 {
-  drawImageAt(SCREEN_START_X, SCREEN_START_Y, img_Stats);
-  display.drawLine(SCREEN_START_X, SCREEN_MENU_MARGIN_Y, SCREEN_END_X, SCREEN_MENU_MARGIN_Y, TS_8b_Gray);
-  display.drawLine(SCREEN_BUTTON_LEFT_MARGIN_X, SCREEN_END_Y, SCREEN_BUTTON_RIGHT_MARGIN_X, SCREEN_END_Y, TS_8b_Gray);
+  display.drawImageAt(display.xMin, display.yMin, &img_Stats);
+  display.drawLine(display.xMin, SCREEN_MENU_MARGIN_Y, display.xMax, SCREEN_MENU_MARGIN_Y, TS_8b_Gray);
+  display.drawLine(SCREEN_BUTTON_LEFT_MARGIN_X, display.yMax, SCREEN_BUTTON_RIGHT_MARGIN_X, display.yMax, TS_8b_Gray);
 }
 
 // draw the Stats grid
@@ -1649,12 +1512,12 @@ void drawStatsGrid()
 // draw the button labels
 void drawButtonLabels()
 {
-  drawImageAt(SCREEN_START_X, SCREEN_BUTTON_TOP_Y, img_ArrowRight);
-  drawImageAt(SCREEN_START_X, SCREEN_BUTTON_BOTTOM_Y, img_ArrowLeft);
-  display.drawLine(SCREEN_BUTTON_LEFT_MARGIN_X, SCREEN_MENU_MARGIN_Y, SCREEN_BUTTON_LEFT_MARGIN_X, SCREEN_END_Y, TS_8b_Gray);
-  drawImageAt(SCREEN_BUTTON_RIGHT_MARGIN_X + 3, SCREEN_BUTTON_TOP_Y, img_ArrowUp);
-  drawImageAt(SCREEN_BUTTON_RIGHT_MARGIN_X + 3, SCREEN_BUTTON_BOTTOM_Y, img_ArrowDown);
-  display.drawLine(SCREEN_BUTTON_RIGHT_MARGIN_X, SCREEN_MENU_MARGIN_Y, SCREEN_BUTTON_RIGHT_MARGIN_X, SCREEN_END_Y, TS_8b_Gray);
+  display.drawImageAt(display.xMin, SCREEN_BUTTON_TOP_Y, &img_ArrowRight);
+  display.drawImageAt(display.xMin, SCREEN_BUTTON_BOTTOM_Y, &img_ArrowLeft);
+  display.drawLine(SCREEN_BUTTON_LEFT_MARGIN_X, SCREEN_MENU_MARGIN_Y, SCREEN_BUTTON_LEFT_MARGIN_X, display.yMax, TS_8b_Gray);
+  display.drawImageAt(SCREEN_BUTTON_RIGHT_MARGIN_X + 3, SCREEN_BUTTON_TOP_Y, &img_ArrowUp);
+  display.drawImageAt(SCREEN_BUTTON_RIGHT_MARGIN_X + 3, SCREEN_BUTTON_BOTTOM_Y, &img_ArrowDown);
+  display.drawLine(SCREEN_BUTTON_RIGHT_MARGIN_X, SCREEN_MENU_MARGIN_Y, SCREEN_BUTTON_RIGHT_MARGIN_X, display.yMax, TS_8b_Gray);
 }
 
 // draw the Time frame
@@ -1667,9 +1530,9 @@ void drawTimeFrame()
 // draw the button labels
 void drawTimeMenu()
 {
-  drawImageAt(SCREEN_START_X, SCREEN_START_Y, img_Time);
-  display.drawLine(SCREEN_START_X, SCREEN_MENU_MARGIN_Y, SCREEN_END_X, SCREEN_MENU_MARGIN_Y, TS_8b_Gray);
-  display.drawLine(SCREEN_BUTTON_LEFT_MARGIN_X, SCREEN_END_Y, SCREEN_BUTTON_RIGHT_MARGIN_X, SCREEN_END_Y, TS_8b_Gray);
+  display.drawImageAt(display.xMin, display.yMin, &img_Time);
+  display.drawLine(display.xMin, SCREEN_MENU_MARGIN_Y, display.xMax, SCREEN_MENU_MARGIN_Y, TS_8b_Gray);
+  display.drawLine(SCREEN_BUTTON_LEFT_MARGIN_X, display.yMax, SCREEN_BUTTON_RIGHT_MARGIN_X, display.yMax, TS_8b_Gray);
 }
 
 /////////////////////////////////////////////
@@ -1684,10 +1547,10 @@ tPoint print2DigitsZeroPaddedAt(uint8_t x, uint8_t y, uint8_t value)
   char buffer[2];
   uint8_t tens = value / 10;
   itoa(tens, buffer, 10);
-  tPoint pos = printAt(x, y, buffer);
+  tPoint pos = display.printAt(x, y, buffer);
   uint8_t units = value % 10;
   itoa(units, buffer, 10);
-  pos = printAt(pos.x, y, buffer);
+  pos = display.printAt(pos.x, y, buffer);
 
   // if(value < 100) {
   //   display.print(F(LBL_SPACE));
@@ -1705,60 +1568,58 @@ tPoint print2DigitsZeroPaddedAt(uint8_t x, uint8_t y, uint8_t value)
 tPoint printAtCentered(uint8_t y, char *str)
 {
   uint8_t width = display.getPrintWidth(str);
-  int x = SCREEN_WIDTH_HALF - (width / 2);
+  int x = (display.xMax - width) / 2;
   if (x < 0)
   {
     x = 0;
   }
 
-  tPoint result = printAt(x, y, str);
+  tPoint result = display.printAt(x, y, str);
   return result;
 }
 
-// prints the given text at the given x, y on the display
-tPoint printAt(uint8_t x, uint8_t y, char *str)
-{
+// // prints the given text at the given x, y on the display
+// tPoint printAt(uint8_t x, uint8_t y, char *str)
+// {
+//   tPoint result = {x, y};
 
-  display.setCursor(x, y);
-  display.print(str);
+//   display.setCursor(x, y);
+//   display.print(str);
 
-  uint8_t endx = x + display.getPrintWidth(str);
-  uint8_t endy = y + display.getFontHeight();
+//   result.x = x + display.getPrintWidth(str);
+//   result.y = y + display.getFontHeight();
 
-  tPoint result = {endx, endy};
-  return result;
-}
+//   return result;
+// }
 
 // prints the given text vertically on the display
 // at the given x, y.
-tPoint printAtVertical(uint8_t x, uint8_t y, char *str)
-{
-  char buffer[2];
+// tPoint printAtVertical(uint8_t x, uint8_t y, char *str)
+// {
+//   char buffer[2];
 
-  tPoint result = {x, y};
-  uint8_t maxWidth = 0;
+//   tPoint result = {x, y};
 
-  for (int i = 0; i < strlen(str); i++)
-  {
-    buffer[0] = str[i];
-    buffer[1] = '\0';
+//   for (int i = 0; i < strlen(str); i++)
+//   {
+//     buffer[0] = str[i];
+//     buffer[1] = '\0';
 
-    // print the char and move the next
-    // print position to one pixel lower
-    tPoint endPoint = printAt(result.x, result.y, buffer);
-    result.y = (1 + endPoint.y);
+//     // print the char and move the next
+//     // print position to one pixel lower
+//     tPoint endPoint = printAt(result.x, result.y, buffer);
+//     result.y = (1 + endPoint.y);
 
-    // check the maximum width of the characters
-    // printed so far
-    if (endPoint.x > maxWidth)
-    {
-      maxWidth = endPoint.x;
-    }
-  }
+//     // check the maximum width of the characters
+//     // printed so far
+//     if (endPoint.x > result.x)
+//     {
+//       result.x = endPoint.x;
+//     }
+//   }
 
-  result.x = result.x + maxWidth;
-  return result;
-}
+//   return result;
+// }
 
 /////////////////////////////////////////////
 // Convenience functions for drawing numbers
@@ -1793,38 +1654,37 @@ tPoint drawDigitAt(uint8_t x, uint8_t y, uint8_t value, const tImage **digits)
   {
     value = 0;
   }
-  tPoint result = drawImageAt(x, y, *(digits[value]));
+  tPoint result = display.drawImageAt(x, y, digits[value]);
   return result;
 }
 
 // draw the given image at (x,y)
-tPoint drawImageAt(uint8_t x, uint8_t y, tImage image)
-{
-  //set a background that matches
-  //display.drawRect(0,0,96,64,TSRectangleFilled,TS_8b_Blue);
-  //let's set up for a bitmap at (40,30) that is 17 pixels wide and 12 pixels tall:
-  //setX(x start, x end);//set OLED RAM to x start, wrap around at x end
-  uint8_t endx = x + image.width;
-  display.setX(x, endx - 1);
-  //setY(y start, y end);//set OLED RAM to y start, wrap around at y end
-  uint8_t endy = y + image.height;
-  display.setY(y, endy - 1);
+// tPoint drawImageAt(uint8_t x, uint8_t y, tImage image)
+// {
+//   //set a background that matches
+//   //display.drawRect(0,0,96,64,TSRectangleFilled,TS_8b_Blue);
+//   //let's set up for a bitmap at (40,30) that is 17 pixels wide and 12 pixels tall:
+//   //setX(x start, x end);//set OLED RAM to x start, wrap around at x end
+//   uint8_t endx = x + image.width;
+//   display.setX(x, endx - 1);
+//   //setY(y start, y end);//set OLED RAM to y start, wrap around at y end
+//   uint8_t endy = y + image.height;
+//   display.setY(y, endy - 1);
 
-  //now start a data transfer
-  display.startData();
-  //writeBuffer(buffer,count);//optimized write of a large buffer of 8 bit data
-  display.writeBuffer(image.data, image.width * image.height);
-  display.endTransfer();
+//   //now start a data transfer
+//   display.startData();
+//   //writeBuffer(buffer,count);//optimized write of a large buffer of 8 bit data
+//   display.writeBuffer(image.data, image.width * image.height);
+//   display.endTransfer();
 
-  tPoint result = {endx, endy};
-  return result;
-}
+//   point_t result = {endx, endy};
+//   return result;
+// }
 
 // prints debug info
 void printDebug(char *buffer)
 {
-
-  display.setFont(liberationSans_10ptFontInfo);
+  display.setFont(SansSerif_8pt);
   display.setCursor(10, 0);
   display.print(buffer);
 }
@@ -1832,7 +1692,7 @@ void printDebug(char *buffer)
 // prints debug info
 void printDebug(int number)
 {
-  display.setFont(liberationSans_10ptFontInfo);
+  display.setFont(SansSerif_8pt);
   display.setCursor(20, 0);
   display.print(number);
 }
@@ -1840,7 +1700,7 @@ void printDebug(int number)
 // prints debug info
 void printDebug(float number)
 {
-  display.setFont(liberationSans_10ptFontInfo);
+  display.setFont(SansSerif_8pt);
   display.setCursor(20, 0);
   display.print(number);
 }

@@ -19,14 +19,15 @@ limitations under the License.
 #define images_h
 
 #include <stdint.h>
+#include "../TinyScreenExt.h"
 
-typedef struct
-{
-    const uint8_t *data;
-    const uint8_t width;
-    const uint8_t height;
-    const uint8_t dataSize;
-} tImage;
+// typedef struct
+// {
+//     const uint8_t *data;
+//     const uint8_t width;
+//     const uint8_t height;
+//     const uint8_t dataSize;
+// } tImage;
 
 static const uint8_t PROGMEM image_data_BT32x32[1024] = {
     // ∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙
@@ -96,7 +97,7 @@ static const uint8_t PROGMEM image_data_BT32x32[1024] = {
 const tImage img_BT32x32 = {image_data_BT32x32, 32, 32,
                             8};
 
-static const uint8_t image_data_yScore63x22[1386] = {
+static const uint8_t PROGMEM image_data_yScore63x22[1386] = {
     // ∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙
     // ∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙
     // ∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙
@@ -293,7 +294,7 @@ static const uint8_t PROGMEM image_data_stats[96] = {
 const tImage img_Stats = {image_data_stats, 12, 8,
                           8};
 
-static const uint8_t image_data_Time[96] = {
+static const uint8_t PROGMEM image_data_Time[96] = {
     // ∙∙∙████∙∙∙∙∙
     // ∙∙█▒█∙▒█∙∙∙∙
     // ∙█▒∙█∙∙▒█∙∙∙
@@ -1007,7 +1008,7 @@ static const uint8_t PROGMEM image_data_Serve_BL[529] = {
 const tImage img_Serve_BL = {image_data_Serve_BL, 23, 23,
                              8};
 
-static const uint8_t image_data_Serve_BR[529] = {
+static const uint8_t PROGMEM image_data_Serve_BR[529] = {
     // ∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙
     // ∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙
     // ∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙

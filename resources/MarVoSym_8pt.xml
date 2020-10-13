@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data type="font" name="MarVoSym_10pt">
+    <family>MarVoSym</family>
+    <size>8</size>
+    <ascent>10</ascent>
+    <descent>2</descent>
+    <style>Regular</style>
+    <widthType>proportional</widthType>
+    <antialiasing>true</antialiasing>
+    <foreground>ffffffff</foreground>
+    <background>ff000000</background>
+    <multiplicityWidth>1</multiplicityWidth>
+    <multiplicityHeight>1</multiplicityHeight>
+    <string>·º»¶</string>
+    <converted>/home/jason/development/arduino/iScore/fonts/MarVoSym_12pt.h</converted>
+    <chars>
+        <char character="·" code="00b7">
+            <picture format="png">iVBORw0KGgoAAAANSUhEUgAAAAUAAAAJCAYAAAD6reaeAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAWklEQVQImY3OoQ0AIRQE0YFcP3gqQH9LL9SCogYckkIoA7HnSA51K5+YrAPENX8DgC+lYGZfrbVKksYYCiEI0EFJ2nsrpaTTnHMSY6T3zrPWIudMa+0k3e9LL+R9LJRf8P13AAAAAElFTkSuQmCC</picture>
+        </char>
+        <char character="º" code="00ba">
+            <picture format="png">iVBORw0KGgoAAAANSUhEUgAAAAYAAAAJCAYAAAARml2dAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAY0lEQVQImXWPwQ3EIBADvYEnEnVQCl3QDDVRAiXQAVUgTR53UQ5dMk+PZMsmCT1wPIWbiDH+ScyM3jspJb7VSBKlFABaa7cIITDn5CLn/BG1Vn4ZY+C9x5xzmNk2utaSvf04AcimPfFypUp0AAAAAElFTkSuQmCC</picture>
+        </char>
+        <char character="»" code="00bb">
+            <picture format="png">iVBORw0KGgoAAAANSUhEUgAAAAYAAAAJCAYAAAARml2dAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAXUlEQVQImZWOoQ3AIBQFH001Gs8KSPZgpr8MghlYCsNVNNCKmp68S16ek4Q+OL6kJJ05Z4UQtgDUWpNKKbyptbLm6b0DMMYgxviElBJzTsxsyTtIwszw3u/gft+9AKeqO5nFC2AUAAAAAElFTkSuQmCC</picture>
+        </char>
+        <char character="¶" code="00b6">
+            <picture format="png">iVBORw0KGgoAAAANSUhEUgAAAAUAAAAJCAYAAAD6reaeAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAVklEQVQImX2OoRXAIBQDjz4EmzABAsfDIFn2W7CMlbqWIhqXE5c4QBy5TgDg99Jao9YKgGKMMjNJkpnJ55yZcxJCeJ1rLVJKjDEe6Pb13jullC/8vXQDloAbJIG8ALkAAAAASUVORK5CYII=</picture>
+        </char>
+    </chars>
+</data>

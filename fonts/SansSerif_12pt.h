@@ -43,6 +43,9 @@
      } tFont;
 */
 
+#ifndef SanSerif_12pt_h
+#define SanSerif_12pt_h
+
 #include <stdint.h>
 #include "../TinyScreenExt.h"
 
@@ -4041,3 +4044,5 @@ static const tChar SansSerif_12pt_array[] = {
 };
 
 const tFont SansSerif_12pt = {95, SansSerif_12pt_array};
+
+#endif

@@ -43,6 +43,9 @@
      } tFont;
 */
 
+#ifndef MarVoSym_10pt_h
+#define MarVoSym_10pt_h
+
 #include <stdint.h>
 #include "../TinyScreenExt.h"
 
@@ -195,3 +198,5 @@ static const tChar MarVoSym_10pt_array[] = {
 };
 
 const tFont MarVoSym_10pt = {4, MarVoSym_10pt_array};
+
+#endif

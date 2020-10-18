@@ -43,6 +43,9 @@
      } tFont;
 */
 
+#ifndef SanSerif_8pt_h
+#define SanSerif_8pt_h
+
 #include <stdint.h>
 #include "../TinyScreenExt.h"
 
@@ -3091,3 +3094,5 @@ static const tChar SansSerif_8pt_array[] = {
 };
 
 static const tFont SansSerif_8pt = {95, SansSerif_8pt_array};
+
+#endif

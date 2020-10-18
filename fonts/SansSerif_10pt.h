@@ -43,6 +43,9 @@
      } tFont;
 */
 
+#ifndef SanSerif_108pt_h
+#define SanSerif_10pt_h
+
 #include <stdint.h>
 #include "../TinyScreenExt.h"
 
@@ -3471,3 +3474,5 @@ static const tChar SansSerif_10pt_array[] = {
 };
 
 const tFont SansSerif_10pt = {95, SansSerif_10pt_array};
+
+#endif

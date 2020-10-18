@@ -128,7 +128,7 @@ uint8_t TinyScreenExt::getPrintWidth(char *st)
     return result;
 }
 
-// prints the given text at the given x, y on the display
+// prints the given char * at the given x, y on the display
 tPoint TinyScreenExt::printAt(uint8_t x, uint8_t y, char *str)
 {
     tPoint result = {x, y};
@@ -168,6 +168,22 @@ tPoint TinyScreenExt::printVerticalAt(uint8_t x, uint8_t y, char *str)
         }
     }
 
+    return result;
+}
+
+// prints the given text centered on the display
+// at the given y. If the given string is too large
+// then it is printed at column 0
+tPoint TinyScreenExt::printCenteredAt(uint8_t y, char *str)
+{
+    uint8_t width = getPrintWidth(str);
+    int x = (xMax - width) / 2;
+    if (x < 0)
+    {
+        x = 0;
+    }
+
+    tPoint result = printAt(x, y, str);
     return result;
 }
 

@@ -27,6 +27,8 @@ limitations under the License.
 
 #include "TinyScreenExt.h"
 #include "TinyScreenBattery.h"
+#include "fonts/DigitsSmall.h"
+#include "fonts/DigitsLarge.h"
 #include "fonts/SansSerif_8pt.h"
 #include "fonts/SansSerif_10pt.h"
 #include "fonts/SansSerif_12pt.h"
@@ -143,50 +145,20 @@ limitations under the License.
 
 #define LBL_UPDOWN_ARROW "CD"
 
-// Array of pointers to the digit images
-// makes it easier to map between 0-9
-// and the corresponding image
-static const tImage *IMG_DIGIT[] = {
-    &img_Digit_0,
-    &img_Digit_1,
-    &img_Digit_2,
-    &img_Digit_3,
-    &img_Digit_4,
-    &img_Digit_5,
-    &img_Digit_6,
-    &img_Digit_7,
-    &img_Digit_8,
-    &img_Digit_9};
-
-// Array of pointers to the small digit images
-// makes it easier to map between 0-9
-// and the corresponding image
-static const tImage *IMG_SMALL_DIGIT[] = {
-    &img_Small_Digit_0,
-    &img_Small_Digit_1,
-    &img_Small_Digit_2,
-    &img_Small_Digit_3,
-    &img_Small_Digit_4,
-    &img_Small_Digit_5,
-    &img_Small_Digit_6,
-    &img_Small_Digit_7,
-    &img_Small_Digit_8,
-    &img_Small_Digit_9};
-
 // Player Names
 static char *LBL_PLAYER[] = {LBL_THEM, LBL_US, LBL_NONE};
 
 static const tImage *IMG_SERVE[][2] = {{&img_Serve_BR, &img_Serve_BL},
                                        {&img_Serve_TL, &img_Serve_TR}};
 
-static const tImage *IMG_PLAYER[][4] = {{&img_Happy_blue, &img_Happy_green, &img_Sad_red, &img_Sad_yellow},
-                                        {&img_Sad_blue, &img_Sad_green, &img_Happy_red, &img_Happy_yellow},
-                                        {&img_Happy_blue, &img_Happy_green, &img_Sad_yellow, &img_Sad_red},
-                                        {&img_Sad_blue, &img_Sad_green, &img_Happy_yellow, &img_Happy_red},
-                                        {&img_Happy_green, &img_Happy_blue, &img_Sad_red, &img_Sad_yellow},
-                                        {&img_Sad_green, &img_Sad_blue, &img_Happy_red, &img_Happy_yellow},
-                                        {&img_Happy_green, &img_Happy_blue, &img_Sad_yellow, &img_Sad_red},
-                                        {&img_Sad_green, &img_Sad_blue, &img_Happy_yellow, &img_Happy_red}};
+static const tImage *IMG_PLAYER_DOUBLES[][4] = {{&img_Happy_blue, &img_Happy_green, &img_Sad_red, &img_Sad_yellow},
+                                                {&img_Sad_blue, &img_Sad_green, &img_Happy_red, &img_Happy_yellow},
+                                                {&img_Happy_blue, &img_Happy_green, &img_Sad_yellow, &img_Sad_red},
+                                                {&img_Sad_blue, &img_Sad_green, &img_Happy_yellow, &img_Happy_red},
+                                                {&img_Happy_green, &img_Happy_blue, &img_Sad_red, &img_Sad_yellow},
+                                                {&img_Sad_green, &img_Sad_blue, &img_Happy_red, &img_Happy_yellow},
+                                                {&img_Happy_green, &img_Happy_blue, &img_Sad_yellow, &img_Sad_red},
+                                                {&img_Sad_green, &img_Sad_blue, &img_Happy_yellow, &img_Happy_red}};
 
 static const tImage *IMG_WINNING_PLAYER[][2] = {{&img_Happy_blue, &img_Happy_green},
                                                 {&img_Happy_red, &img_Happy_yellow}};
@@ -1159,7 +1131,7 @@ void drawStartScreen()
 
   // draw the press to start
   display.setFont(SansSerif_12pt);
-  printAtCentered(50, LBL_TO_START_PRESS);
+  display.printCenteredAt(50, LBL_TO_START_PRESS);
 }
 
 // draw the setting serve screen
@@ -1252,12 +1224,16 @@ void drawPlayingTimeScreen()
 // are the current points in the game
 void drawStatsGameScoresAt(uint8_t x, uint8_t y, uint8_t who, bool runningPoints)
 {
+  char buffer[3];
+
   uint8_t i;
 
   tPoint pos;
 
   pos.x = x;
   pos.y = y;
+
+  display.setFont(Digits_Small);
 
   for (i = 0; i < SUMMARYPAD_MAX_SIZE; i++)
   {
@@ -1268,8 +1244,7 @@ void drawStatsGameScoresAt(uint8_t x, uint8_t y, uint8_t who, bool runningPoints
     }
 
     uint8_t points = getPoints(index, who);
-
-    pos = draw2DigitsZeroPaddedAt(pos.x, y, points, IMG_SMALL_DIGIT);
+    pos = display.printAt(pos.x, y, zeroPad(buffer, points));
     pos.x += 3;
   }
 
@@ -1277,30 +1252,36 @@ void drawStatsGameScoresAt(uint8_t x, uint8_t y, uint8_t who, bool runningPoints
   {
     uint8_t points = getPoints(scorepadIdx, who);
 
-    draw2DigitsZeroPaddedAt(pos.x, y, points, IMG_SMALL_DIGIT);
+    display.printAt(pos.x, y, zeroPad(buffer, points));
   }
 }
 
 // print a time given in millis
 void printTime(unsigned long millis)
 {
-  display.setFont(SansSerif_12pt);
+  char buffer[8];
+
+  display.setFont(SansSerif_10pt);
+
+  tPoint pos = display.printAt(SCREEN_TIME_X, SCREEN_TIME_Y, LBL_PLAYING_TIME);
+
   unsigned long secs = millis / 1000;
 
-  uint8_t value = numberOfHours(secs);
-  tPoint pos = display.printAt(SCREEN_TIME_X, SCREEN_TIME_Y, LBL_PLAYING_TIME);
-  if (value != 0)
+  uint8_t hours = numberOfHours(secs);
+  uint8_t minutes = numberOfMinutes(secs);
+  uint8_t seconds = numberOfSeconds(secs);
+
+  if (hours != 0)
   {
-    pos = print2DigitsZeroPaddedAt(pos.x, SCREEN_TIME_Y, value);
-    pos = display.printAt(pos.x, SCREEN_TIME_Y, LBL_SEPARATOR);
+    snprintf(buffer, sizeof(buffer), "%02d:%02d:%02d", hours, minutes, seconds);
+  }
+  else
+  {
+    snprintf(buffer, sizeof(buffer), "%02d:%02d", minutes, seconds);
   }
 
-  value = numberOfMinutes(secs);
-  pos = print2DigitsZeroPaddedAt(pos.x, SCREEN_TIME_Y, value);
-  pos = display.printAt(pos.x, SCREEN_TIME_Y, LBL_SEPARATOR);
-  value = numberOfSeconds(secs);
-
-  print2DigitsZeroPaddedAt(pos.x, SCREEN_TIME_Y, value);
+  display.setFont(SansSerif_12pt);
+  display.printCenteredAt(pos.y + 4, buffer);
 }
 
 // draw the battery icon
@@ -1357,29 +1338,37 @@ void drawPlayingScore()
 // draw the number of sets for each team
 void drawPlayingScoreGames()
 {
+  display.setFont(Digits_Large);
+
+  char buffer[2];
   uint8_t games = getGames(scorepadIdx, THEM);
-  drawDigitAt(SCREEN_GAMES_LINE_X + SCREEN_MARGIN_OFFSET_X,
-              SCREEN_MENU_MARGIN_Y + SCREEN_MARGIN_OFFSET_Y,
-              games, IMG_DIGIT);
+  itoa(games, buffer, 10);
+  display.printAt(SCREEN_GAMES_LINE_X + SCREEN_MARGIN_OFFSET_X,
+                  SCREEN_MENU_MARGIN_Y + SCREEN_MARGIN_OFFSET_Y,
+                  buffer);
 
   games = getGames(scorepadIdx, US);
-  drawDigitAt(SCREEN_GAMES_LINE_X + SCREEN_MARGIN_OFFSET_X,
-              SCREEN_MIDDLE_LINE_Y + SCREEN_MARGIN_OFFSET_Y,
-              games, IMG_DIGIT);
+  itoa(games, buffer, 10);
+  display.printAt(SCREEN_GAMES_LINE_X + SCREEN_MARGIN_OFFSET_X,
+                  SCREEN_MIDDLE_LINE_Y + SCREEN_MARGIN_OFFSET_Y,
+                  buffer);
 }
 
 // draw the current points for each team
 void drawPlayingScorePoints()
 {
+  char buffer[3];
+  display.setFont(Digits_Large);
   uint8_t points = getPoints(scorepadIdx, THEM);
-  draw2DigitsZeroPaddedAt(SCREEN_POINTS_LINE_X + SCREEN_MARGIN_OFFSET_X,
-                          SCREEN_MENU_MARGIN_Y + SCREEN_MARGIN_OFFSET_Y,
-                          points, IMG_DIGIT);
+  display.printAt(SCREEN_POINTS_LINE_X + SCREEN_MARGIN_OFFSET_X,
+                  SCREEN_MENU_MARGIN_Y + SCREEN_MARGIN_OFFSET_Y,
+                  zeroPad(buffer, points));
 
   points = getPoints(scorepadIdx, US);
-  draw2DigitsZeroPaddedAt(SCREEN_POINTS_LINE_X + SCREEN_MARGIN_OFFSET_X,
-                          SCREEN_MIDDLE_LINE_Y + SCREEN_MARGIN_OFFSET_Y,
-                          points, IMG_DIGIT);
+  zeroPad(buffer, points);
+  display.printAt(SCREEN_POINTS_LINE_X + SCREEN_MARGIN_OFFSET_X,
+                  SCREEN_MIDDLE_LINE_Y + SCREEN_MARGIN_OFFSET_Y,
+                  zeroPad(buffer, points));
 }
 
 void drawPlayingServe()
@@ -1414,16 +1403,16 @@ void drawPlayingPlayers()
   uint8_t playerImges = scorepad[scorepadIdx][PLAYER];
 
   display.drawImageAt(SCREEN_PLAYER_LEFT_X,
-                      SCREEN_PLAYER_TOP_Y, IMG_PLAYER[playerImges][0]);
+                      SCREEN_PLAYER_TOP_Y, IMG_PLAYER_DOUBLES[playerImges][0]);
 
   display.drawImageAt(SCREEN_PLAYER_RIGHT_X,
-                      SCREEN_PLAYER_TOP_Y, IMG_PLAYER[playerImges][1]);
+                      SCREEN_PLAYER_TOP_Y, IMG_PLAYER_DOUBLES[playerImges][1]);
 
   display.drawImageAt(SCREEN_PLAYER_LEFT_X,
-                      SCREEN_PLAYER_BOTTOM_Y, IMG_PLAYER[playerImges][2]);
+                      SCREEN_PLAYER_BOTTOM_Y, IMG_PLAYER_DOUBLES[playerImges][2]);
 
   display.drawImageAt(SCREEN_PLAYER_RIGHT_X,
-                      SCREEN_PLAYER_BOTTOM_Y, IMG_PLAYER[playerImges][3]);
+                      SCREEN_PLAYER_BOTTOM_Y, IMG_PLAYER_DOUBLES[playerImges][3]);
 }
 
 // draw the players stats
@@ -1535,151 +1524,16 @@ void drawTimeMenu()
   display.drawLine(SCREEN_BUTTON_LEFT_MARGIN_X, display.yMax, SCREEN_BUTTON_RIGHT_MARGIN_X, display.yMax, TS_8b_Gray);
 }
 
-/////////////////////////////////////////////
-// Convenience functions for printing numbers
-/////////////////////////////////////////////
+///////////////////////////////////////////////
+// Convenience functions for handeling numbers
+///////////////////////////////////////////////
 
-// print to the display the given value ensuring that
-// two digits are printed ie value less than 10 result
-// result in 09 being printed
-tPoint print2DigitsZeroPaddedAt(uint8_t x, uint8_t y, uint8_t value)
+// put the zero padded value into the provided buffer
+char *zeroPad(char *buffer, uint8_t value)
 {
-  char buffer[2];
-  uint8_t tens = value / 10;
-  itoa(tens, buffer, 10);
-  tPoint pos = display.printAt(x, y, buffer);
-  uint8_t units = value % 10;
-  itoa(units, buffer, 10);
-  pos = display.printAt(pos.x, y, buffer);
-
-  // if(value < 100) {
-  //   display.print(F(LBL_SPACE));
-  // }
-  // if(value < 10) {
-  //   display.print(F(LBL_SPACE));
-  // }
-  // display.print(value);
-  return pos;
+  snprintf(buffer, sizeof(buffer), "%02d", value);
+  return buffer;
 }
-
-// prints the given text centered on the display
-// at the given y. If the given string is too large
-// then it is printed at column 0
-tPoint printAtCentered(uint8_t y, char *str)
-{
-  uint8_t width = display.getPrintWidth(str);
-  int x = (display.xMax - width) / 2;
-  if (x < 0)
-  {
-    x = 0;
-  }
-
-  tPoint result = display.printAt(x, y, str);
-  return result;
-}
-
-// // prints the given text at the given x, y on the display
-// tPoint printAt(uint8_t x, uint8_t y, char *str)
-// {
-//   tPoint result = {x, y};
-
-//   display.setCursor(x, y);
-//   display.print(str);
-
-//   result.x = x + display.getPrintWidth(str);
-//   result.y = y + display.getFontHeight();
-
-//   return result;
-// }
-
-// prints the given text vertically on the display
-// at the given x, y.
-// tPoint printAtVertical(uint8_t x, uint8_t y, char *str)
-// {
-//   char buffer[2];
-
-//   tPoint result = {x, y};
-
-//   for (int i = 0; i < strlen(str); i++)
-//   {
-//     buffer[0] = str[i];
-//     buffer[1] = '\0';
-
-//     // print the char and move the next
-//     // print position to one pixel lower
-//     tPoint endPoint = printAt(result.x, result.y, buffer);
-//     result.y = (1 + endPoint.y);
-
-//     // check the maximum width of the characters
-//     // printed so far
-//     if (endPoint.x > result.x)
-//     {
-//       result.x = endPoint.x;
-//     }
-//   }
-
-//   return result;
-// }
-
-/////////////////////////////////////////////
-// Convenience functions for drawing numbers
-/////////////////////////////////////////////
-
-// print to the display the given value ensuring that
-// two digits are printed ie value less than 10 result
-// result in 09 being printed
-tPoint draw2DigitsZeroPaddedAt(uint8_t x, uint8_t y, uint8_t value, const tImage **digits)
-{
-  uint8_t tens = value / 10;
-  tPoint pos = drawDigitAt(x, y, tens, digits);
-  uint8_t units = value % 10;
-  pos = drawDigitAt(pos.x, y, units, digits);
-
-  // if(value < 100) {
-  //   display.print(F(LBL_SPACE));
-  // }
-  // if(value < 10) {
-  //   display.print(F(LBL_SPACE));
-  // }
-  // display.print(value);
-  return pos;
-}
-
-// print to the display the given value
-// at point x,y
-// if the value is > 9 then 0 is displayed
-tPoint drawDigitAt(uint8_t x, uint8_t y, uint8_t value, const tImage **digits)
-{
-  if (value > 9)
-  {
-    value = 0;
-  }
-  tPoint result = display.drawImageAt(x, y, digits[value]);
-  return result;
-}
-
-// draw the given image at (x,y)
-// tPoint drawImageAt(uint8_t x, uint8_t y, tImage image)
-// {
-//   //set a background that matches
-//   //display.drawRect(0,0,96,64,TSRectangleFilled,TS_8b_Blue);
-//   //let's set up for a bitmap at (40,30) that is 17 pixels wide and 12 pixels tall:
-//   //setX(x start, x end);//set OLED RAM to x start, wrap around at x end
-//   uint8_t endx = x + image.width;
-//   display.setX(x, endx - 1);
-//   //setY(y start, y end);//set OLED RAM to y start, wrap around at y end
-//   uint8_t endy = y + image.height;
-//   display.setY(y, endy - 1);
-
-//   //now start a data transfer
-//   display.startData();
-//   //writeBuffer(buffer,count);//optimized write of a large buffer of 8 bit data
-//   display.writeBuffer(image.data, image.width * image.height);
-//   display.endTransfer();
-
-//   point_t result = {endx, endy};
-//   return result;
-// }
 
 // prints debug info
 void printDebug(char *buffer)

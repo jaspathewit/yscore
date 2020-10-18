@@ -85,6 +85,7 @@ public:
      void setCursor(uint8_t, uint8_t);
      void fontColor(uint16_t, uint16_t);
      tPoint printAt(uint8_t x, uint8_t y, char *str);
+     tPoint printCenteredAt(uint8_t y, char *str);
      tPoint printVerticalAt(uint8_t x, uint8_t y, char *str);
      virtual size_t write(uint8_t);
 

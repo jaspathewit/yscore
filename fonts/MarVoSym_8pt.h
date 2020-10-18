@@ -43,6 +43,9 @@
      } tFont;
 */
 
+#ifndef MarVoSym_8pt_h
+#define MarVoSym_8pt_h
+
 #include <stdint.h>
 #include "../TinyScreenExt.h"
 
@@ -179,3 +182,5 @@ static const tChar MarVoSym_8pt_array[] = {
 };
 
 const tFont MarVoSym_8pt = {4, MarVoSym_8pt_array};
+
+#endif

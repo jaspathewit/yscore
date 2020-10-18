@@ -23,7 +23,7 @@ limitations under the License.
 // #include <SPI.h>
 #include <stdlib.h>
 
-#include "iScore.h"
+#include "yScore.h"
 
 #include "TinyScreenExt.h"
 #include "TinyScreenBattery.h"

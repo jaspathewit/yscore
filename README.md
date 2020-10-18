@@ -1,4 +1,4 @@
-# iScore
+# yScore (Why Score)
 
 A personal score board for badminton based on the [Tinyscreen+](https://tinycircuits.com/products/tinyscreenplus).
 

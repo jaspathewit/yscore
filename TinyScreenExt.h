@@ -15,11 +15,13 @@ limitations under the License.
 
 */
 
-#ifndef TinyScreenExt_h
-#define TinyScreenExt_h
-
 #include <avr/pgmspace.h>
 #include <TinyScreen.h>
+
+#include "TinyScreenBattery.h"
+
+#ifndef TinyScreenExt_h
+#define TinyScreenExt_h
 
 // macros from DateTime.h
 /* Useful Constants */
@@ -74,8 +76,12 @@ public:
      void setFlip(uint8_t flip);
      void setBrightness(uint8_t);
 
-     // hardware
+     // hardware Buttons
      uint8_t getButtons(void);
+
+     // hardware battery
+     uint8_t getBatteryState();
+     float getVoltage();
 
      // Font (These will need to be changed to handle the AntiAliased fonts)
      void setFont(const tFont &);
@@ -107,6 +113,7 @@ private:
      void _init(uint8_t type);
 
      TinyScreen _display = 0;
+     TinyScreenBattery _battery;
 
      // info about the _display
      uint8_t _cursorX, _cursorY;

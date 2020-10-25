@@ -19,6 +19,7 @@ missing from the base TinyScreen.
 */
 
 #include "TinyScreenExt.h"
+#include "TinyScreenBattery.h"
 
 /*
   Constructor
@@ -36,6 +37,7 @@ void TinyScreenExt::_init(uint8_t type)
 {
 
     _display = TinyScreen(TinyScreenPlus);
+    _battery = TinyScreenBattery();
 
     // Set the pin to digital output, set it to 1, set it to ADC input, capture value.
     // Set the pin to digital output, set it to 0, set it to ADC input, capture value.
@@ -217,12 +219,25 @@ size_t TinyScreenExt::write(uint8_t ch)
     return 1;
 }
 
-// hardware (buttons battery)
+// hardware (buttons battery, etc.)
 
 // get the state of all the buttons
 uint8_t TinyScreenExt::getButtons(void)
 {
     return _display.getButtons();
+}
+
+// Get the battery voltage as a scaled value
+// between 0 to 10
+uint8_t TinyScreenExt::getBatteryState()
+{
+    return _battery.getState();
+}
+
+// Get the battery voltage
+float TinyScreenExt::getVoltage(void)
+{
+    return _battery.getVoltage();
 }
 
 // drawing methods

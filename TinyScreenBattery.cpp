@@ -31,11 +31,36 @@ TinyScreenBattery::TinyScreenBattery()
 */
 void TinyScreenBattery::_init()
 {
+    this->_tinyScreenVarient = getRevision();
+}
 
-    this->_tinyScreenVarient = TINYSCREEN_REV_3;
+// determins the refvison of the TinyScreen
+// by detectiny if A0 is floating
+uint8_t TinyScreenBattery::getRevision()
+{
+    uint32_t max = 0;
+    uint32_t min = 0;
+    for (uint8_t i = 0; i < 20; i++)
+    {
+        uint32_t reading = analogRead(A4);
+        if (reading > max)
+        {
+            max = reading;
+        }
 
-    // Set the pin to digital output, set it to 1, set it to ADC input, capture value.
-    // Set the pin to digital output, set it to 0, set it to ADC input, capture value.
+        if (reading < min)
+        {
+            max = reading;
+        }
+    }
+    uint32_t delta = max - min;
+    if (delta < REVISION_THRESHHOLD)
+    {
+        return TINYSCREEN_REV_4;
+    }
+
+    // assume its a Rev3 (code for the battery will work)
+    return TINYSCREEN_REV_3;
 }
 
 // Battery
@@ -78,11 +103,9 @@ float TinyScreenBattery::getVCC()
 // Get the battery voltage
 float TinyScreenBattery::getVoltage(void)
 {
-    const int VBATTpin = A4;
-
     // read the value and discard
-    float battVoltageReading = analogRead(VBATTpin);
-    battVoltageReading = analogRead(VBATTpin);
+    float battVoltageReading = analogRead(VBATT_PIN);
+    battVoltageReading = analogRead(VBATT_PIN);
     float battVoltage = this->getVCC() * battVoltageReading / 1023.0 / 0.5;
 
     return battVoltage;
@@ -125,7 +148,7 @@ uint8_t TinyScreenBattery::getStateRev3()
         // and that we will stay flat until the Vcc is
         // above VCC_UPPER
         this->_isFlat = true;
-        result = 2;
+        result = BATT_STATUS_02;
     }
 
     return result;
@@ -135,6 +158,49 @@ uint8_t TinyScreenBattery::getStateRev3()
 // between 0 to 10 for revision 4 tinyscreens
 uint8_t TinyScreenBattery::getStateRev4()
 {
-    uint8_t result = 10;
-    return result;
+    // get the current value of the battery
+    uint32_t reading = analogRead(VBATT_PIN);
+    reading = analogRead(VBATT_PIN);
+
+    // check that the new reading differs from the old
+    // by at least the threashhold.
+    if (abs(this->_currentVoltage - reading) < VBATT_THRESHOLD)
+    {
+        return this->_currentState;
+    }
+
+    // remember the new _currentVoltage
+    this->_currentVoltage = reading;
+
+    uint32_t level = VBATT_UPPER;
+    // check for full battery
+    if (this->_currentVoltage > level)
+    {
+        this->_currentState = BATT_STATUS_10;
+        return this->_currentState;
+    }
+
+    level -= VBATT_DIVISOR;
+    if (this->_currentVoltage > level)
+    {
+        this->_currentState = BATT_STATUS_08;
+        return this->_currentState;
+    }
+
+    level -= VBATT_DIVISOR;
+    if (this->_currentVoltage > level)
+    {
+        this->_currentState = BATT_STATUS_06;
+        return this->_currentState;
+    }
+
+    level -= VBATT_DIVISOR;
+    if (this->_currentVoltage > level)
+    {
+        this->_currentState = BATT_STATUS_04;
+        return this->_currentState;
+    }
+
+    this->_currentState = BATT_STATUS_02;
+    return this->_currentState;
 }

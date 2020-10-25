@@ -43,11 +43,11 @@
      } tFont;
 */
 
-#ifndef SanSerif_108pt_h
-#define SanSerif_10pt_h
-
 #include <stdint.h>
 #include "../TinyScreenExt.h"
+
+#ifndef SanSerif_108pt_h
+#define SanSerif_10pt_h
 
 #if (0x0 == 0x0)
 static const uint8_t image_data_SansSerif_10pt_0x20[33] = {

@@ -43,11 +43,11 @@
      } tFont;
 */
 
-#ifndef MarVoSym_10pt_h
-#define MarVoSym_10pt_h
-
 #include <stdint.h>
 #include "../TinyScreenExt.h"
+
+#ifndef MarVoSym_10pt_h
+#define MarVoSym_10pt_h
 
 #if (0x0 == 0x0)
 static const uint8_t image_data_MarVoSym_10pt_0xc2b6[66] = {

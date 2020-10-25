@@ -239,9 +239,6 @@ static const tImage *IMG_STATS_PLAYER[][4] = {{&img_Happy_blue, &img_Happy_green
 //TinyScreenPlus for TinyScreen+
 TinyScreenExt display = TinyScreenExt(TinyScreenPlus);
 
-// get the TinyScreenBattery
-TinyScreenBattery battery = TinyScreenBattery();
-
 // Labels for the buttons
 #define LBL_BUT_MODE "MODE"
 #define LBL_BUT_BACK "BACK"
@@ -375,7 +372,10 @@ void loop()
 // handle updating the battery state
 void updateBatteryState()
 {
-  uint8_t newState = battery.getState();
+  uint32_t voltage = analogRead(A4);
+  printDebug(voltage);
+
+  uint8_t newState = display.getBatteryState();
 
   if (batteryState != newState)
   {
@@ -1544,17 +1544,17 @@ void printDebug(char *buffer)
 }
 
 // prints debug info
-void printDebug(int number)
+void printDebug(uint32_t number)
 {
   display.setFont(SansSerif_8pt);
   display.setCursor(20, 0);
-  display.print(number);
+  display.print(number, 10);
 }
 
 // prints debug info
-void printDebug(float number)
+void printDebug(double number)
 {
   display.setFont(SansSerif_8pt);
   display.setCursor(20, 0);
-  display.print(number);
+  display.print(number, 2);
 }

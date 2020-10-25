@@ -20,11 +20,11 @@
      } tFont;
 */
 
-#ifndef DigitsSmall_h
-#define DigitsSmall_h
-
 #include <stdint.h>
 #include "../TinyScreenExt.h"
+
+#ifndef DigitsSmall_h
+#define DigitsSmall_h
 
 #if (0x0 == 0x0)
 

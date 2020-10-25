@@ -15,10 +15,10 @@ limitations under the License.
 
 */
 
+#include <stdint.h>
+
 #ifndef iScore_h
 #define iScore_h
-
-#include <stdint.h>
 
 // typedef struct
 // {

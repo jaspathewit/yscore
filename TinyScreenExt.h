@@ -83,7 +83,7 @@ public:
      uint8_t getBatteryState();
      float getVoltage();
 
-     // Font (These will need to be changed to handle the AntiAliased fonts)
+     // Anti aliased Font handeling
      void setFont(const tFont &);
      uint8_t getFontHeight(const tFont &);
      uint8_t getFontHeight(void);

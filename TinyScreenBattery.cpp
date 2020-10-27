@@ -172,35 +172,21 @@ uint8_t TinyScreenBattery::getStateRev4()
     // remember the new _currentVoltage
     this->_currentVoltage = reading;
 
-    uint32_t level = VBATT_UPPER;
+    uint8_t state = ((reading - VBATT_LOWER) / VBATT_DIVISOR) * 2;
+
     // check for full battery
-    if (this->_currentVoltage > level)
+    if (state > 10)
     {
-        this->_currentState = BATT_STATUS_10;
-        return this->_currentState;
+        state = BATT_STATUS_10;
     }
 
-    level -= VBATT_DIVISOR;
-    if (this->_currentVoltage > level)
+    // check for flat battery
+    if (state < 2)
     {
-        this->_currentState = BATT_STATUS_08;
-        return this->_currentState;
+        state = BATT_STATUS_02;
     }
 
-    level -= VBATT_DIVISOR;
-    if (this->_currentVoltage > level)
-    {
-        this->_currentState = BATT_STATUS_06;
-        return this->_currentState;
-    }
-
-    level -= VBATT_DIVISOR;
-    if (this->_currentVoltage > level)
-    {
-        this->_currentState = BATT_STATUS_04;
-        return this->_currentState;
-    }
-
-    this->_currentState = BATT_STATUS_02;
+    // remember the current state
+    this->_currentState = state;
     return this->_currentState;
 }

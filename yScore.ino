@@ -333,6 +333,9 @@ void loop()
   // update the button states
   updateButtonStates();
 
+  // for testing update the button state
+  // updateButtonStatesSequence();
+
   // perform the action
   performAction();
 
@@ -414,6 +417,47 @@ void updateButtonStates()
   // printButtonStates();
 }
 
+// update the button states
+void updateButtonStatesSequence()
+{
+  bool curStateMode = false;
+  bool curStateBack = false;
+  bool curStateThem = false;
+  bool curStateUs = false;
+
+  long button = random(0, 12);
+
+  if (button == 0)
+  {
+    buttonStateMode = BUT_STATE_PRESSED;
+    curStateMode = true;
+  }
+
+  if (button == 1)
+  {
+    buttonStateBack = BUT_STATE_PRESSED;
+    curStateBack = true;
+  }
+
+  if (button > 2 && button < 7)
+  {
+    buttonStateUs = BUT_STATE_PRESSED;
+    curStateUs = true;
+  }
+
+  if (button > 7)
+  {
+    buttonStateThem = BUT_STATE_PRESSED;
+    curStateThem = true;
+  }
+
+  // update the prev states with the current state
+  prevStateMode = curStateMode;
+  prevStateBack = curStateBack;
+  prevStateThem = curStateThem;
+  prevStateUs = curStateUs;
+}
+
 void printButtonStates()
 {
   display.setFont(SansSerif_8pt);
@@ -469,10 +513,6 @@ void resetButtonState()
 // perform action
 void performAction()
 {
-
-  // check for a long press on the mode
-  // button
-  // performActionDefault();
 
   switch (appState)
   {

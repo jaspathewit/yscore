@@ -39,7 +39,7 @@ void TinyScreenBattery::_init()
 uint8_t TinyScreenBattery::getRevision()
 {
     uint32_t max = 0;
-    uint32_t min = 0;
+    uint32_t min = UINT32_MAX;
     for (uint8_t i = 0; i < 20; i++)
     {
         uint32_t reading = analogRead(A4);
@@ -172,7 +172,8 @@ uint8_t TinyScreenBattery::getStateRev4()
     // remember the new _currentVoltage
     this->_currentVoltage = reading;
 
-    uint8_t state = ((reading - VBATT_LOWER) / VBATT_DIVISOR) * 2;
+    // gets a value between 0 and 12
+    uint8_t state = (reading - VBATT_LOWER) / VBATT_DIVISOR;
 
     // check for full battery
     if (state > 10)

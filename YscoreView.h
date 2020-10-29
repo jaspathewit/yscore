@@ -1,7 +1,3 @@
-/*********************************************************************
-iScore
-*********************************************************************/
-
 /*
 Copyright (C) 2020 Jason Hewitt
 
@@ -19,15 +15,8 @@ limitations under the License.
 
 */
 
-// #include <Wire.h>
-// #include <SPI.h>
-#include <stdlib.h>
-
-#include "yScore.h"
-#include "YscoreModel.h"
-#include "YscoreView.h"
-#include "YscoreControler.h"
-#include "TinyScreenExt.h"
+#ifndef YScoreView_h
+#define YScoreView_h
 
 // Screen dimensions and locations
 #define SCREEN_MENU_MARGIN_Y 10
@@ -229,9 +218,6 @@ static const tImage *IMG_STATS_PLAYER[][4] = {{&img_Happy_blue, &img_Happy_green
 //TinyScreenAlternate for alternate address TinyScreen shields
 //TinyScreenPlus for TinyScreen+
 TinyScreenExt display = TinyScreenExt(TinyScreenPlus);
-YscoreView view = YscoreView(display);
-YscoreModel model = YscoreModel(display);
-YscoreControler controler = YscoreControler(display);
 
 // Labels for the buttons
 #define LBL_BUT_MODE "MODE"
@@ -244,11 +230,29 @@ YscoreControler controler = YscoreControler(display);
 #define LBL_MENU_STATS "Stats"
 #define LBL_MENU_RESTART "Restart"
 
+// map the TSButtons (for the display flip)
+uint8_t TSButtonMode = TSButtonUpperLeft;
+uint8_t TSButtonBack = TSButtonLowerLeft;
+uint8_t TSButtonThem = TSButtonUpperRight;
+uint8_t TSButtonUs = TSButtonLowerRight;
+
+// define the button previous states
+bool prevStateMode = false;
+bool prevStateBack = false;
+bool prevStateThem = false;
+bool prevStateUs = false;
+
 // start in an unknown state application states
 uint8_t appState = APP_STATE_UNDEF;
 
 // indicates when the model has changed
 bool modelChanged = false;
+
+// the button states
+uint8_t buttonStateMode = BUT_STATE_UNPRESSED;
+uint8_t buttonStateBack = BUT_STATE_UNPRESSED;
+uint8_t buttonStateUs = BUT_STATE_UNPRESSED;
+uint8_t buttonStateThem = BUT_STATE_UNPRESSED;
 
 // current battery state
 uint8_t batteryState = 0;
@@ -269,815 +273,54 @@ unsigned long playingTime;
 // who won the match
 uint8_t winner = NONE;
 
-//////////////////////////
-// Setup the initial state
-//////////////////////////
-
-void setup()
+// Class provides the view functionality.
+class YscoreView
 {
-  // wire up the model view and controler
-  model.setView(view);
-  control
-
-      // starting state
-      appState = APP_STATE_STARTING;
-
-  // setupButtons();
-  resetButtonState();
-  setupdisplay();
-  resetScorepad();
-}
-
-void setupdisplay()
-{
-  display.begin();
-  // needs to be set so that the button definitions are correct
-  display.setFlip(true);
-  //setBrightness(brightness);//sets main current level, valid levels are 0-15
-  display.setBrightness(10);
-  // set the font to be used
-  //display.setFont(liberationSans_8ptFontInfo);
-  // set white text on black background
-  display.fontColor(TS_8b_White, TS_8b_Black);
-
-  // draw the starting screen
-  drawStartScreen();
-}
-
-////////////////////////////////////////////////
-// Main evaluation loop
-// keep this short to improve the responsiveness
-////////////////////////////////////////////////
-void loop()
-{
-  // update the button states
-  updateButtonStates();
-
-  // for testing update the button state
-  // updateButtonStatesSequence();
-
-  // perform the action
-  performAction();
-
-  // update the display according to the current state
-  // but only if the model has changed
-  if (modelChanged)
-  {
-    updateDisplay();
-  }
-
-  // unsigned long time = millis();
-  updateBatteryState();
-
-  if (modelChanged)
-  {
-    drawBatteryIcon(SCREEN_BATTERY_X, display.yMin);
-  }
-
-  delay(50);
-
-  // any changes to the model will have been handled
-  modelChanged = false;
-
-  // Display current battery voltage
-  //float voltage = battery.getVCC();
-  //printDebug(voltage);
-
-  //  Serial.print("Loop Time");
-  //  Serial.print(millis() - time);
-  //  Serial.println("ms");
-}
-
-///////////////////////
-// Handle Battery State
-///////////////////////
-
-// handle updating the battery state
-void updateBatteryState()
-{
-  uint32_t voltage = analogRead(A4);
-  printDebug(voltage);
-
-  uint8_t newState = display.getBatteryState();
-
-  if (batteryState != newState)
-  {
-    batteryState = newState;
-    modelChanged = true;
-  }
-}
-
-///////////////////////////
-// Handle the Button states
-///////////////////////////
-
-// update the button states
-void updateButtonStates()
-{
-  // get the current state of the all buttons
-  int8_t buttons = display.getButtons();
-
-  bool curStateMode = (buttons & TSButtonMode) > 0;
-  bool curStateBack = (buttons & TSButtonBack) > 0;
-  bool curStateThem = (buttons & TSButtonThem) > 0;
-  bool curStateUs = (buttons & TSButtonUs) > 0;
-
-  // determine what the button states are
-  buttonStateMode = readButtonState(prevStateMode, curStateMode);
-  buttonStateBack = readButtonState(prevStateBack, curStateBack);
-  buttonStateUs = readButtonState(prevStateUs, curStateUs);
-  buttonStateThem = readButtonState(prevStateThem, curStateThem);
-
-  // update the prev states with the current state
-  prevStateMode = curStateMode;
-  prevStateBack = curStateBack;
-  prevStateThem = curStateThem;
-  prevStateUs = curStateUs;
-
-  // printButtonStates();
-}
-
-// update the button states
-void updateButtonStatesSequence()
-{
-  bool curStateMode = false;
-  bool curStateBack = false;
-  bool curStateThem = false;
-  bool curStateUs = false;
-
-  long button = random(0, 12);
-
-  if (button == 0)
-  {
-    buttonStateMode = BUT_STATE_PRESSED;
-    curStateMode = true;
-  }
-
-  if (button == 1)
-  {
-    buttonStateBack = BUT_STATE_PRESSED;
-    curStateBack = true;
-  }
-
-  if (button > 2 && button < 7)
-  {
-    buttonStateUs = BUT_STATE_PRESSED;
-    curStateUs = true;
-  }
-
-  if (button > 7)
-  {
-    buttonStateThem = BUT_STATE_PRESSED;
-    curStateThem = true;
-  }
-
-  // update the prev states with the current state
-  prevStateMode = curStateMode;
-  prevStateBack = curStateBack;
-  prevStateThem = curStateThem;
-  prevStateUs = curStateUs;
-}
-
-void printButtonStates()
-{
-  display.setFont(SansSerif_8pt);
-  display.setCursor(0, 50);
-  display.print("M ");
-  printButtonState(buttonStateMode);
-  display.print("B ");
-  printButtonState(buttonStateBack);
-  display.print("T ");
-  printButtonState(buttonStateThem);
-  display.print("U ");
-  printButtonState(buttonStateUs);
-}
-
-void printButtonState(uint8_t buttonState)
-{
-  if (buttonState == BUT_STATE_PRESSED)
-  {
-    display.print("p ");
-  }
-  else
-  {
-    display.print("u ");
-  }
-}
-
-// update the button state for a single button
-uint8_t readButtonState(bool prevState, bool currState)
-{
-  // if our state changed and we are not pressed now
-  // then the button was released (so it had been pressed)
-  if (prevState != currState && currState == false)
-  {
-    return BUT_STATE_PRESSED;
-  }
-  return BUT_STATE_UNPRESSED;
-}
-
-// function resets all button states to BUT_STATE_UNPRESSED
-void resetButtonState()
-{
-  buttonStateMode = BUT_STATE_UNPRESSED;
-  buttonStateBack = BUT_STATE_UNPRESSED;
-  buttonStateUs = BUT_STATE_UNPRESSED;
-  buttonStateThem = BUT_STATE_UNPRESSED;
-}
-
-////////////////////////////////////////
-// Perform Actions depending on AppState
-// and button state
-////////////////////////////////////////
-
-// perform action
-void performAction()
-{
-
-  switch (appState)
-  {
-  case APP_STATE_STARTING:
-    performActionStarting();
-    break;
-  case APP_STATE_SET_SERVE:
-    performActionSettingServe();
-    break;
-  case APP_STATE_PLAYING:
-    performActionPlaying();
-    break;
-  case APP_STATE_PAUSING:
-    performActionPausing();
-    break;
-  case APP_STATE_PAUSING_TIME:
-    performActionPausingTime();
-    break;
-  case APP_STATE_WINNING:
-    performActionWinning();
-    break;
-  case APP_STATE_STATS:
-    performActionStats();
-    break;
-  case APP_STATE_STATS_TIME:
-    performActionStatsTime();
-    break;
-  }
-}
-
-// perform the default action for all app states
-void performActionDefault()
-{
-}
-
-// deform the action for the App_Starting state
-// must set modelChanged if the model is changed by this action
-void performActionStarting()
-{
-  if ((buttonStateMode == BUT_STATE_PRESSED) || (buttonStateBack == BUT_STATE_PRESSED) || (buttonStateThem == BUT_STATE_PRESSED) || (buttonStateUs == BUT_STATE_PRESSED))
-  {
-    appState = APP_STATE_SET_SERVE;
-    modelChanged = true;
-    return;
-  }
-}
-
-// peform the action for the app setting state
-// must set modelChanged if the model in changed by this action
-void performActionSettingServe()
-{
-
-  // check for go back
-  if (buttonStateBack == BUT_STATE_PRESSED)
-  {
-    appState = APP_STATE_STARTING;
-    modelChanged = true;
-    return;
-  }
-
-  // check for do nothing
-  bool doNothing = checkDoNothing();
-  if (doNothing)
-  {
-    return;
-  }
-
-  uint8_t whoToUpdate = NONE;
-
-  if (buttonStateUs == BUT_STATE_PRESSED)
-  {
-    whoToUpdate = US;
-  }
-
-  if (buttonStateThem == BUT_STATE_PRESSED)
-  {
-    whoToUpdate = THEM;
-  }
-
-  setServe(scorepadIdx, whoToUpdate);
-  startTime = millis();
-  // JHW Temp
-  appState = APP_STATE_PLAYING;
-  // appState = APP_STATE_WINNING;
-  // winner = THEM;
-  modelChanged = true;
-}
-
-// perform the action for the app playing state
-// must set modelChanged if the model in changed by this action
-void performActionPlaying()
-{
-  //printDebug(scorepadIdx);
-
-  if (buttonStateMode == BUT_STATE_PRESSED)
-  {
-    createSummaryTable();
-    playingTime = millis() - startTime;
-    appState = APP_STATE_PAUSING;
-    modelChanged = true;
-    return;
-  }
-
-  if (buttonStateBack == BUT_STATE_PRESSED)
-  {
-    // We want to go back and no points have been scored
-    if (scorepadIdx == 0)
-    {
-      appState = APP_STATE_SET_SERVE;
-      resetScorepad();
-    }
-    else
-    {
-      decScorepadIdx();
-    }
-    modelChanged = true;
-    return;
-  }
-
-  // check for do nothing
-  bool doNothing = checkDoNothing();
-  if (doNothing)
-  {
-    return;
-  }
-
-  uint8_t whoToUpdate = NONE;
-
-  if (buttonStateUs == BUT_STATE_PRESSED)
-  {
-    whoToUpdate = US;
-  }
-
-  if (buttonStateThem == BUT_STATE_PRESSED)
-  {
-    whoToUpdate = THEM;
-  }
-
-  copyScorepadRowTo(scorepadIdx, scorepadIdx + 1);
-  incScorepadIdx();
-  // update the score and who has the serve
-  setServe(scorepadIdx, whoToUpdate);
-  incPoints(scorepadIdx, whoToUpdate);
-  modelChanged = true;
-  checkGameWon();
-}
-
-// check if a game was won
-void checkGameWon()
-{
-
-  // first check if a game was won by US
-  uint8_t whoToUpdate = checkGameWonBy(US, THEM);
-  if (whoToUpdate == NONE)
-  {
-    whoToUpdate = checkGameWonBy(THEM, US);
-  }
-
-  // uint8_t whoToUpdate = NONE;
-
-  // // get the points
-  // uint8_t usPoints = getPoints(scorepadIdx, US);
-  // uint8_t themPoints = getPoints(scorepadIdx, THEM);
-
-  // // US got to 21 points before THEM
-  // if (usPoints == 21 && themPoints < 20) {
-  //   whoToUpdate = US;
-  // }
-
-  // if (themPoints == 21 && usPoints < 20) {
-  //   whoToUpdate = THEM;
-  // }
-
-  // // US got passed 21 and two points in the lead
-  // if (usPoints > 21 && (usPoints - themPoints) >=2 ) {
-  //   whoToUpdate = US;
-  // }
-
-  // if (themPoints > 21 && (themPoints - usPoints) >=2 ) {
-  //   whoToUpdate = THEM;
-  // }
-
-  // // check for defacto winner at 30 points
-  // if (usPoints == 30) {
-  //   whoToUpdate = US;
-  // }
-
-  // if (themPoints == 30) {
-  //   whoToUpdate = THEM;
-  // }
-
-  // perform the update
-  if (whoToUpdate != NONE)
-  {
-    // mark this scorepad as an end of game
-    endOfGameOn(scorepadIdx);
-    copyScorepadNewGameRowTo(scorepadIdx, scorepadIdx + 1);
-    incScorepadIdx();
-    incGames(scorepadIdx, whoToUpdate);
-    modelChanged = true;
-    checkMatchWon();
-  }
-}
-
-// check if a game was won by lhs as compared to rhs
-// if the game was won by the lhs return lhs else
-// return NONE, basically this determines if lhs
-// won a game. It makes no statement about the rhs
-// this must be tested for separatly
-uint8_t checkGameWonBy(uint8_t lhs, uint8_t rhs)
-{
-  uint8_t result = NONE;
-
-  // get the points
-  uint8_t lhsPoints = getPoints(scorepadIdx, lhs);
-  uint8_t rhsPoints = getPoints(scorepadIdx, rhs);
-
-  // lhs got to 21 points before rhs
-  if (lhsPoints == 21 && rhsPoints < 20)
-  {
-    result = lhs;
-  }
-
-  // lhs got passed 21 and is two points in the lead
-  if (lhsPoints > 21 && (lhsPoints - rhsPoints) >= 2)
-  {
-    result = lhs;
-  }
-
-  // check for defacto winner at 30 points
-  if (lhsPoints == 30)
-  {
-    result = lhs;
-  }
-
-  return result;
-}
-
-// check if a match was won
-void checkMatchWon()
-{
-  uint8_t whoToUpdate = NONE;
-  // get the games
-  uint8_t usGames = getGames(scorepadIdx, US);
-  uint8_t themGames = getGames(scorepadIdx, THEM);
-
-  // US got to 2 games before THEM
-  if (usGames == 2)
-  {
-    whoToUpdate = US;
-  }
-
-  if (themGames == 2)
-  {
-    whoToUpdate = THEM;
-  }
-
-  // perform the update
-  if (whoToUpdate != NONE)
-  {
-    // mark this scorepad as an end of game
-    // endOfGameOn(scorepadIdx);
-    // incScorepadIdx();
-    // record the winner
-    winner = whoToUpdate;
-    createSummaryTable();
-    playingTime = millis() - startTime;
-    appState = APP_STATE_WINNING;
-    modelChanged = true;
-  }
-}
-
-// return true if neither the us and them buttons were pressed or
-// both were pressed
-bool checkDoNothing()
-{
-  // either both buttons were pressed or neither button was pressed
-  return buttonStateUs == buttonStateThem;
-}
-
-// perform the action for the App_Winning state
-// must set modelChanged if the model in changed by this action
-void performActionWinning()
-{
-  // show the stats
-  if (buttonStateMode == BUT_STATE_PRESSED)
-  {
-    appState = APP_STATE_STATS;
-    modelChanged = true;
-    return;
-  }
-
-  // We have not won yet
-  if (buttonStateBack == BUT_STATE_PRESSED)
-  {
-    decScorepadIdx();
-    appState = APP_STATE_PLAYING;
-    modelChanged = true;
-    return;
-  }
-
-  // us or them restart
-  if (buttonStateUs == BUT_STATE_PRESSED || buttonStateThem == BUT_STATE_PRESSED)
-  {
-    appState = APP_STATE_SET_SERVE;
-    resetScorepad();
-    modelChanged = true;
-    return;
-  }
-
-  return;
-}
-
-// perform the action for the App_Stats state
-// must set modelChanged if the model is changed by this action
-void performActionStats()
-{
-  if (buttonStateBack == BUT_STATE_PRESSED)
-  {
-    appState = APP_STATE_WINNING;
-    modelChanged = true;
-    return;
-  }
-
-  if (buttonStateMode == BUT_STATE_PRESSED)
-  {
-    appState = APP_STATE_STATS_TIME;
-    modelChanged = true;
-    return;
-  }
-
-  // us or them restart
-  if (buttonStateUs == BUT_STATE_PRESSED || buttonStateThem == BUT_STATE_PRESSED)
-  {
-    appState = APP_STATE_SET_SERVE;
-    resetScorepad();
-    modelChanged = true;
-    return;
-  }
-}
-
-// perform the action for the App_Stats_time state
-// must set modelChanged if the model is changed by this action
-void performActionStatsTime()
-{
-  if (buttonStateBack == BUT_STATE_PRESSED)
-  {
-    appState = APP_STATE_STATS;
-    modelChanged = true;
-    return;
-  }
-
-  // us or them restart
-  if (buttonStateUs == BUT_STATE_PRESSED || buttonStateThem == BUT_STATE_PRESSED)
-  {
-    appState = APP_STATE_SET_SERVE;
-    resetScorepad();
-    modelChanged = true;
-    return;
-  }
-}
-
-// perform the action for the App_Pausing state
-// must set modelChanged if the model in changed by this action
-void performActionPausing()
-{
-  if (buttonStateBack == BUT_STATE_PRESSED)
-  {
-    appState = APP_STATE_PLAYING;
-    modelChanged = true;
-    return;
-  }
-
-  if (buttonStateMode == BUT_STATE_PRESSED)
-  {
-    appState = APP_STATE_PAUSING_TIME;
-    modelChanged = true;
-    return;
-  }
-
-  // us or them restart
-  if (buttonStateUs == BUT_STATE_PRESSED || buttonStateThem == BUT_STATE_PRESSED)
-  {
-    appState = APP_STATE_SET_SERVE;
-    resetScorepad();
-    modelChanged = true;
-    return;
-  }
-}
-
-// perform the action for the App_Pausing_Time state
-// must set modelChanged if the model in changed by this action
-void performActionPausingTime()
-{
-  if (buttonStateBack == BUT_STATE_PRESSED)
-  {
-    appState = APP_STATE_PAUSING;
-    modelChanged = true;
-    return;
-  }
-
-  // us or them restart
-  if (buttonStateUs == BUT_STATE_PRESSED || buttonStateThem == BUT_STATE_PRESSED)
-  {
-    appState = APP_STATE_SET_SERVE;
-    resetScorepad();
-    modelChanged = true;
-    return;
-  }
-}
-
-///////////////////////
-// manage the score pad
-///////////////////////
-
-// resets all the values in the scorepad to zero
-// TODO check if it is suficient to just set the
-// first row to 00
-void resetScorepad()
-{
-  // reset the scorepad
-  // for (int i = 0; i < SCOREPAD_MAX_SIZE ; i++) {
-  //   scorepad[i][US] = 0;
-  //   scorepad[i][THEM] = 0;
-  // }
-
-  scorepad[0][US] = 0;
-  scorepad[0][THEM] = 0;
-
-  winner = NONE;
-  scorepadIdx = 0;
-}
-
-// copy the score pad row reseting the has serve bit and EndOfGame at the same time
-void copyScorepadRowTo(uint8_t from, uint8_t to)
-{
-  // copy the score pad row mask out the end of game bit
-  scorepad[to][THEM] = scorepad[from][THEM] & MASK_8TH_BIT_OFF;
-  // copy the US score pad row
-  scorepad[to][US] = scorepad[from][US];
-  // copy the PLAYER score pad row
-  scorepad[to][PLAYER] = scorepad[from][PLAYER];
-}
-
-// copy the score pad row keeping the serve and the games
-void copyScorepadNewGameRowTo(uint8_t from, uint8_t to)
-{
-  // keep the number of games
-  scorepad[to][THEM] = scorepad[from][THEM] & MASK_GAMES;
-  // keep the number of games and the serve bit
-  scorepad[to][US] = scorepad[from][US] & MASK_GAMES;
-  // keep the number of games and the serve bit
-  scorepad[to][PLAYER] = scorepad[from][PLAYER];
-}
-
-// function increments the score pad index
-inline void incScorepadIdx()
-{
-  scorepadIdx++;
-}
-
-// function decrements the score pad index
-// taking into account the EndOfGameMarker
-// if there is one
-inline void decScorepadIdx()
-{
-  scorepadIdx--;
-  if (isEndOfGame(scorepadIdx))
-  {
-    // go back before the end of the game
-    scorepadIdx--;
-  }
-}
-
-// resets all the values in the summarypad to NULL_SCOREPAD_IDX
-void resetSummarypad()
-{
-  for (int i = 0; i < SUMMARYPAD_MAX_SIZE; i++)
-  {
-    summarypad[i] = NULL_SCOREPAD_IDX;
-  }
-}
-
-// function creates the summary table from the scorepad
-void createSummaryTable()
-{
-  resetSummarypad();
-  uint8_t summaryIdx = 0;
-  for (int i = 0; i < scorepadIdx; i++)
-  {
-    // if this was the score at the end of the game
-    if (isEndOfGame(i))
-    {
-      summarypad[summaryIdx] = i;
-      summaryIdx++;
-    }
-  }
-}
-
-//////////////////////////////////////////////////////////////////
-// manage data extraction and setting of values from the score pad
-//////////////////////////////////////////////////////////////////
-
-// sets the uint8_t serve bit of the scorepad row at the given index off or on
-// depending on who has the serve
-inline void setServe(uint8_t index, uint8_t who)
-{
-  if (who == US)
-  {
-    // record that US now has the serve
-    scorepad[index][PLAYER] |= MASK_1ST_BIT_ON;
-    // if we are not at the start of the match
-    if (index != 0)
-    {
-      // check if we had the serve on the previous point
-      bool hadServe = hasServe(index - 1, US);
-      if (hadServe)
-      {
-        // toggle the position of the players
-        scorepad[index][PLAYER] ^= MASK_2ND_BIT_ON;
-      }
-    }
-  }
-  else
-  {
-    scorepad[index][PLAYER] &= MASK_1ST_BIT_OFF;
-    // if we are not at the start of the match
-    if (index != 0)
-    {
-      // check if they had the serve on the previous point
-      bool hadServe = hasServe(index - 1, THEM);
-      if (hadServe)
-      {
-        // toggle the position of the players
-        scorepad[index][PLAYER] ^= MASK_3RD_BIT_ON;
-      }
-    }
-  }
-}
-
-// sets the THEM uint8_t EndOfGame bit of the scorepad row at the given index on
-void endOfGameOn(uint8_t index)
-{
-  scorepad[index][THEM] |= MASK_8TH_BIT_ON;
-}
-
-// gets the THEM uint8_t EndOfGame bit of the scorepad row at the given index on
-bool isEndOfGame(uint8_t index)
-{
-  return scorepad[index][THEM] & MASK_8TH_BIT_ON;
-}
-
-// gets the number of games from the  scorepad row at the given index for the given player
-uint8_t getGames(uint8_t index, uint8_t who)
-{
-  uint8_t result = scorepad[index][who] & MASK_GAMES;
-  return result >> 5;
-}
-
-// adds one to the number of games given index for the given player
-void incGames(uint8_t index, uint8_t who)
-{
-  scorepad[index][who] += ONE_GAME;
-}
-
-// gets the points from the  scorepad row at the given index for the given player
-uint8_t getPoints(uint8_t index, uint8_t who)
-{
-  uint8_t result = scorepad[index][who] & MASK_POINTS;
-  return result;
-}
-
-// adds one to the number of points scorepad row at the given index for the given player
-void incPoints(uint8_t index, uint8_t who)
-{
-  scorepad[index][who]++;
-}
-
-// gets the serve status from the scorepad row at the given index for the given player
-inline bool hasServe(uint8_t index, uint8_t who)
-{
-  // get if the serve is true or false
-  bool result = scorepad[index][PLAYER] & MASK_1ST_BIT_ON;
-  return who == US ? result : !result;
-}
+public:
+  YscoreView(TinyScreenExt display);
+
+  // void begin(void);
+  // void setFlip(uint8_t flip);
+  // void setBrightness(uint8_t);
+
+  // // hardware Buttons
+  // uint8_t getButtons(void);
+
+  // // hardware battery
+  // uint8_t getBatteryState();
+  // float getVoltage();
+
+  // // Anti aliased Font handeling
+  // void setFont(const tFont &);
+  // uint8_t getFontHeight(const tFont &);
+  // uint8_t getFontHeight(void);
+  // uint8_t getPrintWidth(char *);
+  // void setCursor(uint8_t, uint8_t);
+  // void fontColor(uint16_t, uint16_t);
+  // tPoint printAt(uint8_t x, uint8_t y, char *str);
+  // tPoint printCenteredAt(uint8_t y, char *str);
+  // tPoint printVerticalAt(uint8_t x, uint8_t y, char *str);
+  // virtual size_t write(uint8_t);
+
+  // //drawing commands
+  // //   void drawLine(uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t);
+  // void drawLine(uint8_t, uint8_t, uint8_t, uint8_t, uint16_t);
+  // //   void drawRect(uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t);
+  // void drawRect(uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, uint16_t);
+  // //   void clearWindow(uint8_t, uint8_t, uint8_t, uint8_t);
+  // tPoint drawImageAt(uint8_t x, uint8_t y, const tImage *image);
+  // void clearScreen(void);
+
+  // static const uint8_t xMin = 0;
+  // static const uint8_t yMin = 0;
+  // static const uint8_t xMax = 95;
+  // static const uint8_t yMax = 63;
+
+private:
+  void _init(TinyScreenExt display);
+
+  TinyScreenExt _display = 0;
+};
 
 // handle the display updates etc
 // update the display according to the state
@@ -1555,26 +798,4 @@ char *zeroPad(char *buffer, uint8_t value)
   return buffer;
 }
 
-// prints debug info
-void printDebug(char *buffer)
-{
-  display.setFont(SansSerif_8pt);
-  display.setCursor(10, 0);
-  display.print(buffer);
-}
-
-// prints debug info
-void printDebug(uint32_t number)
-{
-  display.setFont(SansSerif_8pt);
-  display.setCursor(20, 0);
-  display.print(number, 10);
-}
-
-// prints debug info
-void printDebug(double number)
-{
-  display.setFont(SansSerif_8pt);
-  display.setCursor(20, 0);
-  display.print(number, 2);
-}
+#endif

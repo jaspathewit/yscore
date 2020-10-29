@@ -1,7 +1,3 @@
-/*********************************************************************
-iScore
-*********************************************************************/
-
 /*
 Copyright (C) 2020 Jason Hewitt
 
@@ -19,15 +15,20 @@ limitations under the License.
 
 */
 
-// #include <Wire.h>
-// #include <SPI.h>
-#include <stdlib.h>
-
-#include "yScore.h"
-#include "YscoreModel.h"
 #include "YscoreView.h"
-#include "YscoreControler.h"
+
 #include "TinyScreenExt.h"
+#include "TinyScreenBattery.h"
+#include "fonts/DigitsSmall.h"
+#include "fonts/DigitsLarge.h"
+#include "fonts/SansSerif_8pt.h"
+#include "fonts/SansSerif_10pt.h"
+#include "fonts/SansSerif_12pt.h"
+#include "fonts/MarVoSym_10pt.h"
+
+//#include "fonts/TinyFont.h"
+//#include "fonts/windings3.h"
+#include "images/images.h"
 
 // Screen dimensions and locations
 #define SCREEN_MENU_MARGIN_Y 10
@@ -229,9 +230,6 @@ static const tImage *IMG_STATS_PLAYER[][4] = {{&img_Happy_blue, &img_Happy_green
 //TinyScreenAlternate for alternate address TinyScreen shields
 //TinyScreenPlus for TinyScreen+
 TinyScreenExt display = TinyScreenExt(TinyScreenPlus);
-YscoreView view = YscoreView(display);
-YscoreModel model = YscoreModel(display);
-YscoreControler controler = YscoreControler(display);
 
 // Labels for the buttons
 #define LBL_BUT_MODE "MODE"
@@ -244,11 +242,29 @@ YscoreControler controler = YscoreControler(display);
 #define LBL_MENU_STATS "Stats"
 #define LBL_MENU_RESTART "Restart"
 
+// map the TSButtons (for the display flip)
+uint8_t TSButtonMode = TSButtonUpperLeft;
+uint8_t TSButtonBack = TSButtonLowerLeft;
+uint8_t TSButtonThem = TSButtonUpperRight;
+uint8_t TSButtonUs = TSButtonLowerRight;
+
+// define the button previous states
+bool prevStateMode = false;
+bool prevStateBack = false;
+bool prevStateThem = false;
+bool prevStateUs = false;
+
 // start in an unknown state application states
 uint8_t appState = APP_STATE_UNDEF;
 
 // indicates when the model has changed
 bool modelChanged = false;
+
+// the button states
+uint8_t buttonStateMode = BUT_STATE_UNPRESSED;
+uint8_t buttonStateBack = BUT_STATE_UNPRESSED;
+uint8_t buttonStateUs = BUT_STATE_UNPRESSED;
+uint8_t buttonStateThem = BUT_STATE_UNPRESSED;
 
 // current battery state
 uint8_t batteryState = 0;
@@ -275,12 +291,8 @@ uint8_t winner = NONE;
 
 void setup()
 {
-  // wire up the model view and controler
-  model.setView(view);
-  control
-
-      // starting state
-      appState = APP_STATE_STARTING;
+  // starting state
+  appState = APP_STATE_STARTING;
 
   // setupButtons();
   resetButtonState();

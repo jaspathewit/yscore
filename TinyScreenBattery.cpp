@@ -50,7 +50,7 @@ uint8_t TinyScreenBattery::getRevision()
 
         if (reading < min)
         {
-            max = reading;
+            min = reading;
         }
     }
     uint32_t delta = max - min;

@@ -26,9 +26,9 @@ limitations under the License.
 // the analog pin giving the value of the Battery
 #define VBATT_PIN A4
 #define VBATT_THRESHOLD 5
-#define VBATT_UPPER 600
-#define VBATT_LOWER 500
-#define VBATT_DIVISOR 15
+#define VBATT_UPPER 640
+#define VBATT_LOWER 520
+#define VBATT_DIVISOR 10
 
 // value should give about an hours usage
 // before dying completly

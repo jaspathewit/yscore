@@ -15,61 +15,18 @@ limitations under the License.
 
 */
 
+// #include "IYscoreView.h"
+#include "TinyScreenExt.h"
+#include "IYscoreView.h"
+
 #ifndef YScoreModel_h
 #define YScoreModel_h
 
-// Screen dimensions and locations
-#define SCREEN_MENU_MARGIN_Y 10
-
-#define SCREEN_BATTERY_X 82
-
-#define SCREEN_BUTTON_LEFT_MARGIN_X 7
-#define SCREEN_BUTTON_TOP_Y 13
-#define SCREEN_BUTTON_BOTTOM_Y 48
-
-#define SCREEN_BUTTON_RIGHT_MARGIN_X 88
-
-#define SCREEN_MIDDLE_LINE_Y 37
-
-#define SCREEN_GAMES_LINE_X 42
-#define SCREEN_POINTS_LINE_X 59
-
-#define SCREEN_SERVE_X 14
-#define SCREEN_SERVE_Y 26
-
-#define SCREEN_PLAYER_LEFT_X 10
-#define SCREEN_PLAYER_RIGHT_X 27
-#define SCREEN_PLAYER_TOP_Y 13
-#define SCREEN_PLAYER_BOTTOM_Y 48
-
-#define SCREEN_STATS_PLAYER_LEFT_X 9
-#define SCREEN_STATS_PLAYER_RIGHT_X 23
-#define SCREEN_STATS_PLAYER_TOP_Y 13
-#define SCREEN_STATS_PLAYER_BOTTOM_Y 31
-
-#define SCREEN_STATS_SCORE_LEFT_X 40
-#define SCREEN_STATS_SCORE_TOP_Y 15
-#define SCREEN_STATS_SCORE_BOTTOM_Y 33
-
-#define SCREEN_STATS_MIDDLE_LINE_Y 28
-#define SCREEN_STATS_BOTTOM_LINE_Y 46
-
-#define SCREEN_STATS_POINTS_LINE1_X 37
-#define SCREEN_STATS_POINTS_LINE2_X 54
-#define SCREEN_STATS_POINTS_LINE3_X 71
-
-#define SCREEN_TIME_X 10
-#define SCREEN_TIME_Y 15
-
-// offset from screen margins
-#define SCREEN_MARGIN_OFFSET_X 4
-#define SCREEN_MARGIN_OFFSET_Y 6
-
-// button state
-#define BUTTON_MODE TSButtonUpperLeft
-#define BUTTON_US TSButtonUpperRight
-#define BUTTON_THEM TSButtonLowerRight
-#define BUTTON_BACK TSButtonLowerLeft
+// // button state
+// #define BUTTON_MODE TSButtonUpperLeft
+// #define BUTTON_US TSButtonUpperRight
+// #define BUTTON_THEM TSButtonLowerRight
+// #define BUTTON_BACK TSButtonLowerLeft
 
 // The application states
 #define APP_STATE_UNDEF 0
@@ -92,62 +49,6 @@ limitations under the License.
 
 // The number of milliseconds for a long press
 #define LONG_PRESS_TIME 500
-
-// define the labels used in the application
-#define LBL_TITLE "iScore"
-#define LBL_COPYRIGHT "1.0 (c) J. Hewitt"
-//  Battery: 100%
-#define LBL_TO_START_PRESS "Press to start"
-#define LBL_BATTERY "Bat: "
-
-#define LBL_WHOSERVES "Who serves?"
-#define LBL_RESTART " Restart "
-
-#define LBL_SEPARATOR ":"
-#define LBL_SPACE " "
-#define LBL_ZERO "0"
-#define LBL_PERCENT "%"
-
-// define the modifyable labels
-#define LBL_US " US  "
-#define LBL_THEM " THEM"
-#define LBL_NONE " NONE"
-
-#define LBL_YOU "YOU "
-#define LBL_PLAYING_TIME "Time Played"
-
-// "text" when it is in MarVoSym font are the
-// Up Down left and right arrows
-#define LBL_UP_ARROW "C"
-#define LBL_DOWN_ARROW "D"
-#define LBL_LEFT_ARROW "A"
-#define LBL_RIGHT_ARROW "B"
-
-#define LBL_UPDOWN_ARROW "CD"
-
-// Player Names
-static char *LBL_PLAYER[] = {LBL_THEM, LBL_US, LBL_NONE};
-
-static const tImage *IMG_SERVE[][2] = {{&img_Serve_BR, &img_Serve_BL},
-                                       {&img_Serve_TL, &img_Serve_TR}};
-
-static const tImage *IMG_PLAYER_DOUBLES[][4] = {{&img_Happy_blue, &img_Happy_green, &img_Sad_red, &img_Sad_yellow},
-                                                {&img_Sad_blue, &img_Sad_green, &img_Happy_red, &img_Happy_yellow},
-                                                {&img_Happy_blue, &img_Happy_green, &img_Sad_yellow, &img_Sad_red},
-                                                {&img_Sad_blue, &img_Sad_green, &img_Happy_yellow, &img_Happy_red},
-                                                {&img_Happy_green, &img_Happy_blue, &img_Sad_red, &img_Sad_yellow},
-                                                {&img_Sad_green, &img_Sad_blue, &img_Happy_red, &img_Happy_yellow},
-                                                {&img_Happy_green, &img_Happy_blue, &img_Sad_yellow, &img_Sad_red},
-                                                {&img_Sad_green, &img_Sad_blue, &img_Happy_yellow, &img_Happy_red}};
-
-static const tImage *IMG_WINNING_PLAYER[][2] = {{&img_Happy_blue, &img_Happy_green},
-                                                {&img_Happy_red, &img_Happy_yellow}};
-
-static const tImage *IMG_STATS_PLAYER[][4] = {{&img_Happy_blue, &img_Happy_green, &img_Happy_red, &img_Happy_yellow},
-                                              {&img_Happy_blue, &img_Happy_green, &img_Sad_red, &img_Sad_yellow},
-                                              {&img_Sad_blue, &img_Sad_green, &img_Happy_red, &img_Happy_yellow}};
-
-// static const char* LBL_SERVE[][2] = {{">", "<"}, {"<", ">"}};
 
 // The maximum number of scores that need to be stored
 #define SCOREPAD_MAX_SIZE 180
@@ -200,86 +101,82 @@ static const tImage *IMG_STATS_PLAYER[][4] = {{&img_Happy_blue, &img_Happy_green
 // the value that needs to be added to a uint8_t to "add" a game
 #define ONE_GAME 0x20
 
-// #define VBATPIN A9
-
-// Using software SPI (the default case) for driving the display:
-// #define OLED_MOSI   5
-// #define OLED_CLK   10
-// #define OLED_DC    11
-// #define OLED_CS    12
-// #define OLED_RESET 13
-
-// create the display
-// Adafruit_SSD1306 Display(OLED_MOSI, OLED_CLK, OLED_DC, OLED_RESET, OLED_CS);
-
-//Get the display to be used
-//Library must be passed the board type
-//TinyScreenDefault for TinyScreen shields
-//TinyScreenAlternate for alternate address TinyScreen shields
-//TinyScreenPlus for TinyScreen+
-TinyScreenExt display = TinyScreenExt(TinyScreenPlus);
-
-// Labels for the buttons
-#define LBL_BUT_MODE "MODE"
-#define LBL_BUT_BACK "BACK"
-#define LBL_BUT_THEM "THEM"
-#define LBL_BUT_US "US"
-
-// create the labels for the
-#define LBL_MENU_PLAY "Play"
-#define LBL_MENU_STATS "Stats"
-#define LBL_MENU_RESTART "Restart"
-
-// map the TSButtons (for the display flip)
-uint8_t TSButtonMode = TSButtonUpperLeft;
-uint8_t TSButtonBack = TSButtonLowerLeft;
-uint8_t TSButtonThem = TSButtonUpperRight;
-uint8_t TSButtonUs = TSButtonLowerRight;
-
-// define the button previous states
-bool prevStateMode = false;
-bool prevStateBack = false;
-bool prevStateThem = false;
-bool prevStateUs = false;
+// // map the TSButtons (for the display flip)
+// uint8_t TSButtonMode = TSButtonUpperLeft;
+// uint8_t TSButtonBack = TSButtonLowerLeft;
+// uint8_t TSButtonThem = TSButtonUpperRight;
+// uint8_t TSButtonUs = TSButtonLowerRight;
 
 // start in an unknown state application states
-uint8_t appState = APP_STATE_UNDEF;
+// uint8_t appState = APP_STATE_UNDEF;
 
 // indicates when the model has changed
-bool modelChanged = false;
+// bool modelChanged = false;
 
 // the button states
-uint8_t buttonStateMode = BUT_STATE_UNPRESSED;
-uint8_t buttonStateBack = BUT_STATE_UNPRESSED;
-uint8_t buttonStateUs = BUT_STATE_UNPRESSED;
-uint8_t buttonStateThem = BUT_STATE_UNPRESSED;
-
-// current battery state
-uint8_t batteryState = 0;
-
-// the score pad
-uint8_t scorepad[SCOREPAD_MAX_SIZE][3];
-
-// the current index into the scorepad
-uint8_t scorepadIdx = 0;
-
-// the indexes into the scorepad of where games where won
-uint8_t summarypad[SUMMARYPAD_MAX_SIZE];
-
-// playing time
-unsigned long startTime;
-unsigned long playingTime;
-
-// who won the match
-uint8_t winner = NONE;
+// uint8_t buttonStateMode = BUT_STATE_UNPRESSED;
+// uint8_t buttonStateBack = BUT_STATE_UNPRESSED;
+// uint8_t buttonStateUs = BUT_STATE_UNPRESSED;
+// uint8_t buttonStateThem = BUT_STATE_UNPRESSED;
 
 // Class provides the model functionality.
 class YscoreModel
 {
 public:
-  YscoreModel(TinyScreenExt display);
+  YscoreModel(TinyScreenExt &display);
 
-  void setView(YscoreView view);
+  void setView(IYscoreView *view);
+  void updateBatteryState();
+  uint8_t getBatteryState();
+
+  void setAppState(uint8_t appState);
+  uint8_t getAppState();
+
+  // returns the current playing time
+  void startPlayingTime();
+  // returns the current playing time
+  long getPlayingTime();
+
+  // resets all the values in the scorepad to zero
+  // TODO check if it is suficient to just set the
+  // first row to 000
+  void resetScorepad();
+
+  // function increments the score pad index
+  void incScorepadIdx();
+  // function decrements the score pad index
+  // taking into account the EndOfGameMarker
+  // if there is one
+  void decScorepadIdx();
+
+  // function creates the summary table from the scorepad
+  void createSummaryTable();
+  // returns the summary pad
+  uint8_t *getSummaryPad();
+
+  // returns true if play has started ie one point has been made false if not
+  bool hasPlayStarted();
+
+  // adds one to the number of points scorepad row at the given index for the given player
+  void incPoints(uint8_t who);
+
+  // gets the current number of games for the given player
+  uint8_t getGames(uint8_t who);
+  // gets the current points from for the given player
+  uint8_t getPoints(uint8_t who);
+  // gets the points from the  scorepad row at the given index for the given player
+  uint8_t getPoints(uint8_t who, uint8_t index);
+
+  // set the serve for the given player
+  void setServe(uint8_t who);
+  // gets the serve status for the given player
+  inline bool hasServe(uint8_t who);
+
+  // gets the serve status for the given player
+  uint8_t getPlayerPosition();
+
+  // gets the identity of the winner
+  uint8_t getWinner();
 
   // void begin(void);
   // void setFlip(uint8_t flip);
@@ -319,185 +216,75 @@ public:
   // static const uint8_t yMax = 63;
 
 private:
-  void _init(TinyScreenExt display);
+  // update the view
+  void updateView();
+  // update the battery view
+  void updateViewBattery();
 
-  TinyScreenExt _display = 0;
-  YscoreView _view = 0;
+  // check if a game was won
+  void checkGameWon();
+  // check if a game was won by lhs as compared to rhs
+  // if the game was won by the lhs return lhs else
+  // return NONE, basically this determines if lhs
+  // won a game. It makes no statement about the rhs
+  // this must be tested for separatly
+  uint8_t checkGameWonBy(uint8_t lhs, uint8_t rhs);
+  // check if a match was won
+  void checkMatchWon();
+
+  // copy the score pad row reseting the has serve bit and EndOfGame at the same time
+  void copyScorepadRowTo(uint8_t from, uint8_t to);
+  // copy the score pad row keeping the serve and the games
+  void copyScorepadNewGameRowTo(uint8_t from, uint8_t to);
+
+  // resets all the values in the summarypad to NULL_SCOREPAD_IDX
+  void resetSummarypad();
+
+  //////////////////////////////////////////////////////////////////
+  // manage data extraction and setting of values from the score pad
+  //////////////////////////////////////////////////////////////////
+
+  // gets the serve status at the given index for the given player
+  inline bool hasServe(uint8_t who, uint8_t index);
+
+  // sets the uint8_t serve bit of the scorepad row at the given index off or on
+  // depending on who has the serve
+  inline void setServe(uint8_t index, uint8_t who);
+
+  // sets the THEM uint8_t EndOfGame bit of the scorepad row at the given index on
+  void endOfGameOn(uint8_t index);
+  // gets the THEM uint8_t EndOfGame bit of the scorepad row at the given index on
+  bool isEndOfGame(uint8_t index);
+  // gets the number of games from the  scorepad row at the given index for the given player
+  uint8_t getGames(uint8_t index, uint8_t who);
+  // adds one to the number of games given index for the given player
+  void incGames(uint8_t index, uint8_t who);
+
+  // adds one to the number of points scorepad row at the given index for the given player
+  void incPoints(uint8_t index, uint8_t who);
+
+  uint8_t _appState = APP_STATE_UNDEF;
+  // current battery state
+  uint8_t _batteryState = 0;
+
+  // the score pad
+  uint8_t _scorepad[SCOREPAD_MAX_SIZE][3];
+
+  // the current index into the scorepad
+  uint8_t _scorepadIdx = 0;
+
+  // the indexes into the scorepad of where games where won
+  uint8_t _summaryPad[SUMMARYPAD_MAX_SIZE];
+
+  // playing time
+  unsigned long _startTime;
+  unsigned long _playingTime;
+
+  // who won the match
+  uint8_t _winner = NONE;
+
+  TinyScreenExt &_display;
+  IYscoreView *_view = NULL;
 };
-
-///////////////////////
-// manage the score pad
-///////////////////////
-
-// resets all the values in the scorepad to zero
-// TODO check if it is suficient to just set the
-// first row to 00
-void resetScorepad()
-{
-  // reset the scorepad
-  // for (int i = 0; i < SCOREPAD_MAX_SIZE ; i++) {
-  //   scorepad[i][US] = 0;
-  //   scorepad[i][THEM] = 0;
-  // }
-
-  scorepad[0][US] = 0;
-  scorepad[0][THEM] = 0;
-
-  winner = NONE;
-  scorepadIdx = 0;
-}
-
-// copy the score pad row reseting the has serve bit and EndOfGame at the same time
-void copyScorepadRowTo(uint8_t from, uint8_t to)
-{
-  // copy the score pad row mask out the end of game bit
-  scorepad[to][THEM] = scorepad[from][THEM] & MASK_8TH_BIT_OFF;
-  // copy the US score pad row
-  scorepad[to][US] = scorepad[from][US];
-  // copy the PLAYER score pad row
-  scorepad[to][PLAYER] = scorepad[from][PLAYER];
-}
-
-// copy the score pad row keeping the serve and the games
-void copyScorepadNewGameRowTo(uint8_t from, uint8_t to)
-{
-  // keep the number of games
-  scorepad[to][THEM] = scorepad[from][THEM] & MASK_GAMES;
-  // keep the number of games and the serve bit
-  scorepad[to][US] = scorepad[from][US] & MASK_GAMES;
-  // keep the number of games and the serve bit
-  scorepad[to][PLAYER] = scorepad[from][PLAYER];
-}
-
-// function increments the score pad index
-inline void incScorepadIdx()
-{
-  scorepadIdx++;
-}
-
-// function decrements the score pad index
-// taking into account the EndOfGameMarker
-// if there is one
-inline void decScorepadIdx()
-{
-  scorepadIdx--;
-  if (isEndOfGame(scorepadIdx))
-  {
-    // go back before the end of the game
-    scorepadIdx--;
-  }
-}
-
-// resets all the values in the summarypad to NULL_SCOREPAD_IDX
-void resetSummarypad()
-{
-  for (int i = 0; i < SUMMARYPAD_MAX_SIZE; i++)
-  {
-    summarypad[i] = NULL_SCOREPAD_IDX;
-  }
-}
-
-// function creates the summary table from the scorepad
-void createSummaryTable()
-{
-  resetSummarypad();
-  uint8_t summaryIdx = 0;
-  for (int i = 0; i < scorepadIdx; i++)
-  {
-    // if this was the score at the end of the game
-    if (isEndOfGame(i))
-    {
-      summarypad[summaryIdx] = i;
-      summaryIdx++;
-    }
-  }
-}
-
-//////////////////////////////////////////////////////////////////
-// manage data extraction and setting of values from the score pad
-//////////////////////////////////////////////////////////////////
-
-// sets the uint8_t serve bit of the scorepad row at the given index off or on
-// depending on who has the serve
-inline void setServe(uint8_t index, uint8_t who)
-{
-  if (who == US)
-  {
-    // record that US now has the serve
-    scorepad[index][PLAYER] |= MASK_1ST_BIT_ON;
-    // if we are not at the start of the match
-    if (index != 0)
-    {
-      // check if we had the serve on the previous point
-      bool hadServe = hasServe(index - 1, US);
-      if (hadServe)
-      {
-        // toggle the position of the players
-        scorepad[index][PLAYER] ^= MASK_2ND_BIT_ON;
-      }
-    }
-  }
-  else
-  {
-    scorepad[index][PLAYER] &= MASK_1ST_BIT_OFF;
-    // if we are not at the start of the match
-    if (index != 0)
-    {
-      // check if they had the serve on the previous point
-      bool hadServe = hasServe(index - 1, THEM);
-      if (hadServe)
-      {
-        // toggle the position of the players
-        scorepad[index][PLAYER] ^= MASK_3RD_BIT_ON;
-      }
-    }
-  }
-}
-
-// sets the THEM uint8_t EndOfGame bit of the scorepad row at the given index on
-void endOfGameOn(uint8_t index)
-{
-  scorepad[index][THEM] |= MASK_8TH_BIT_ON;
-}
-
-// gets the THEM uint8_t EndOfGame bit of the scorepad row at the given index on
-bool isEndOfGame(uint8_t index)
-{
-  return scorepad[index][THEM] & MASK_8TH_BIT_ON;
-}
-
-// gets the number of games from the  scorepad row at the given index for the given player
-uint8_t getGames(uint8_t index, uint8_t who)
-{
-  uint8_t result = scorepad[index][who] & MASK_GAMES;
-  return result >> 5;
-}
-
-// adds one to the number of games given index for the given player
-void incGames(uint8_t index, uint8_t who)
-{
-  scorepad[index][who] += ONE_GAME;
-}
-
-// gets the points from the  scorepad row at the given index for the given player
-uint8_t getPoints(uint8_t index, uint8_t who)
-{
-  uint8_t result = scorepad[index][who] & MASK_POINTS;
-  return result;
-}
-
-// adds one to the number of points scorepad row at the given index for the given player
-void incPoints(uint8_t index, uint8_t who)
-{
-  scorepad[index][who]++;
-}
-
-// gets the serve status from the scorepad row at the given index for the given player
-inline bool hasServe(uint8_t index, uint8_t who)
-{
-  // get if the serve is true or false
-  bool result = scorepad[index][PLAYER] & MASK_1ST_BIT_ON;
-  return who == US ? result : !result;
-}
 
 #endif

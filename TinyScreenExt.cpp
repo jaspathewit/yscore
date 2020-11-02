@@ -24,23 +24,10 @@ missing from the base TinyScreen.
 /*
   Constructor
 */
-
 TinyScreenExt::TinyScreenExt(uint8_t type)
 {
-    _init(type);
-}
-
-/*
-  Initialzie the tiny screen extension
-*/
-void TinyScreenExt::_init(uint8_t type)
-{
-
     _display = TinyScreen(TinyScreenPlus);
     _battery = TinyScreenBattery();
-
-    // Set the pin to digital output, set it to 1, set it to ADC input, capture value.
-    // Set the pin to digital output, set it to 0, set it to ADC input, capture value.
 }
 
 void TinyScreenExt::begin(void)

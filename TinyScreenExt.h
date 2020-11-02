@@ -110,8 +110,6 @@ public:
      static const uint8_t yMax = 63;
 
 private:
-     void _init(uint8_t type);
-
      TinyScreen _display = 0;
      TinyScreenBattery _battery;
 

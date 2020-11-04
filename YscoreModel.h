@@ -17,7 +17,7 @@ limitations under the License.
 
 // #include "IYscoreView.h"
 #include "TinyScreenExt.h"
-#include "IYscoreView.h"
+#include "YscoreViewInterface.h"
 
 #ifndef YScoreModel_h
 #define YScoreModel_h
@@ -170,7 +170,7 @@ public:
   // set the serve for the given player
   void setServe(uint8_t who);
   // gets the serve status for the given player
-  inline bool hasServe(uint8_t who);
+  bool hasServe(uint8_t who);
 
   // gets the serve status for the given player
   uint8_t getPlayerPosition();

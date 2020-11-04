@@ -24,9 +24,10 @@ limitations under the License.
 #include <stdlib.h>
 
 #include "yScore.h"
-#include "YscoreModel.h"
 #include "YscoreView.h"
+#include "YscoreModel.h"
 #include "YscoreController.h"
+#include "TinyScreen.h"
 #include "TinyScreenExt.h"
 
 //Get the display to be used
@@ -45,8 +46,13 @@ YscoreController controller = YscoreController(display);
 
 void setup()
 {
+  // SerialUSB.begin(9600);
+  // while (!SerialUSB)
+  //   ;
+
   // setup the display
   setupDisplay();
+
   // wire up the model view and controler
   // model can notify the view
   model.setView(&view);
@@ -69,15 +75,14 @@ void setup()
 void setupDisplay()
 {
   display.begin();
-  // needs to be set so that the button definitions are correct
-  display.setFlip(true);
+
   //setBrightness(brightness);//sets main current level, valid levels are 0-15
   display.setBrightness(10);
   // set the font to be used
-  //display.setFont(liberationSans_8ptFontInfo);
+  display.setFont(SansSerif_8pt);
   // set white text on black background
-  display.fontColor(TS_8b_White, TS_8b_Black);
-
+  // display.fontColor(TS_8b_White, TS_8b_Black);
+  display.setFlip(true);
   // draw the starting screen
   // drawStartScreen();
 }
@@ -92,7 +97,7 @@ void loop()
   controller.performAction();
 
   // update the battery state of the model
-  model.updateBatteryState();
+  //model.updateBatteryState();
 
-  delay(50);
+  delay(100);
 }

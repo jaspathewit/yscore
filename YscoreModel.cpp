@@ -59,6 +59,7 @@ void YscoreModel::setAppState(uint8_t appState)
   if (_appState != appState)
   {
     _appState = appState;
+    _view->updateView();
   }
 }
 
@@ -191,7 +192,7 @@ uint8_t YscoreModel::getPoints(uint8_t who, uint8_t index)
 }
 
 // gets the serve status for the given player
-inline bool YscoreModel::hasServe(uint8_t who)
+bool YscoreModel::hasServe(uint8_t who)
 {
   // get if the serve is true or false for the
   // side requested

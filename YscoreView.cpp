@@ -23,6 +23,7 @@ limitations under the License.
 */
 YscoreView::YscoreView(TinyScreenExt &display) : _display(display)
 {
+  _display.print("ctor View");
 }
 
 // sets the model to be used to retrieve the values

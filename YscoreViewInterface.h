@@ -15,8 +15,8 @@ limitations under the License.
 
 */
 
-#ifndef IYScoreView_h
-#define IYScoreView_h
+#ifndef YcoreViewInterface_h
+#define YcoreViewInterface_h
 
 // Interface to be implemented by Class provides the YscoreView functionality.
 class IYscoreView

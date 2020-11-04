@@ -185,6 +185,18 @@ size_t TinyScreenExt::write(uint8_t ch)
         return 1;
     }
 
+    if (ch == '\n')
+    {
+        _cursorY += _fontHeight;
+        return 1;
+    }
+
+    if (ch == '\r')
+    {
+        _cursorX = 0;
+        return 1;
+    }
+
     // check that the char to be written is in the range
     if (ch < _fontFirstCh || ch > _fontLastCh)
     {

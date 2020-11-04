@@ -23,6 +23,7 @@ limitations under the License.
 */
 YscoreController::YscoreController(TinyScreenExt &display) : _display(display)
 {
+  //initButtons();
 }
 
 // sets the model to be used to retrieve the values
@@ -32,9 +33,20 @@ void YscoreController::setModel(YscoreModel *model)
   _model = model;
 }
 
+void YscoreController::initButtons()
+{
+  // needs to be set so that the button definitions are correct
+  _display.setFlip(true);
+  _TSButtonMode = TSButtonUpperLeft;
+  _TSButtonBack = TSButtonLowerLeft;
+  _TSButtonThem = TSButtonUpperRight;
+  _TSButtonUs = TSButtonLowerRight;
+}
+
 // function resets all button states to BUT_STATE_UNPRESSED
 void YscoreController::initilise()
 {
+  initButtons();
   resetButtonState();
   _model->resetScorepad();
   _model->setAppState(APP_STATE_STARTING);
@@ -50,10 +62,10 @@ void YscoreController::updateButtonStates()
   // get the current state of the all buttons
   int8_t buttons = _display.getButtons();
 
-  bool curStateMode = (buttons & TSButtonMode) > 0;
-  bool curStateBack = (buttons & TSButtonBack) > 0;
-  bool curStateThem = (buttons & TSButtonThem) > 0;
-  bool curStateUs = (buttons & TSButtonUs) > 0;
+  bool curStateMode = (buttons & _TSButtonMode) > 0;
+  bool curStateBack = (buttons & _TSButtonBack) > 0;
+  bool curStateThem = (buttons & _TSButtonThem) > 0;
+  bool curStateUs = (buttons & _TSButtonUs) > 0;
 
   // determine what the button states are
   _buttonStateMode = readButtonState(_prevStateMode, curStateMode);
@@ -168,6 +180,7 @@ void YscoreController::performAction()
 {
   if (_model == NULL)
   {
+    _display.println("Model null");
     return;
   }
 

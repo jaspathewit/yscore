@@ -21,12 +21,6 @@ limitations under the License.
 #ifndef YScoreController_h
 #define YScoreController_h
 
-// map the TSButtons (for the display flip)
-uint8_t TSButtonMode = TSButtonUpperLeft;
-uint8_t TSButtonBack = TSButtonLowerLeft;
-uint8_t TSButtonThem = TSButtonUpperRight;
-uint8_t TSButtonUs = TSButtonLowerRight;
-
 // Class provides the controler functionality.
 class YscoreController
 {
@@ -44,6 +38,8 @@ public:
   void performAction();
 
 private:
+  // initilise the buttons
+  void initButtons();
   // update the button states
   void updateButtonStates();
   // update the button states
@@ -84,6 +80,12 @@ private:
 
   TinyScreenExt &_display;
   YscoreModel *_model = NULL;
+
+  // the definition of the buttons
+  uint8_t _TSButtonMode;
+  uint8_t _TSButtonBack;
+  uint8_t _TSButtonThem;
+  uint8_t _TSButtonUs;
 
   // the button states
   uint8_t _buttonStateMode = BUT_STATE_UNPRESSED;

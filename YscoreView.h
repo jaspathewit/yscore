@@ -28,7 +28,7 @@ limitations under the License.
 #include "fonts/MarVoSym_12pt.h"
 
 #include "YscoreModel.h"
-#include "IYscoreView.h"
+#include "YscoreViewInterface.h"
 
 #ifndef YScoreView_h
 #define YScoreView_h

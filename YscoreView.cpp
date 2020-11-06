@@ -23,7 +23,6 @@ limitations under the License.
 */
 YscoreView::YscoreView(TinyScreenExt &display) : _display(display)
 {
-  _display.print("ctor View");
 }
 
 // sets the model to be used to retrieve the values
@@ -510,28 +509,4 @@ char *YscoreView::zeroPad(char *buffer, uint8_t value)
 {
   snprintf(buffer, sizeof(buffer), "%02d", value);
   return buffer;
-}
-
-// prints debug info
-void YscoreView::printDebug(char *buffer)
-{
-  _display.setFont(SansSerif_8pt);
-  _display.setCursor(10, 0);
-  _display.print(buffer);
-}
-
-// prints debug info
-void YscoreView::printDebug(uint32_t number)
-{
-  _display.setFont(SansSerif_8pt);
-  _display.setCursor(20, 0);
-  _display.print(number, 10);
-}
-
-// prints debug info
-void YscoreView::printDebug(double number)
-{
-  _display.setFont(SansSerif_8pt);
-  _display.setCursor(20, 0);
-  _display.print(number, 2);
 }

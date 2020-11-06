@@ -130,9 +130,9 @@ static const tImage *IMG_PLAYER_DOUBLES[][4] = {{&img_Happy_blue, &img_Happy_gre
 static const tImage *IMG_WINNING_PLAYER[][2] = {{&img_Happy_blue, &img_Happy_green},
                                                 {&img_Happy_red, &img_Happy_yellow}};
 
-static const tImage *IMG_STATS_PLAYER[][4] = {{&img_Happy_blue, &img_Happy_green, &img_Happy_red, &img_Happy_yellow},
-                                              {&img_Happy_blue, &img_Happy_green, &img_Sad_red, &img_Sad_yellow},
-                                              {&img_Sad_blue, &img_Sad_green, &img_Happy_red, &img_Happy_yellow}};
+static const tImage *IMG_STATS_PLAYER[][4] = {{&img_Happy_blue, &img_Happy_green, &img_Sad_red, &img_Sad_yellow},
+                                              {&img_Sad_blue, &img_Sad_green, &img_Happy_red, &img_Happy_yellow},
+                                              {&img_Happy_blue, &img_Happy_green, &img_Happy_red, &img_Happy_yellow}};
 
 // static const char* LBL_SERVE[][2] = {{">", "<"}, {"<", ">"}};
 
@@ -161,45 +161,6 @@ public:
   void updateView();
   // method updates the view of the battery
   void updateViewBattery();
-
-  // Update the view according to the current state of the YscoreModel
-
-  // void begin(void);
-  // void setFlip(uint8_t flip);
-  // void setBrightness(uint8_t);
-
-  // // hardware Buttons
-  // uint8_t getButtons(void);
-
-  // // hardware battery
-  // uint8_t getBatteryState();
-  // float getVoltage();
-
-  // // Anti aliased Font handeling
-  // void setFont(const tFont &);
-  // uint8_t getFontHeight(const tFont &);
-  // uint8_t getFontHeight(void);
-  // uint8_t getPrintWidth(char *);
-  // void setCursor(uint8_t, uint8_t);
-  // void fontColor(uint16_t, uint16_t);
-  // tPoint printAt(uint8_t x, uint8_t y, char *str);
-  // tPoint printCenteredAt(uint8_t y, char *str);
-  // tPoint printVerticalAt(uint8_t x, uint8_t y, char *str);
-  // virtual size_t write(uint8_t);
-
-  // //drawing commands
-  // //   void drawLine(uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t);
-  // void drawLine(uint8_t, uint8_t, uint8_t, uint8_t, uint16_t);
-  // //   void drawRect(uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t);
-  // void drawRect(uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, uint16_t);
-  // //   void clearWindow(uint8_t, uint8_t, uint8_t, uint8_t);
-  // tPoint drawImageAt(uint8_t x, uint8_t y, const tImage *image);
-  // void clearScreen(void);
-
-  // static const uint8_t xMin = 0;
-  // static const uint8_t yMin = 0;
-  // static const uint8_t xMax = 95;
-  // static const uint8_t yMax = 63;
 
 private:
   // draw the start screen
@@ -273,13 +234,6 @@ private:
 
   // put the zero padded value into the provided buffer
   char *zeroPad(char *buffer, uint8_t value);
-
-  // prints debug info
-  void printDebug(char *buffer);
-  // prints debug info
-  void printDebug(uint32_t number);
-  // prints debug info
-  void printDebug(double number);
 
   TinyScreenExt &_display;
   YscoreModel *_model = NULL;

@@ -121,7 +121,9 @@ void YscoreModel::incScorepadIdx()
 {
   // copy the data of the existing row to the new row
   // and increment the index
-  copyScorepadRowTo(_scorepadIdx, _scorepadIdx++);
+  copyScorepadRowTo(_scorepadIdx, _scorepadIdx + 1);
+  _scorepadIdx++;
+  _display.printDebug(_scorepadIdx);
 }
 
 // function decrements the score pad index
@@ -141,6 +143,7 @@ void YscoreModel::decScorepadIdx()
   {
     updateView();
   }
+  _display.printDebug(_scorepadIdx);
 }
 
 // get the summary pad

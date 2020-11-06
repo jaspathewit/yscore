@@ -18,6 +18,7 @@ limitations under the License.
 missing from the base TinyScreen.
 */
 
+#include "fonts/SansSerif_8pt.h"
 #include "TinyScreenExt.h"
 #include "TinyScreenBattery.h"
 
@@ -272,4 +273,20 @@ tPoint TinyScreenExt::drawImageAt(uint8_t x, uint8_t y, const tImage *image)
 
     tPoint result = {endx, endy};
     return result;
+}
+
+// prints debug info
+void TinyScreenExt::printDebug(char *buffer)
+{
+    setFont(SansSerif_8pt);
+    setCursor(10, 0);
+    print(buffer);
+}
+
+// prints debug info
+void TinyScreenExt::printDebug(uint32_t number)
+{
+    setFont(SansSerif_8pt);
+    setCursor(20, 0);
+    print(number, 10);
 }

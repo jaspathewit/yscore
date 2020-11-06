@@ -180,7 +180,6 @@ void YscoreController::performAction()
 {
   if (_model == NULL)
   {
-    _display.println("Model null");
     return;
   }
 
@@ -189,6 +188,7 @@ void YscoreController::performAction()
 
   // get the current app state and perform the action
   uint8_t appState = _model->getAppState();
+
   switch (appState)
   {
   case APP_STATE_STARTING:

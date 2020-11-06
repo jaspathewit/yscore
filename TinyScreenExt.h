@@ -104,6 +104,11 @@ public:
      tPoint drawImageAt(uint8_t x, uint8_t y, const tImage *image);
      void clearScreen(void);
 
+     // Utility debug methods
+     void printDebug(char *buffer);
+     // prints debug info
+     void printDebug(uint32_t number);
+
      static const uint8_t xMin = 0;
      static const uint8_t yMin = 0;
      static const uint8_t xMax = 95;

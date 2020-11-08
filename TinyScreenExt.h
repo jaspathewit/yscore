@@ -16,8 +16,9 @@ limitations under the License.
 */
 
 #include <avr/pgmspace.h>
+#include <RTCZero.h>
 #include <TinyScreen.h>
-
+#include "fonts/TinyScreenExtFont.h"
 #include "TinyScreenBattery.h"
 
 #ifndef TinyScreenExt_h
@@ -43,29 +44,6 @@ typedef struct
      uint8_t y;
 } tPoint;
 
-// type defining images that can be drawn to the TinyScreen
-typedef struct
-{
-     const uint8_t *data;
-     const uint8_t width;
-     const uint8_t height;
-     const uint8_t dataSize;
-} tImage;
-
-// type used to define a char in the font table
-typedef struct
-{
-     long int code;
-     const tImage *image;
-} tChar;
-
-// type used to define a font
-typedef struct
-{
-     int length;
-     const tChar *chars;
-} tFont;
-
 // Class provides an extension to the TinyScreen class.
 class TinyScreenExt : public Print
 {
@@ -82,6 +60,12 @@ public:
      // hardware battery
      uint8_t getBatteryState();
      float getVoltage();
+
+     // hardware RTC
+     void setTime(uint8_t hours, uint8_t minutes, uint8_t seconds);
+     uint8_t getHours();
+     uint8_t getMinutes();
+     uint8_t getSeconds();
 
      // Anti aliased Font handeling
      void setFont(const tFont &);
@@ -115,8 +99,9 @@ public:
      static const uint8_t yMax = 63;
 
 private:
-     TinyScreen _display = 0;
+     TinyScreen _display;
      TinyScreenBattery _battery;
+     RTCZero _rtc;
 
      // info about the _display
      uint8_t _cursorX, _cursorY;

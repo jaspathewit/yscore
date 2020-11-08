@@ -21,7 +21,7 @@
 */
 
 #include <stdint.h>
-#include "../TinyScreenExt.h"
+#include "TinyScreenExtFont.h"
 
 #ifndef DigitsSmall_h
 #define DigitsSmall_h

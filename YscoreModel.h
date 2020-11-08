@@ -132,10 +132,14 @@ public:
   void setAppState(uint8_t appState);
   uint8_t getAppState();
 
-  // returns the current playing time
+  // resets the current playing time
   void startPlayingTime();
-  // returns the current playing time
-  long getPlayingTime();
+  // returns the current playing hours
+  uint8_t getPlayingHours();
+  // return the current playing minutes
+  uint8_t getPlayingMinutes();
+  // return the current playing seconds
+  uint8_t getPlayingSeconds();
 
   // resets all the values in the scorepad to zero
   // TODO check if it is suficient to just set the

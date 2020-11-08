@@ -91,18 +91,28 @@ uint8_t YscoreModel::getBatteryState()
   return _batteryState;
 }
 
-// record the time when play started
-// This should use the tinyscreen RTC
-// so that we don't have a problem with rollover.
+// set time play started
 void YscoreModel::startPlayingTime()
 {
-  _startTime = millis();
+  _display.setTime(0, 0, 0);
 }
 
-// get the current playing time
-long YscoreModel::getPlayingTime()
+// get the current playing hours
+uint8_t YscoreModel::getPlayingHours()
 {
-  return _playingTime;
+  return _display.getHours();
+}
+
+// get the current playing minutes
+uint8_t YscoreModel::getPlayingMinutes()
+{
+  return _display.getMinutes();
+}
+
+// get the current playing seconds
+uint8_t YscoreModel::getPlayingSeconds()
+{
+  return _display.getSeconds();
 }
 
 // resets the scorepad

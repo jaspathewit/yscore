@@ -44,7 +44,7 @@
 */
 
 #include <stdint.h>
-#include "../TinyScreenExt.h"
+#include "TinyScreenExtFont.h"
 
 #ifndef MarVoSym_8pt_h
 #define MarVoSym_8pt_h

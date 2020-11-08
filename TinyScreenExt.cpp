@@ -28,12 +28,14 @@ missing from the base TinyScreen.
 TinyScreenExt::TinyScreenExt(uint8_t type)
 {
     _display = TinyScreen(TinyScreenPlus);
+    _rtc = RTCZero();
     _battery = TinyScreenBattery();
 }
 
 void TinyScreenExt::begin(void)
 {
     _display.begin();
+    _rtc.begin();
 }
 
 // Sets if the Screen of the TinyScreen is fliped vertically
@@ -238,6 +240,30 @@ uint8_t TinyScreenExt::getBatteryState()
 float TinyScreenExt::getVoltage(void)
 {
     return _battery.getVoltage();
+}
+
+// set the time for the rtc
+void TinyScreenExt::setTime(uint8_t hour, uint8_t minute, uint8_t second)
+{
+    _rtc.setTime(hour, minute, second);
+}
+
+// get the number of hours from the rtc
+uint8_t TinyScreenExt::getHours()
+{
+    return _rtc.getHours();
+}
+
+// get the number of minutes from the rtc
+uint8_t TinyScreenExt::getMinutes()
+{
+    return _rtc.getMinutes();
+}
+
+// get the number of seconds from the rtc
+uint8_t TinyScreenExt::getSeconds()
+{
+    return _rtc.getSeconds();
 }
 
 // drawing methods

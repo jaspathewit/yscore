@@ -44,7 +44,7 @@
 */
 
 #include <stdint.h>
-#include "../TinyScreenExt.h"
+#include "TinyScreenExtFont.h"
 
 #ifndef SanSerif_108pt_h
 #define SanSerif_10pt_h

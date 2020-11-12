@@ -94,24 +94,51 @@ uint8_t YscoreModel::getBatteryState()
 // set time play started
 void YscoreModel::startPlayingTime()
 {
+  _display.setDate(1, 1, 20);
   _display.setTime(0, 0, 0);
+}
+
+// record match playing time
+void YscoreModel::recordMatchPlayingTime()
+{
+  _hours = getPlayingHours();
+  _minutes = getPlayingMinutes();
+  _seconds = getPlayingSeconds();
 }
 
 // get the current playing hours
 uint8_t YscoreModel::getPlayingHours()
 {
+  // if we are in the stats time state
+  // return the match playing time
+  if (_appState == APP_STATE_STATS_TIME)
+  {
+    return _hours;
+  }
   return _display.getHours();
 }
 
 // get the current playing minutes
 uint8_t YscoreModel::getPlayingMinutes()
 {
+  // if we are in the stats time state
+  // return the match playing time
+  if (_appState == APP_STATE_STATS_TIME)
+  {
+    return _minutes;
+  }
   return _display.getMinutes();
 }
 
 // get the current playing seconds
 uint8_t YscoreModel::getPlayingSeconds()
 {
+  // if we are in the stats time state
+  // return the match playing time
+  if (_appState == APP_STATE_STATS_TIME)
+  {
+    return _seconds;
+  }
   return _display.getSeconds();
 }
 
@@ -133,7 +160,6 @@ void YscoreModel::incScorepadIdx()
   // and increment the index
   copyScorepadRowTo(_scorepadIdx, _scorepadIdx + 1);
   _scorepadIdx++;
-  _display.printDebug(_scorepadIdx);
 }
 
 // function decrements the score pad index
@@ -153,7 +179,6 @@ void YscoreModel::decScorepadIdx()
   {
     updateView();
   }
-  _display.printDebug(_scorepadIdx);
 }
 
 // get the summary pad
@@ -347,6 +372,7 @@ void YscoreModel::checkMatchWon()
     // record the winner
     _winner = whoToUpdate;
     createSummaryTable();
+    recordMatchPlayingTime();
     setAppState(APP_STATE_WINNING);
   }
 }
@@ -402,9 +428,6 @@ void YscoreModel::createSummaryTable()
       summaryIdx++;
     }
   }
-
-  // record the current playing time
-  _playingTime = millis() - _startTime;
 }
 
 //////////////////////////////////////////////////////////////////

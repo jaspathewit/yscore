@@ -17,10 +17,21 @@ limitations under the License.
 /* Class extends the TinyScreen class to provide additional functionality 
 missing from the base TinyScreen.
 */
-
+#include <SPI.h>
 #include "fonts/SansSerif_8pt.h"
+#include <TinyScreen.h>
 #include "TinyScreenExt.h"
 #include "TinyScreenBattery.h"
+
+// interupt handler for the RTC
+void RTCwakeHandler()
+{
+}
+
+// interupt handler for the buttons
+void wakeHandler()
+{
+}
 
 /*
   Constructor
@@ -30,12 +41,87 @@ TinyScreenExt::TinyScreenExt(uint8_t type)
     _display = TinyScreen(TinyScreenPlus);
     _rtc = RTCZero();
     _battery = TinyScreenBattery();
+
+    // ensure that all pins are pulled up
+    for (int i = 0; i <= 45; i++)
+    {
+        if ((i != PIN_USB_DM) && (i != PIN_USB_DP))
+        {
+            pinMode(i, INPUT_PULLUP);
+        }
+    }
 }
 
 void TinyScreenExt::begin(void)
 {
     _display.begin();
     _rtc.begin();
+}
+
+// turns the tiny screen display on
+void TinyScreenExt::on(void)
+{
+    _display.on();
+}
+
+// turns the tinyscreen display off
+void TinyScreenExt::off(void)
+{
+    _display.off();
+}
+
+// puts the tinyscreen into standby mode (low power mode)
+// a button press is required to bring
+// it out of standby mode
+void TinyScreenExt::standByMode(void)
+{
+    attachInterupts();
+
+    // go to sleep
+    _rtc.standbyMode();
+    detachInterupts();
+}
+
+// attaches all the interupts required for
+// standBy mode
+void TinyScreenExt::attachInterupts(void)
+{
+    // set up the interupts
+    // add the RTC handler to the RTC
+    _rtc.attachInterrupt(RTCwakeHandler);
+
+    // add interupts to all the buttons
+    // triggered when the buton is released
+    attachInterrupt(TSP_PIN_BT1, wakeHandler, RISING);
+    attachInterrupt(TSP_PIN_BT2, wakeHandler, RISING);
+    attachInterrupt(TSP_PIN_BT3, wakeHandler, RISING);
+    attachInterrupt(TSP_PIN_BT4, wakeHandler, RISING);
+
+#if defined(ARDUINO_ARCH_SAMD)
+    // https://github.com/arduino/ArduinoCore-samd/issues/142
+    // Clock EIC in sleep mode so that we can use pin change interrupts
+    // The RTCZero library will setup generic clock 2 to XOSC32K/32
+    // and we'll use that for the EIC. Increases power consumption by ~50uA
+    GCLK->CLKCTRL.reg = uint16_t(GCLK_CLKCTRL_CLKEN | GCLK_CLKCTRL_GEN_GCLK2 | GCLK_CLKCTRL_ID(GCLK_CLKCTRL_ID_EIC_Val));
+    while (GCLK->STATUS.bit.SYNCBUSY)
+    {
+    }
+#endif
+}
+
+// dettaches all the interupts required for
+// standBy mode
+void TinyScreenExt::detachInterupts(void)
+{
+    // set up the interupts
+    // add the RTC handler to the RTC
+    _rtc.detachInterrupt();
+
+    // add interupts to all the buttons
+    detachInterrupt(TSP_PIN_BT1);
+    detachInterrupt(TSP_PIN_BT2);
+    detachInterrupt(TSP_PIN_BT3);
+    detachInterrupt(TSP_PIN_BT4);
 }
 
 // Sets if the Screen of the TinyScreen is fliped vertically
@@ -240,6 +326,30 @@ uint8_t TinyScreenExt::getBatteryState()
 float TinyScreenExt::getVoltage(void)
 {
     return _battery.getVoltage();
+}
+
+// set the date for the rtc
+void TinyScreenExt::setDate(uint8_t day, uint8_t month, uint8_t year)
+{
+    _rtc.setDate(day, month, year);
+}
+
+// get the day of hours from the rtc
+uint8_t TinyScreenExt::getDay()
+{
+    return _rtc.getDay();
+}
+
+// get the number of minutes from the rtc
+uint8_t TinyScreenExt::getMonth()
+{
+    return _rtc.getMonth();
+}
+
+// get the number of seconds from the rtc
+uint8_t TinyScreenExt::getYear()
+{
+    return _rtc.getYear();
 }
 
 // set the time for the rtc

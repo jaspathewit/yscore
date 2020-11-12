@@ -134,6 +134,8 @@ public:
 
   // resets the current playing time
   void startPlayingTime();
+  // record the match playing time (Hours, minutes, seconds)
+  void recordMatchPlayingTime();
   // returns the current playing hours
   uint8_t getPlayingHours();
   // return the current playing minutes
@@ -181,43 +183,6 @@ public:
 
   // gets the identity of the winner
   uint8_t getWinner();
-
-  // void begin(void);
-  // void setFlip(uint8_t flip);
-  // void setBrightness(uint8_t);
-
-  // // hardware Buttons
-  // uint8_t getButtons(void);
-
-  // // hardware battery
-  // uint8_t getBatteryState();
-  // float getVoltage();
-
-  // // Anti aliased Font handeling
-  // void setFont(const tFont &);
-  // uint8_t getFontHeight(const tFont &);
-  // uint8_t getFontHeight(void);
-  // uint8_t getPrintWidth(char *);
-  // void setCursor(uint8_t, uint8_t);
-  // void fontColor(uint16_t, uint16_t);
-  // tPoint printAt(uint8_t x, uint8_t y, char *str);
-  // tPoint printCenteredAt(uint8_t y, char *str);
-  // tPoint printVerticalAt(uint8_t x, uint8_t y, char *str);
-  // virtual size_t write(uint8_t);
-
-  // //drawing commands
-  // //   void drawLine(uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t);
-  // void drawLine(uint8_t, uint8_t, uint8_t, uint8_t, uint16_t);
-  // //   void drawRect(uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t);
-  // void drawRect(uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, uint16_t);
-  // //   void clearWindow(uint8_t, uint8_t, uint8_t, uint8_t);
-  // tPoint drawImageAt(uint8_t x, uint8_t y, const tImage *image);
-  // void clearScreen(void);
-
-  // static const uint8_t xMin = 0;
-  // static const uint8_t yMin = 0;
-  // static const uint8_t xMax = 95;
-  // static const uint8_t yMax = 63;
 
 private:
   // update the view
@@ -281,8 +246,9 @@ private:
   uint8_t _summaryPad[SUMMARYPAD_MAX_SIZE];
 
   // playing time
-  unsigned long _startTime;
-  unsigned long _playingTime;
+  uint8_t _hours;
+  uint8_t _minutes;
+  uint8_t _seconds;
 
   // who won the match
   uint8_t _winner = NONE;

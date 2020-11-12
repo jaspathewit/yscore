@@ -190,7 +190,7 @@ void YscoreView::drawStatsScreen(bool runningPoints)
 void YscoreView::drawPlayingTimeScreen()
 {
   drawTimeFrame();
-  printTime(_model->getPlayingTime());
+  printTime(_model->getPlayingHours(), _model->getPlayingMinutes(), _model->getPlayingSeconds());
   drawRestart();
 }
 
@@ -236,28 +236,29 @@ void YscoreView::drawStatsGameScoresAt(uint8_t x, uint8_t y, uint8_t who, bool r
 }
 
 // print a time given in millis
-void YscoreView::printTime(unsigned long millis)
+void YscoreView::printTime(uint8_t hours, uint8_t minutes, uint8_t seconds)
 {
-  char buffer[8];
+  char buffer[12];
 
   _display.setFont(SansSerif_10pt);
 
   tPoint pos = _display.printAt(SCREEN_TIME_X, SCREEN_TIME_Y, LBL_PLAYING_TIME);
 
-  unsigned long secs = millis / 1000;
+  uint8_t days = _display.getDay() - 1;
 
-  uint8_t hours = numberOfHours(secs);
-  uint8_t minutes = numberOfMinutes(secs);
-  uint8_t seconds = numberOfSeconds(secs);
+  // temp for measuring standby time
+  //if (days != 0) {
+  snprintf(buffer, sizeof(buffer), "%02d:%02d:%02d:%02d", days, hours, minutes, seconds);
+  //}
 
-  if (hours != 0)
-  {
-    snprintf(buffer, sizeof(buffer), "%02d:%02d:%02d", hours, minutes, seconds);
-  }
-  else
-  {
-    snprintf(buffer, sizeof(buffer), "%02d:%02d", minutes, seconds);
-  }
+  // if (hours != 0)
+  // {
+  //   snprintf(buffer, sizeof(buffer), "%02d:%02d:%02d", hours, minutes, seconds);
+  // }
+  // else
+  // {
+  //   snprintf(buffer, sizeof(buffer), "%02d:%02d", minutes, seconds);
+  // }
 
   _display.setFont(SansSerif_12pt);
   _display.printCenteredAt(pos.y + 4, buffer);

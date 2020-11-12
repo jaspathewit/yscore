@@ -20,6 +20,9 @@ limitations under the License.
 #ifndef yScore_h
 #define yScore_h
 
+// the delay in the main execution loop
+#define LOOP_DELAY 100
+
 // typedef struct
 // {
 //      uint8_t x;

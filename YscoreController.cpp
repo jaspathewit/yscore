@@ -15,7 +15,7 @@ limitations under the License.
 
 */
 #include "fonts/SansSerif_8pt.h"
-
+#include "yScore.h"
 #include "YscoreController.h"
 
 /*
@@ -33,6 +33,8 @@ void YscoreController::setModel(YscoreModel *model)
   _model = model;
 }
 
+// initlise all the buttons for the fliped configuration
+//
 void YscoreController::initButtons()
 {
   // needs to be set so that the button definitions are correct
@@ -57,7 +59,7 @@ void YscoreController::initilise()
 ///////////////////////////
 
 // update the button states
-void YscoreController::updateButtonStates()
+uint8_t YscoreController::updateButtonStates()
 {
   // get the current state of the all buttons
   int8_t buttons = _display.getButtons();
@@ -73,13 +75,34 @@ void YscoreController::updateButtonStates()
   _buttonStateUs = readButtonState(_prevStateUs, curStateUs);
   _buttonStateThem = readButtonState(_prevStateThem, curStateThem);
 
+  uint8_t changed = BUTTONS_STATE_NO_CHANGE;
   // update the prev states with the current state
-  _prevStateMode = curStateMode;
-  _prevStateBack = curStateBack;
-  _prevStateThem = curStateThem;
-  _prevStateUs = curStateUs;
+  if (_prevStateMode != curStateMode)
+  {
+    _prevStateMode = curStateMode;
+    changed = BUTTONS_STATE_CHANGED;
+  }
+
+  if (_prevStateBack != curStateBack)
+  {
+    _prevStateBack = curStateBack;
+    changed = BUTTONS_STATE_CHANGED;
+  }
+
+  if (_prevStateThem != curStateThem)
+  {
+    _prevStateThem = curStateThem;
+    changed = BUTTONS_STATE_CHANGED;
+  }
+
+  if (_prevStateUs != curStateUs)
+  {
+    _prevStateUs = curStateUs;
+    changed = BUTTONS_STATE_CHANGED;
+  }
 
   // printButtonStates();
+  return changed;
 }
 
 // update the button states
@@ -184,7 +207,41 @@ void YscoreController::performAction()
   }
 
   // update the current state of the buttons
-  updateButtonStates();
+  int8_t changed = updateButtonStates();
+  if (BUTTONS_STATE_NO_CHANGE == changed)
+  {
+    // check if no button has been pressed for a while
+    _performActionCount++;
+
+    //_display.printDebug(_performActionCount);
+
+    // we need to go to sleep
+    if (_performActionCount > SLEEP_THRESHHOLD)
+    {
+      _performActionCount = 0;
+      // turn off the display and go to sleep
+      _display.off();
+      _display.standByMode();
+      // when we are awoken we restart here
+      // clear the current button state
+      resetButtonState();
+      return;
+    }
+    else
+    {
+      // if we are in the APP_STATE_PAUSING_TIME
+      // make sure we update the playing time
+      if (_model->getAppState() == APP_STATE_PAUSING_TIME)
+      {
+        performActionPausingTime();
+      }
+      return;
+    }
+  }
+
+  // button state has changed
+  // reset the performActionCounter
+  _performActionCount = 0;
 
   // get the current app state and perform the action
   uint8_t appState = _model->getAppState();

@@ -82,7 +82,7 @@ limitations under the License.
 
 // define the labels used in the application
 #define LBL_TITLE "iScore"
-#define LBL_COPYRIGHT "1.0 (c) J. Hewitt"
+#define LBL_COPYRIGHT "1.0 (c) J Hewitt"
 //  Battery: 100%
 #define LBL_TO_START_PRESS "Press to start"
 #define LBL_BATTERY "Bat: "
@@ -189,7 +189,7 @@ private:
   // are the current points in the game
   void drawStatsGameScoresAt(uint8_t x, uint8_t y, uint8_t who, bool runningPoints);
   // print a time given in millis
-  void printTime(unsigned long millis);
+  void printTime(uint8_t hours, uint8_t minutes, uint8_t seconds);
   // draw the battery icon
   void drawBatteryIcon(uint8_t x, uint8_t y);
   // draw the playing frame

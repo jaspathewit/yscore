@@ -76,6 +76,9 @@ void setupDisplay()
 {
   display.begin();
 
+  // turn on the Display
+  display.on();
+
   //setBrightness(brightness);//sets main current level, valid levels are 0-15
   display.setBrightness(10);
   // set the font to be used
@@ -93,11 +96,13 @@ void setupDisplay()
 ////////////////////////////////////////////////
 void loop()
 {
+  // delay so that this loop is not so tight
+  delay(LOOP_DELAY);
+  // ensure that the display is on
+  display.on();
   // perform the action
   controller.performAction();
 
   // update the battery state of the model
-  //model.updateBatteryState();
-
-  delay(100);
+  model.updateBatteryState();
 }

@@ -51,6 +51,9 @@ public:
      TinyScreenExt(uint8_t type);
 
      void begin(void);
+     void on(void);
+     void off(void);
+     void standByMode(void);
      void setFlip(uint8_t flip);
      void setBrightness(uint8_t);
 
@@ -62,10 +65,18 @@ public:
      float getVoltage();
 
      // hardware RTC
+     void setDate(uint8_t day, uint8_t month, uint8_t year);
+     uint8_t getDay();
+     uint8_t getMonth();
+     uint8_t getYear();
      void setTime(uint8_t hours, uint8_t minutes, uint8_t seconds);
      uint8_t getHours();
      uint8_t getMinutes();
      uint8_t getSeconds();
+
+     // interupts for standByMode
+     void attachInterupts();
+     void detachInterupts();
 
      // Anti aliased Font handeling
      void setFont(const tFont &);
@@ -99,7 +110,7 @@ public:
      static const uint8_t yMax = 63;
 
 private:
-     TinyScreen _display;
+     TinyScreen _display = 0;
      TinyScreenBattery _battery;
      RTCZero _rtc;
 

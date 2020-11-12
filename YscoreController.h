@@ -21,6 +21,13 @@ limitations under the License.
 #ifndef YScoreController_h
 #define YScoreController_h
 
+// The number of times that the actionPerfocmed is called before
+// the device goes to sleep
+#define SLEEP_THRESHHOLD 600
+
+#define BUTTONS_STATE_NO_CHANGE 0
+#define BUTTONS_STATE_CHANGED 1
+
 // Class provides the controler functionality.
 class YscoreController
 {
@@ -41,7 +48,7 @@ private:
   // initilise the buttons
   void initButtons();
   // update the button states
-  void updateButtonStates();
+  uint8_t updateButtonStates();
   // update the button states
   void updateButtonStatesSequence();
   // print the button states for debugging
@@ -94,10 +101,12 @@ private:
   uint8_t _buttonStateThem = BUT_STATE_UNPRESSED;
 
   // define the button previous states
-  bool _prevStateMode = false;
-  bool _prevStateBack = false;
-  bool _prevStateThem = false;
-  bool _prevStateUs = false;
+  uint8_t _prevStateMode = false;
+  uint8_t _prevStateBack = false;
+  uint8_t _prevStateThem = false;
+  uint8_t _prevStateUs = false;
+
+  uint16_t _performActionCount = 0;
 };
 
 #endif

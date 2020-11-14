@@ -33,7 +33,7 @@ void YscoreView::setModel(YscoreModel *model)
 }
 
 // update the view according to the state
-void YscoreView::updateView()
+void YscoreView::update()
 {
   if (_model == NULL)
   {
@@ -79,17 +79,35 @@ void YscoreView::updateView()
     break;
   }
 
+  // always update the battery if the view was updated
+  // after that the battery will be updated sepparatly
+  updateBattery();
+
   // display.display();
 }
 
 // update the view of the battery according to the state
-void YscoreView::updateViewBattery()
+void YscoreView::updateBattery()
 {
   if (_model == NULL)
   {
     return;
   }
   drawBatteryIcon(SCREEN_BATTERY_X, _display.yMin);
+}
+
+// update the view of the time according to the state
+void YscoreView::updateTime()
+{
+  if (_model == NULL)
+  {
+    return;
+  }
+
+  if (_model->getAppState() == APP_STATE_PAUSING_TIME)
+  {
+    drawPlayingTimeScreen();
+  }
 }
 
 ///////////////////////////////////////////
@@ -216,13 +234,14 @@ void YscoreView::drawStatsGameScoresAt(uint8_t x, uint8_t y, uint8_t who, bool r
 
   for (i = 0; i < SUMMARYPAD_MAX_SIZE; i++)
   {
-    uint8_t index = _model->getSummaryPad()[i];
+    uint8_t index = _model->getPointsIndex(i);
     if (index == NULL_SCOREPAD_IDX)
     {
       break;
     }
 
-    uint8_t points = _model->getPoints(index, who);
+    uint8_t points = _model->getPoints(who, index);
+
     pos = _display.printAt(pos.x, y, zeroPad(buffer, points));
     pos.x += 3;
   }
@@ -277,7 +296,7 @@ void YscoreView::drawBatteryIcon(uint8_t x, uint8_t y)
 
   // change the colour depending on the charge
   uint8_t batteryState = _model->getBatteryState();
-  uint16_t colour = TS_8b_Green;
+  uint8_t colour = TS_8b_Green;
   if (batteryState <= 2)
   {
     colour = TS_8b_Red;

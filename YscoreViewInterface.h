@@ -23,9 +23,11 @@ class IYscoreView
 {
 public:
   // method updates the view according to the current model
-  virtual void updateView() = 0;
+  virtual void update() = 0;
   // method updates the view of the battery
-  virtual void updateViewBattery() = 0;
+  virtual void updateBattery() = 0;
+  // method updates the view of the playing time
+  virtual void updateTime() = 0;
 };
 
 #endif

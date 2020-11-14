@@ -40,7 +40,7 @@ void YscoreModel::updateView()
   {
     return;
   }
-  _view->updateView();
+  _view->update();
 }
 
 // call the view to update the battery
@@ -50,7 +50,17 @@ void YscoreModel::updateViewBattery()
   {
     return;
   }
-  _view->updateViewBattery();
+  _view->updateBattery();
+}
+
+// call the view to update the time
+void YscoreModel::updateViewTime()
+{
+  if (_view == NULL)
+  {
+    return;
+  }
+  _view->updateTime();
 }
 
 // set the appstate of the model
@@ -59,7 +69,8 @@ void YscoreModel::setAppState(uint8_t appState)
   if (_appState != appState)
   {
     _appState = appState;
-    _view->updateView();
+    // update the view
+    _view->update();
   }
 }
 
@@ -81,7 +92,7 @@ void YscoreModel::updateBatteryState()
   if (_batteryState != newState)
   {
     _batteryState = newState;
-    _view->updateViewBattery();
+    _view->updateBattery();
   }
 }
 
@@ -98,12 +109,41 @@ void YscoreModel::startPlayingTime()
   _display.setTime(0, 0, 0);
 }
 
-// record match playing time
-void YscoreModel::recordMatchPlayingTime()
+// update the time
+void YscoreModel::updateTime()
 {
-  _hours = getPlayingHours();
-  _minutes = getPlayingMinutes();
-  _seconds = getPlayingSeconds();
+  // only update the playing time if not in
+  if (_appState == APP_STATE_WINNING || _appState == APP_STATE_STATS || _appState == APP_STATE_STATS_TIME)
+  {
+    return;
+  }
+
+  uint8_t changed = false;
+  uint8_t hours = _display.getHours();
+  if (_hours != hours)
+  {
+    _hours = hours;
+    changed = true;
+  }
+
+  uint8_t minutes = _display.getMinutes();
+  if (_minutes != minutes)
+  {
+    _minutes = minutes;
+    changed = true;
+  }
+
+  uint8_t seconds = _display.getSeconds();
+  if (_seconds != seconds)
+  {
+    _seconds = seconds;
+    changed = true;
+  }
+
+  if (changed)
+  {
+    _view->updateTime();
+  }
 }
 
 // get the current playing hours
@@ -142,6 +182,12 @@ uint8_t YscoreModel::getPlayingSeconds()
   return _display.getSeconds();
 }
 
+// gets the current score pad index
+uint8_t YscoreModel::getScorepadIdx()
+{
+  return _scorepadIdx;
+}
+
 // resets the scorepad
 void YscoreModel::resetScorepad()
 {
@@ -151,6 +197,9 @@ void YscoreModel::resetScorepad()
 
   _winner = NONE;
   _scorepadIdx = 0;
+
+  // reset the summary pad
+  resetSummarypad();
 }
 
 // function increments the score pad index
@@ -181,14 +230,20 @@ void YscoreModel::decScorepadIdx()
   }
 }
 
-// get the summary pad
-uint8_t *YscoreModel::getSummaryPad()
+// get the index into the points table for the
+// given summary pad index
+uint8_t YscoreModel::getPointsIndex(uint8_t index)
 {
-  return _summaryPad;
+  if (index > SUMMARYPAD_MAX_SIZE)
+  {
+    return NULL_SCOREPAD_IDX;
+  }
+
+  return _summaryPad[index];
 }
 
 // returns true if play has started
-bool YscoreModel::hasPlayStarted()
+uint8_t YscoreModel::hasPlayStarted()
 {
   return _scorepadIdx > 0;
 }
@@ -258,7 +313,7 @@ void YscoreModel::setServe(uint8_t who)
     if (_scorepadIdx != 0)
     {
       // check if we had the serve on the previous point
-      bool hadServe = hasServe(_scorepadIdx - 1, US);
+      bool hadServe = hasServe(US, _scorepadIdx - 1);
       if (hadServe)
       {
         // toggle the position of the players
@@ -273,7 +328,7 @@ void YscoreModel::setServe(uint8_t who)
     if (_scorepadIdx != 0)
     {
       // check if they had the serve on the previous point
-      bool hadServe = hasServe(_scorepadIdx - 1, THEM);
+      bool hadServe = hasServe(THEM, _scorepadIdx - 1);
       if (hadServe)
       {
         // toggle the position of the players
@@ -304,10 +359,15 @@ void YscoreModel::checkGameWon()
   // perform the update
   if (whoToUpdate != NONE)
   {
-    // mark this scorepad as an end of game
+    // mark the current scorepad as an end of game
     endOfGameOn(_scorepadIdx);
-    copyScorepadNewGameRowTo(_scorepadIdx, _scorepadIdx);
-    incGames(_scorepadIdx, whoToUpdate);
+    // create a new scorepad entry for the start of the game
+    copyScorepadNewGameRowTo(_scorepadIdx, _scorepadIdx + 1);
+    // increment the number of games in the new row
+    incGames(_scorepadIdx + 1, whoToUpdate);
+    // move to the new score pad entry
+    _scorepadIdx++;
+
     checkMatchWon();
   }
 }
@@ -372,7 +432,6 @@ void YscoreModel::checkMatchWon()
     // record the winner
     _winner = whoToUpdate;
     createSummaryTable();
-    recordMatchPlayingTime();
     setAppState(APP_STATE_WINNING);
   }
 }
@@ -401,7 +460,7 @@ void YscoreModel::copyScorepadNewGameRowTo(uint8_t from, uint8_t to)
   _scorepad[to][THEM] = _scorepad[from][THEM] & MASK_GAMES;
   // keep the number of games and the serve bit
   _scorepad[to][US] = _scorepad[from][US] & MASK_GAMES;
-  // keep the number of games and the serve bit
+  // keep the number of games and the serve position
   _scorepad[to][PLAYER] = _scorepad[from][PLAYER];
 }
 

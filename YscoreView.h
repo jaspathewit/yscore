@@ -158,9 +158,11 @@ public:
   void setModel(YscoreModel *model);
 
   // method updates the view according to the current model
-  void updateView();
+  void update();
   // method updates the view of the battery
-  void updateViewBattery();
+  void updateBattery();
+  // method updates the view of the time
+  void updateTime();
 
 private:
   // draw the start screen

@@ -134,8 +134,8 @@ public:
 
   // resets the current playing time
   void startPlayingTime();
-  // record the match playing time (Hours, minutes, seconds)
-  void recordMatchPlayingTime();
+  // update the time (Hours, minutes, seconds)
+  void updateTime();
   // returns the current playing hours
   uint8_t getPlayingHours();
   // return the current playing minutes
@@ -143,6 +143,7 @@ public:
   // return the current playing seconds
   uint8_t getPlayingSeconds();
 
+  uint8_t getScorepadIdx();
   // resets all the values in the scorepad to zero
   // TODO check if it is suficient to just set the
   // first row to 000
@@ -158,10 +159,10 @@ public:
   // function creates the summary table from the scorepad
   void createSummaryTable();
   // returns the summary pad
-  uint8_t *getSummaryPad();
+  uint8_t getPointsIndex(uint8_t index);
 
   // returns true if play has started ie one point has been made false if not
-  bool hasPlayStarted();
+  uint8_t hasPlayStarted();
 
   // adds one to the number of points scorepad row at the given index for the given player
   void incPoints(uint8_t who);
@@ -189,6 +190,8 @@ private:
   void updateView();
   // update the battery view
   void updateViewBattery();
+  // update the time view
+  void updateViewTime();
 
   // check if a game was won
   void checkGameWon();

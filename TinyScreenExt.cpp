@@ -385,6 +385,11 @@ void TinyScreenExt::clearScreen()
 //sets specified OLED controller memory to an 8/16 bit color, fill is a boolean
 void TinyScreenExt::drawRect(uint8_t x, uint8_t y, uint8_t w, uint8_t h, uint8_t f, uint16_t color)
 {
+    // if its a zero height or width don't bother
+    if (w == 0 || h == 0)
+    {
+        return;
+    }
     _display.drawRect(x, y, w, h, f, color);
 }
 

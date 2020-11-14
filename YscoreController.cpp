@@ -229,12 +229,6 @@ void YscoreController::performAction()
     }
     else
     {
-      // if we are in the APP_STATE_PAUSING_TIME
-      // make sure we update the playing time
-      if (_model->getAppState() == APP_STATE_PAUSING_TIME)
-      {
-        performActionPausingTime();
-      }
       return;
     }
   }
@@ -339,15 +333,16 @@ void YscoreController::performActionPlaying()
 
   if (_buttonStateBack == BUT_STATE_PRESSED)
   {
-    // We want to go back and no points have been scored
+    // We want to go back has play started
     if (_model->hasPlayStarted())
     {
-      _model->setAppState(APP_STATE_SET_SERVE);
-      _model->resetScorepad();
+      _model->decScorepadIdx();
     }
     else
     {
-      _model->decScorepadIdx();
+      // play has not started
+      _model->setAppState(APP_STATE_SET_SERVE);
+      _model->resetScorepad();
     }
     return;
   }

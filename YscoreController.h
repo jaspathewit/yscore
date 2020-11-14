@@ -22,8 +22,8 @@ limitations under the License.
 #define YScoreController_h
 
 // The number of times that the actionPerfocmed is called before
-// the device goes to sleep
-#define SLEEP_THRESHHOLD 600
+// the device goes to sleep (10 minutes)
+#define SLEEP_THRESHHOLD 6000
 
 #define BUTTONS_STATE_NO_CHANGE 0
 #define BUTTONS_STATE_CHANGED 1

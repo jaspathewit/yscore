@@ -100,9 +100,13 @@ void loop()
   delay(LOOP_DELAY);
   // ensure that the display is on
   display.on();
-  // perform the action
-  controller.performAction();
 
   // update the battery state of the model
   model.updateBatteryState();
+
+  // update the current playing time
+  model.updateTime();
+
+  // perform the action
+  controller.performAction();
 }

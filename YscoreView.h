@@ -84,7 +84,7 @@ limitations under the License.
 #define LBL_TITLE "iScore"
 #define LBL_COPYRIGHT "1.0 © J. Hewitt"
 //  Battery: 100%
-#define LBL_TO_START_PRESS "Prÿss to start"
+#define LBL_TO_START_PRESS "Press to start"
 #define LBL_BATTERY "Bat: "
 
 #define LBL_WHOSERVES "Who serves?"
@@ -181,6 +181,8 @@ private:
   void drawScreenSettingTypeOfMatch();
   // draw the settings language
   void drawScreenSettingLanguage();
+  // draw the settings brightness
+  void drawScreenSettingBrightness();
   // draw the settings handedness
   void drawScreenSettingHandedness();
   // draw the about screen

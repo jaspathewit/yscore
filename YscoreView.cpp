@@ -207,8 +207,15 @@ void YscoreView::drawScreenSettingLanguage()
 // draw the settings Handedness
 void YscoreView::drawScreenSettingHandedness()
 {
-  drawFrame(&img_Language);
+  drawFrame(&img_Handedness);
   _display.printCenteredAt(30, "Handedness");
+}
+
+// draw the settings Brightness
+void YscoreView::drawScreenSettingBrightness()
+{
+  drawFrame(&img_Language);
+  _display.printCenteredAt(30, "Brightness");
 }
 
 // draw the about screen

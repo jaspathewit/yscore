@@ -109,7 +109,4 @@ void loop()
 
   // perform the action
   controller.performAction();
-
-  display.setFont(SansSerif_10pt);
-  display.printAt(30, 30, "©");
 }

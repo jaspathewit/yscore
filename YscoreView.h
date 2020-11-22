@@ -82,9 +82,9 @@ limitations under the License.
 
 // define the labels used in the application
 #define LBL_TITLE "iScore"
-#define LBL_COPYRIGHT "1.0 (c) J Hewitt"
+#define LBL_COPYRIGHT "1.0 © J. Hewitt"
 //  Battery: 100%
-#define LBL_TO_START_PRESS "Press to start"
+#define LBL_TO_START_PRESS "Prÿss to start"
 #define LBL_BATTERY "Bat: "
 
 #define LBL_WHOSERVES "Who serves?"
@@ -166,36 +166,40 @@ public:
 
 private:
   // draw the start screen
-  void drawStartScreen();
+  void drawScreenStart();
   // drow the setting the serve screen
-  void drawSettingServeScreen();
+  void drawScreenSettingsServe();
+  // draw the playing screen
+  void drawScreenPlaying();
+  // draw the winningscreen
+  void drawScreenWinning();
+  // draw the stats screen
+  void drawScreenStats(bool runningPoints);
+  // draw the playing time screen
+  void drawScreenPlayingTime();
+  // draw the settings type of match screen
+  void drawScreenSettingTypeOfMatch();
+  // draw the settings language
+  void drawScreenSettingLanguage();
+  // draw the settings handedness
+  void drawScreenSettingHandedness();
+  // draw the about screen
+  void drawScreenAbout();
+  // draw the ack Scree
+  void drawScreenAck();
+  // draw the update Screen
+  void drawScreenUpdate();
+
+  ///////////////////////////////////////////
+  // Elements of screens
+  ///////////////////////////////////////////
+
   // draw the who serves
   void drawWhoServes();
-  // draw the playing screen
-  void drawPlayingScreen();
-  // draw the winningscreen
-  void drawWinningScreen();
-  // draw the restart
-  void drawRestart();
-  // draw the stats screen
-  void drawStatsScreen(bool runningPoints);
-  // draw the playing time screen
-  void drawPlayingTimeScreen();
-
-  ///////////////////////////////////////////
-  // Print components and elements of screens
-  ///////////////////////////////////////////
-
   // draw the game scores for the given player
   // if the running Points is true the last value
   // are the current points in the game
   void drawStatsGameScoresAt(uint8_t x, uint8_t y, uint8_t who, bool runningPoints);
-  // print a time given in millis
-  void printTime(uint8_t hours, uint8_t minutes, uint8_t seconds);
-  // draw the battery icon
-  void drawBatteryIcon(uint8_t x, uint8_t y);
-  // draw the playing frame
-  void drawPlayingFrame();
   // draw the playing grid
   void drawPlayingGrid();
   // draw the playing score
@@ -204,31 +208,37 @@ private:
   void drawPlayingScoreGames();
   // draw the current points for each team
   void drawPlayingScorePoints();
-
+  // draw the arrow indicating serve
   void drawPlayingServe();
   // draw the players playing the game
   void drawPlayingPlayers();
   // draw the players stats
   void drawStatsPlayers();
-  // draw the playing menu
-  void drawPlayingMenu();
-
   // draw the winning players of the match
   void drawWinningPlayers();
-  // draw the Stats frame
-  void drawStatsFrame();
-  // draw the stats menu
-  void drawStatsMenu();
   // draw the Stats grid
   void drawStatsGrid();
+
+  ///////////////////////////////////////////////
+  // Screen "Widgets"
+  ///////////////////////////////////////////////
+  // draw the frame (Menu + button labels)
+  void drawFrame(const tImage *image);
+
+  // draw a menu
+  void drawMenu(const tImage *image);
+
+  // draw the restart
+  void drawRestart();
+
   // draw the button labels
   void drawButtonLabels();
 
-  // draw the Time frame
-  void drawTimeFrame();
+  // draw the battery icon
+  void drawBatteryIcon(uint8_t x, uint8_t y);
 
-  // draw the time menu
-  void drawTimeMenu();
+  // print a time given in millis
+  void printTime(uint8_t hours, uint8_t minutes, uint8_t seconds);
 
   ///////////////////////////////////////////////
   // Convenience functions for handeling numbers

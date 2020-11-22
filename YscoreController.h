@@ -84,6 +84,18 @@ private:
   void performActionPausing();
   // perform the action for the App_Pausing_Time state
   void performActionPausingTime();
+  // perform the action for the App_setting_type_of_match
+  void performActionSettingTypeOfMatch();
+  // perform the action for the App_setting_language
+  void performActionSettingLanguage();
+  // perform the action for the App_setting_Handedness
+  void performActionSettingHandedness();
+  // perform the action for the App_about
+  void performActionAbout();
+  // perform the action for the App_ack
+  void performActionAck();
+  // perform the action for the App_update
+  void performActionUpdate();
 
   TinyScreenExt &_display;
   YscoreModel *_model = NULL;

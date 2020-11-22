@@ -31,14 +31,24 @@ limitations under the License.
 // The application states
 #define APP_STATE_UNDEF 0
 #define APP_STATE_STARTING 1
-#define APP_STATE_SET_SERVE 2
+#define APP_STATE_SETTING_SERVE 2
 #define APP_STATE_PLAYING 3
 #define APP_STATE_WINNING 4
 #define APP_STATE_PAUSING 5
 #define APP_STATE_PAUSING_TIME 6
 #define APP_STATE_STATS 7
 #define APP_STATE_STATS_TIME 8
-#define APP_STATE_CONFIG_DOUBLES 9
+#define APP_STATE_SETTING_TYPE_OF_MATCH 9
+#define APP_STATE_SETTING_LANGUAGE 10
+#define APP_STATE_SETTING_HANDEDNESS 11
+#define APP_STATE_ABOUT 12
+#define APP_STATE_ACK 13
+#define APP_STATE_UPDATE 14
+
+// values for settings
+#define TYPE_OF_MATCH_UNDEF 0
+#define TYPE_OF_MATCH_DOUBLES 1
+#define TYPE_OF_MATCH_SINGLES 2
 
 // The button states
 // pressed are odd values so that
@@ -185,6 +195,10 @@ public:
   // gets the identity of the winner
   uint8_t getWinner();
 
+  // settings
+  void setTypeOfMatch(uint8_t typeOfMatch);
+  uint8_t getTypeOfMatch();
+
 private:
   // update the view
   void updateView();
@@ -255,6 +269,10 @@ private:
 
   // who won the match
   uint8_t _winner = NONE;
+
+  // Settings
+  // type of match DOUBLES / SINGLES
+  uint8_t _typeOfMatch = TYPE_OF_MATCH_DOUBLES;
 
   TinyScreenExt &_display;
   IYscoreView *_view = NULL;

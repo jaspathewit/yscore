@@ -46,41 +46,55 @@ void YscoreView::update()
   switch (_model->getAppState())
   {
   case APP_STATE_STARTING:
-    drawStartScreen();
+    drawScreenStart();
     break;
-  case APP_STATE_SET_SERVE:
-    drawSettingServeScreen();
+  case APP_STATE_SETTING_SERVE:
+    drawScreenSettingsServe();
     break;
   case APP_STATE_PLAYING:
-    drawPlayingScreen();
+    drawScreenPlaying();
     break;
   case APP_STATE_PAUSING:
     // draw the stats screen with the running
     // points
-    drawStatsScreen(true);
+    drawScreenStats(true);
     break;
   case APP_STATE_PAUSING_TIME:
-    // draw the playing time
-    drawPlayingTimeScreen();
+    drawScreenPlayingTime();
     break;
   case APP_STATE_WINNING:
-    // draw the winning screen without the running
-    // points
-    drawWinningScreen();
+    drawScreenWinning();
     break;
   case APP_STATE_STATS:
     // draw the stats screen without the running
     // points
-    drawStatsScreen(false);
+    drawScreenStats(false);
     break;
   case APP_STATE_STATS_TIME:
-    // draw the playing time
-    drawPlayingTimeScreen();
+    drawScreenPlayingTime();
+    break;
+  case APP_STATE_SETTING_TYPE_OF_MATCH:
+    drawScreenSettingTypeOfMatch();
+    break;
+  case APP_STATE_SETTING_LANGUAGE:
+    drawScreenSettingLanguage();
+    break;
+  case APP_STATE_SETTING_HANDEDNESS:
+    drawScreenSettingHandedness();
+    break;
+  case APP_STATE_ABOUT:
+    drawScreenAbout();
+    break;
+  case APP_STATE_ACK:
+    drawScreenAck();
+    break;
+  case APP_STATE_UPDATE:
+    drawScreenUpdate();
     break;
   }
 
-  // always update the battery if the view was updated
-  // after that the battery will be updated sepparatly
+  // always update the battery if the state was updated
+  // after that the battery will be updated separatly
   updateBattery();
 
   // display.display();
@@ -106,7 +120,7 @@ void YscoreView::updateTime()
 
   if (_model->getAppState() == APP_STATE_PAUSING_TIME)
   {
-    drawPlayingTimeScreen();
+    drawScreenPlayingTime();
   }
 }
 
@@ -115,7 +129,7 @@ void YscoreView::updateTime()
 //////////////////////////////////////////
 
 // draw the start screen
-void YscoreView::drawStartScreen()
+void YscoreView::drawScreenStart()
 {
   _display.setFont(SansSerif_8pt);
   _display.printAt(0, 0, LBL_COPYRIGHT);
@@ -132,11 +146,95 @@ void YscoreView::drawStartScreen()
 }
 
 // draw the setting serve screen
-void YscoreView::drawSettingServeScreen()
+void YscoreView::drawScreenSettingsServe()
 {
-  drawPlayingFrame();
+  drawFrame(&img_Play);
   drawWhoServes();
 }
+
+// draw the playing screen
+void YscoreView::drawScreenPlaying()
+{
+  drawFrame(&img_Play);
+  drawPlayingGrid();
+  drawPlayingServe();
+  drawPlayingPlayers();
+  drawPlayingScore();
+}
+
+// draw the winningscreen
+void YscoreView::drawScreenWinning()
+{
+  drawFrame(&img_Play);
+  drawWinningPlayers();
+  drawRestart();
+}
+
+// draw the stats screen
+void YscoreView::drawScreenStats(bool runningPoints)
+{
+  drawFrame(&img_Stats);
+  drawStatsPlayers();
+  drawStatsGrid();
+  drawStatsGameScoresAt(SCREEN_STATS_SCORE_LEFT_X, SCREEN_STATS_SCORE_TOP_Y, THEM, runningPoints);
+  drawStatsGameScoresAt(SCREEN_STATS_SCORE_LEFT_X, SCREEN_STATS_SCORE_BOTTOM_Y, US, runningPoints);
+
+  drawRestart();
+}
+
+// draw the playing time screen
+void YscoreView::drawScreenPlayingTime()
+{
+  drawFrame(&img_Time);
+  printTime(_model->getPlayingHours(), _model->getPlayingMinutes(), _model->getPlayingSeconds());
+  drawRestart();
+}
+
+// draw the settings type of match screen
+void YscoreView::drawScreenSettingTypeOfMatch()
+{
+  drawFrame(&img_TypeOfMatch);
+  _display.printCenteredAt(30, "TypeOfMatch");
+}
+
+// draw the settings languge
+void YscoreView::drawScreenSettingLanguage()
+{
+  drawFrame(&img_Language);
+  _display.printCenteredAt(30, "Language");
+}
+
+// draw the settings Handedness
+void YscoreView::drawScreenSettingHandedness()
+{
+  drawFrame(&img_Language);
+  _display.printCenteredAt(30, "Handedness");
+}
+
+// draw the about screen
+void YscoreView::drawScreenAbout()
+{
+  drawFrame(&img_Language);
+  _display.printCenteredAt(30, "About");
+}
+
+// draw the ack screen
+void YscoreView::drawScreenAck()
+{
+  drawFrame(&img_Language);
+  _display.printCenteredAt(30, "Ack");
+}
+
+// draw the ack screen
+void YscoreView::drawScreenUpdate()
+{
+  drawFrame(&img_Language);
+  _display.printCenteredAt(30, "Update");
+}
+
+///////////////////////////////////////////
+// elements of screens
+///////////////////////////////////////////
 
 // draw the who serves
 void YscoreView::drawWhoServes()
@@ -161,60 +259,6 @@ void YscoreView::drawWhoServes()
   _display.setFont(SansSerif_12pt);
   _display.printAt(pos.x, y, LBL_US);
 }
-
-// draw the playing screen
-void YscoreView::drawPlayingScreen()
-{
-  drawPlayingFrame();
-  drawPlayingGrid();
-  drawPlayingServe();
-  drawPlayingPlayers();
-  drawPlayingScore();
-}
-
-// draw the winningscreen
-void YscoreView::drawWinningScreen()
-{
-  drawPlayingFrame();
-  drawWinningPlayers();
-  drawRestart();
-}
-
-// draw the restart
-void YscoreView::drawRestart()
-{
-  _display.setFont(MarVoSym_10pt);
-  uint8_t y = (_display.yMax - 2) - _display.getFontHeight();
-  tPoint pos = _display.printAt(SCREEN_BUTTON_LEFT_MARGIN_X + SCREEN_MARGIN_OFFSET_X,
-                                50, LBL_UPDOWN_ARROW);
-
-  _display.setFont(SansSerif_10pt);
-  _display.printAt(pos.x, 50, LBL_RESTART);
-}
-
-// draw the stats screen
-void YscoreView::drawStatsScreen(bool runningPoints)
-{
-  drawStatsFrame();
-  drawStatsPlayers();
-  drawStatsGrid();
-  drawStatsGameScoresAt(SCREEN_STATS_SCORE_LEFT_X, SCREEN_STATS_SCORE_TOP_Y, THEM, runningPoints);
-  drawStatsGameScoresAt(SCREEN_STATS_SCORE_LEFT_X, SCREEN_STATS_SCORE_BOTTOM_Y, US, runningPoints);
-
-  drawRestart();
-}
-
-// draw the playing time screen
-void YscoreView::drawPlayingTimeScreen()
-{
-  drawTimeFrame();
-  printTime(_model->getPlayingHours(), _model->getPlayingMinutes(), _model->getPlayingSeconds());
-  drawRestart();
-}
-
-///////////////////////////////////////////
-// Print components and elements of screens
-///////////////////////////////////////////
 
 // draw the game scores for the given player
 // if the running Points is true the last value
@@ -252,68 +296,6 @@ void YscoreView::drawStatsGameScoresAt(uint8_t x, uint8_t y, uint8_t who, bool r
 
     _display.printAt(pos.x, y, zeroPad(buffer, points));
   }
-}
-
-// print a time given in millis
-void YscoreView::printTime(uint8_t hours, uint8_t minutes, uint8_t seconds)
-{
-  char buffer[12];
-
-  _display.setFont(SansSerif_10pt);
-
-  tPoint pos = _display.printAt(SCREEN_TIME_X, SCREEN_TIME_Y, LBL_PLAYING_TIME);
-
-  uint8_t days = _display.getDay() - 1;
-
-  // temp for measuring standby time
-  //if (days != 0) {
-  snprintf(buffer, sizeof(buffer), "%02d:%02d:%02d:%02d", days, hours, minutes, seconds);
-  //}
-
-  // if (hours != 0)
-  // {
-  //   snprintf(buffer, sizeof(buffer), "%02d:%02d:%02d", hours, minutes, seconds);
-  // }
-  // else
-  // {
-  //   snprintf(buffer, sizeof(buffer), "%02d:%02d", minutes, seconds);
-  // }
-
-  _display.setFont(SansSerif_12pt);
-  _display.printCenteredAt(pos.y + 4, buffer);
-}
-
-// draw the battery icon
-void YscoreView::drawBatteryIcon(uint8_t x, uint8_t y)
-{
-  uint8_t height = 8;
-  uint8_t width = 12;
-
-  // Draw the border
-  _display.drawRect(x, y, width, height, TSRectangleNoFill, TS_8b_White);
-  // draw the contact at the end
-  _display.drawLine(x + width, y + 2, x + width, y + 5, TS_8b_White);
-
-  // change the colour depending on the charge
-  uint8_t batteryState = _model->getBatteryState();
-  uint8_t colour = TS_8b_Green;
-  if (batteryState <= 2)
-  {
-    colour = TS_8b_Red;
-  }
-
-  // clear the battery content
-  _display.drawRect(x + 1, y + 1, 10, height - 2, TSRectangleFilled, TS_8b_Black);
-
-  // draw the content
-  _display.drawRect(x + 1, y + 1, batteryState, height - 2, TSRectangleFilled, colour);
-}
-
-// draw the playing frame
-void YscoreView::drawPlayingFrame()
-{
-  drawPlayingMenu();
-  drawButtonLabels();
 }
 
 // draw the playing grid
@@ -426,14 +408,6 @@ void YscoreView::drawStatsPlayers()
                        SCREEN_STATS_PLAYER_BOTTOM_Y, IMG_STATS_PLAYER[winner][3]);
 }
 
-// draw the playing menu
-void YscoreView::drawPlayingMenu()
-{
-  _display.drawImageAt(_display.xMin, _display.yMin, &img_Play);
-  _display.drawLine(_display.xMin, SCREEN_MENU_MARGIN_Y, _display.xMax, SCREEN_MENU_MARGIN_Y, TS_8b_Gray);
-  _display.drawLine(SCREEN_BUTTON_LEFT_MARGIN_X, _display.yMax, SCREEN_BUTTON_RIGHT_MARGIN_X, _display.yMax, TS_8b_Gray);
-}
-
 // draw the winning players of the match
 void YscoreView::drawWinningPlayers()
 {
@@ -460,21 +434,6 @@ void YscoreView::drawWinningPlayers()
                    LBL_PLAYER[winner]);
 }
 
-// draw the Stats frame
-void YscoreView::drawStatsFrame()
-{
-  drawStatsMenu();
-  drawButtonLabels();
-}
-
-// draw the button labels
-void YscoreView::drawStatsMenu()
-{
-  _display.drawImageAt(_display.xMin, _display.yMin, &img_Stats);
-  _display.drawLine(_display.xMin, SCREEN_MENU_MARGIN_Y, _display.xMax, SCREEN_MENU_MARGIN_Y, TS_8b_Gray);
-  _display.drawLine(SCREEN_BUTTON_LEFT_MARGIN_X, _display.yMax, SCREEN_BUTTON_RIGHT_MARGIN_X, _display.yMax, TS_8b_Gray);
-}
-
 // draw the Stats grid
 void YscoreView::drawStatsGrid()
 {
@@ -494,30 +453,115 @@ void YscoreView::drawStatsGrid()
                     SCREEN_STATS_POINTS_LINE3_X, SCREEN_STATS_BOTTOM_LINE_Y, TS_8b_Gray);
 }
 
+// // draw the Time frame
+// void YscoreView::drawTimeFrame()
+// {
+//   drawTimeMenu();
+//   drawButtonLabels();
+// }
+
+// // draw the time menu labels
+// void YscoreView::drawTimeMenu()
+// {
+//   _display.drawImageAt(_display.xMin, _display.yMin, &img_Time);
+//   _display.drawLine(_display.xMin, SCREEN_MENU_MARGIN_Y, _display.xMax, SCREEN_MENU_MARGIN_Y, TS_8b_Gray);
+//   _display.drawLine(SCREEN_BUTTON_LEFT_MARGIN_X, _display.yMax, SCREEN_BUTTON_RIGHT_MARGIN_X, _display.yMax, TS_8b_Gray);
+// }
+
+///////////////////////////////////////////////
+// Screen "widgits"
+///////////////////////////////////////////////
+// draw a frame
+void YscoreView::drawFrame(const tImage *image)
+{
+  drawMenu(image);
+  drawButtonLabels();
+}
+
+// draw a menu
+void YscoreView::drawMenu(const tImage *image)
+{
+  _display.drawImageAt(_display.xMin, _display.yMin, image);
+  _display.drawLine(_display.xMin, SCREEN_MENU_MARGIN_Y, _display.xMax, SCREEN_MENU_MARGIN_Y, TS_8b_Gray);
+  _display.drawLine(SCREEN_BUTTON_LEFT_MARGIN_X, _display.yMax, SCREEN_BUTTON_RIGHT_MARGIN_X, _display.yMax, TS_8b_Gray);
+  _display.drawLine(SCREEN_BUTTON_LEFT_MARGIN_X, SCREEN_MENU_MARGIN_Y, SCREEN_BUTTON_LEFT_MARGIN_X, _display.yMax, TS_8b_Gray);
+  _display.drawLine(SCREEN_BUTTON_RIGHT_MARGIN_X, SCREEN_MENU_MARGIN_Y, SCREEN_BUTTON_RIGHT_MARGIN_X, _display.yMax, TS_8b_Gray);
+}
+
+// draw the restart
+void YscoreView::drawRestart()
+{
+  _display.setFont(MarVoSym_10pt);
+  uint8_t y = (_display.yMax - 2) - _display.getFontHeight();
+  tPoint pos = _display.printAt(SCREEN_BUTTON_LEFT_MARGIN_X + SCREEN_MARGIN_OFFSET_X,
+                                50, LBL_UPDOWN_ARROW);
+
+  _display.setFont(SansSerif_10pt);
+  _display.printAt(pos.x, 50, LBL_RESTART);
+}
+
 // draw the button labels
 void YscoreView::drawButtonLabels()
 {
   _display.drawImageAt(_display.xMin, SCREEN_BUTTON_TOP_Y, &img_ArrowRight);
   _display.drawImageAt(_display.xMin, SCREEN_BUTTON_BOTTOM_Y, &img_ArrowLeft);
-  _display.drawLine(SCREEN_BUTTON_LEFT_MARGIN_X, SCREEN_MENU_MARGIN_Y, SCREEN_BUTTON_LEFT_MARGIN_X, _display.yMax, TS_8b_Gray);
   _display.drawImageAt(SCREEN_BUTTON_RIGHT_MARGIN_X + 3, SCREEN_BUTTON_TOP_Y, &img_ArrowUp);
   _display.drawImageAt(SCREEN_BUTTON_RIGHT_MARGIN_X + 3, SCREEN_BUTTON_BOTTOM_Y, &img_ArrowDown);
-  _display.drawLine(SCREEN_BUTTON_RIGHT_MARGIN_X, SCREEN_MENU_MARGIN_Y, SCREEN_BUTTON_RIGHT_MARGIN_X, _display.yMax, TS_8b_Gray);
 }
 
-// draw the Time frame
-void YscoreView::drawTimeFrame()
+// draw the battery icon
+void YscoreView::drawBatteryIcon(uint8_t x, uint8_t y)
 {
-  drawTimeMenu();
-  drawButtonLabels();
+  uint8_t height = 8;
+  uint8_t width = 12;
+
+  // Draw the border
+  _display.drawRect(x, y, width, height, TSRectangleNoFill, TS_8b_White);
+  // draw the contact at the end
+  _display.drawLine(x + width, y + 2, x + width, y + 5, TS_8b_White);
+
+  // change the colour depending on the charge
+  uint8_t batteryState = _model->getBatteryState();
+  uint8_t colour = TS_8b_Green;
+  if (batteryState <= 2)
+  {
+    colour = TS_8b_Red;
+  }
+
+  // clear the battery content
+  _display.drawRect(x + 1, y + 1, 10, height - 2, TSRectangleFilled, TS_8b_Black);
+
+  // draw the content
+  _display.drawRect(x + 1, y + 1, batteryState, height - 2, TSRectangleFilled, colour);
 }
 
-// draw the time menu labels
-void YscoreView::drawTimeMenu()
+// print a time given in millis
+void YscoreView::printTime(uint8_t hours, uint8_t minutes, uint8_t seconds)
 {
-  _display.drawImageAt(_display.xMin, _display.yMin, &img_Time);
-  _display.drawLine(_display.xMin, SCREEN_MENU_MARGIN_Y, _display.xMax, SCREEN_MENU_MARGIN_Y, TS_8b_Gray);
-  _display.drawLine(SCREEN_BUTTON_LEFT_MARGIN_X, _display.yMax, SCREEN_BUTTON_RIGHT_MARGIN_X, _display.yMax, TS_8b_Gray);
+  char buffer[12];
+
+  _display.setFont(SansSerif_10pt);
+
+  tPoint pos = _display.printAt(SCREEN_TIME_X, SCREEN_TIME_Y, LBL_PLAYING_TIME);
+
+  uint8_t days = _display.getDay() - 1;
+
+  // temp for measuring standby time
+  //if (days != 0) {
+  snprintf(buffer, sizeof(buffer), "%02d:%02d:%02d:%02d", days, hours, minutes, seconds);
+  //}
+
+  // if (hours != 0)
+  // {
+  //   snprintf(buffer, sizeof(buffer), "%02d:%02d:%02d", hours, minutes, seconds);
+  // }
+  // else
+  // {
+  //   snprintf(buffer, sizeof(buffer), "%02d:%02d", minutes, seconds);
+  // }
+
+  _display.setFont(SansSerif_12pt);
+  _display.printCenteredAt(pos.y + 4, buffer);
 }
 
 ///////////////////////////////////////////////

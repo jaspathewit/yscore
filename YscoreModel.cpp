@@ -490,6 +490,27 @@ void YscoreModel::createSummaryTable()
 }
 
 //////////////////////////////////////////////////////////////////
+// Settings
+//////////////////////////////////////////////////////////////////
+
+// sets the type of match being played
+void YscoreModel::setTypeOfMatch(uint8_t typeOfMatch)
+{
+  if (_typeOfMatch != typeOfMatch)
+  {
+    _typeOfMatch = typeOfMatch;
+    _view->update();
+  }
+  return;
+}
+
+// gets the type of match being played
+uint8_t YscoreModel::getTypeOfMatch()
+{
+  return _typeOfMatch;
+}
+
+//////////////////////////////////////////////////////////////////
 // manage data extraction and setting of values from the score pad
 //////////////////////////////////////////////////////////////////
 

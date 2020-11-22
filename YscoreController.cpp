@@ -245,7 +245,7 @@ void YscoreController::performAction()
   case APP_STATE_STARTING:
     performActionStarting();
     break;
-  case APP_STATE_SET_SERVE:
+  case APP_STATE_SETTING_SERVE:
     performActionSettingServe();
     break;
   case APP_STATE_PLAYING:
@@ -266,6 +266,24 @@ void YscoreController::performAction()
   case APP_STATE_STATS_TIME:
     performActionStatsTime();
     break;
+  case APP_STATE_SETTING_TYPE_OF_MATCH:
+    performActionSettingTypeOfMatch();
+    break;
+  case APP_STATE_SETTING_LANGUAGE:
+    performActionSettingLanguage();
+    break;
+  case APP_STATE_SETTING_HANDEDNESS:
+    performActionSettingHandedness();
+    break;
+  case APP_STATE_ABOUT:
+    performActionAbout();
+    break;
+  case APP_STATE_ACK:
+    performActionAck();
+    break;
+  case APP_STATE_UPDATE:
+    performActionUpdate();
+    break;
   }
 }
 
@@ -278,9 +296,15 @@ void YscoreController::performActionDefault()
 // must set modelChanged if the model is changed by this action
 void YscoreController::performActionStarting()
 {
-  if ((_buttonStateMode == BUT_STATE_PRESSED) || (_buttonStateBack == BUT_STATE_PRESSED) || (_buttonStateThem == BUT_STATE_PRESSED) || (_buttonStateUs == BUT_STATE_PRESSED))
+  if (_buttonStateBack == BUT_STATE_PRESSED)
   {
-    _model->setAppState(APP_STATE_SET_SERVE);
+    _model->setAppState(APP_STATE_SETTING_TYPE_OF_MATCH);
+    return;
+  }
+
+  if ((_buttonStateMode == BUT_STATE_PRESSED) || (_buttonStateThem == BUT_STATE_PRESSED) || (_buttonStateUs == BUT_STATE_PRESSED))
+  {
+    _model->setAppState(APP_STATE_SETTING_SERVE);
     return;
   }
 }
@@ -341,7 +365,7 @@ void YscoreController::performActionPlaying()
     else
     {
       // play has not started
-      _model->setAppState(APP_STATE_SET_SERVE);
+      _model->setAppState(APP_STATE_SETTING_SERVE);
       _model->resetScorepad();
     }
     return;
@@ -404,7 +428,7 @@ void YscoreController::performActionWinning()
   // us or them restart
   if (_buttonStateUs == BUT_STATE_PRESSED || _buttonStateThem == BUT_STATE_PRESSED)
   {
-    _model->setAppState(APP_STATE_SET_SERVE);
+    _model->setAppState(APP_STATE_SETTING_SERVE);
     _model->resetScorepad();
     return;
   }
@@ -430,7 +454,7 @@ void YscoreController::performActionStats()
   // us or them restart
   if (_buttonStateUs == BUT_STATE_PRESSED || _buttonStateThem == BUT_STATE_PRESSED)
   {
-    _model->setAppState(APP_STATE_SET_SERVE);
+    _model->setAppState(APP_STATE_SETTING_SERVE);
     _model->resetScorepad();
     return;
   }
@@ -448,7 +472,7 @@ void YscoreController::performActionStatsTime()
   // us or them restart
   if (_buttonStateUs == BUT_STATE_PRESSED || _buttonStateThem == BUT_STATE_PRESSED)
   {
-    _model->setAppState(APP_STATE_SET_SERVE);
+    _model->setAppState(APP_STATE_SETTING_SERVE);
     _model->resetScorepad();
     return;
   }
@@ -472,7 +496,7 @@ void YscoreController::performActionPausing()
   // us or them restart
   if (_buttonStateUs == BUT_STATE_PRESSED || _buttonStateThem == BUT_STATE_PRESSED)
   {
-    _model->setAppState(APP_STATE_SET_SERVE);
+    _model->setAppState(APP_STATE_SETTING_SERVE);
     _model->resetScorepad();
     return;
   }
@@ -490,8 +514,132 @@ void YscoreController::performActionPausingTime()
   // us or them restart
   if (_buttonStateUs == BUT_STATE_PRESSED || _buttonStateThem == BUT_STATE_PRESSED)
   {
-    _model->setAppState(APP_STATE_SET_SERVE);
+    _model->setAppState(APP_STATE_SETTING_SERVE);
     _model->resetScorepad();
+    return;
+  }
+}
+
+// perform the action for the App_setting_type_of_match
+void YscoreController::performActionSettingTypeOfMatch()
+{
+  if (_buttonStateBack == BUT_STATE_PRESSED)
+  {
+    _model->setAppState(APP_STATE_SETTING_LANGUAGE);
+    return;
+  }
+
+  if (_buttonStateMode == BUT_STATE_PRESSED)
+  {
+    _model->setAppState(APP_STATE_STARTING);
+    return;
+  }
+
+  // us or them restart
+  if (_buttonStateUs == BUT_STATE_PRESSED || _buttonStateThem == BUT_STATE_PRESSED)
+  {
+    return;
+  }
+}
+
+// perform the action for the App_Stats_setting_language
+void YscoreController::performActionSettingLanguage()
+{
+  if (_buttonStateBack == BUT_STATE_PRESSED)
+  {
+    _model->setAppState(APP_STATE_SETTING_HANDEDNESS);
+    return;
+  }
+
+  if (_buttonStateMode == BUT_STATE_PRESSED)
+  {
+    _model->setAppState(APP_STATE_SETTING_TYPE_OF_MATCH);
+    return;
+  }
+
+  if (_buttonStateUs == BUT_STATE_PRESSED || _buttonStateThem == BUT_STATE_PRESSED)
+  {
+    return;
+  }
+}
+
+// perform the action for the App_Stats_setting_language
+void YscoreController::performActionSettingHandedness()
+{
+  if (_buttonStateBack == BUT_STATE_PRESSED)
+  {
+    _model->setAppState(APP_STATE_ABOUT);
+    return;
+  }
+
+  if (_buttonStateMode == BUT_STATE_PRESSED)
+  {
+    _model->setAppState(APP_STATE_SETTING_LANGUAGE);
+    return;
+  }
+
+  if (_buttonStateUs == BUT_STATE_PRESSED || _buttonStateThem == BUT_STATE_PRESSED)
+  {
+    return;
+  }
+}
+
+// perform the action for the App_setting_about
+void YscoreController::performActionAbout()
+{
+  if (_buttonStateBack == BUT_STATE_PRESSED)
+  {
+    _model->setAppState(APP_STATE_ACK);
+    return;
+  }
+
+  if (_buttonStateMode == BUT_STATE_PRESSED)
+  {
+    _model->setAppState(APP_STATE_SETTING_HANDEDNESS);
+    return;
+  }
+
+  // us or them restart
+  if (_buttonStateUs == BUT_STATE_PRESSED || _buttonStateThem == BUT_STATE_PRESSED)
+  {
+    return;
+  }
+}
+
+// perform the action for the App_setting_about
+void YscoreController::performActionAck()
+{
+  if (_buttonStateBack == BUT_STATE_PRESSED)
+  {
+    _model->setAppState(APP_STATE_UPDATE);
+    return;
+  }
+
+  if (_buttonStateMode == BUT_STATE_PRESSED)
+  {
+    _model->setAppState(APP_STATE_ABOUT);
+    return;
+  }
+
+  // us or them restart
+  if (_buttonStateUs == BUT_STATE_PRESSED || _buttonStateThem == BUT_STATE_PRESSED)
+  {
+    return;
+  }
+}
+
+// perform the action for the App_setting_update
+void YscoreController::performActionUpdate()
+{
+  if (_buttonStateMode == BUT_STATE_PRESSED)
+  {
+    _model->setAppState(APP_STATE_ACK);
+    return;
+  }
+
+  // us or them restart
+  if (_buttonStateUs == BUT_STATE_PRESSED || _buttonStateThem == BUT_STATE_PRESSED)
+  {
     return;
   }
 }

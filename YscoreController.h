@@ -72,29 +72,18 @@ private:
   // return true if neither the us and them buttons were pressed or
   // both were pressed
   bool checkDoNothing();
-  // perform the action for the App_Winning state
-  // must set modelChanged if the model in changed by this action
-  void performActionWinning();
-  // perform the action for the AppStats state
-  void performActionStats();
 
-  // perform the action for the App_Stats_time state
+  void performActionWinning();
+  void performActionStats();
   void performActionStatsTime();
-  // perform the action for the App_Pausing state
   void performActionPausing();
-  // perform the action for the App_Pausing_Time state
   void performActionPausingTime();
-  // perform the action for the App_setting_type_of_match
   void performActionSettingTypeOfMatch();
-  // perform the action for the App_setting_language
+  void performActionSettingBrightness();
   void performActionSettingLanguage();
-  // perform the action for the App_setting_Handedness
   void performActionSettingHandedness();
-  // perform the action for the App_about
   void performActionAbout();
-  // perform the action for the App_ack
   void performActionAck();
-  // perform the action for the App_update
   void performActionUpdate();
 
   TinyScreenExt &_display;

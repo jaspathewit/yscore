@@ -76,6 +76,9 @@ void YscoreView::update()
   case APP_STATE_SETTING_TYPE_OF_MATCH:
     drawScreenSettingTypeOfMatch();
     break;
+  case APP_STATE_SETTING_BRIGHTNESS:
+    drawScreenSettingBrightness();
+    break;
   case APP_STATE_SETTING_LANGUAGE:
     drawScreenSettingLanguage();
     break;
@@ -148,14 +151,14 @@ void YscoreView::drawScreenStart()
 // draw the setting serve screen
 void YscoreView::drawScreenSettingsServe()
 {
-  drawFrame(&img_Play);
+  drawFrame(&img_IconPlay);
   drawWhoServes();
 }
 
 // draw the playing screen
 void YscoreView::drawScreenPlaying()
 {
-  drawFrame(&img_Play);
+  drawFrame(&img_IconPlay);
   drawPlayingGrid();
   drawPlayingServe();
   drawPlayingPlayers();
@@ -165,7 +168,7 @@ void YscoreView::drawScreenPlaying()
 // draw the winningscreen
 void YscoreView::drawScreenWinning()
 {
-  drawFrame(&img_Play);
+  drawFrame(&img_IconPlay);
   drawWinningPlayers();
   drawRestart();
 }
@@ -173,7 +176,7 @@ void YscoreView::drawScreenWinning()
 // draw the stats screen
 void YscoreView::drawScreenStats(bool runningPoints)
 {
-  drawFrame(&img_Stats);
+  drawFrame(&img_IconStats);
   drawStatsPlayers();
   drawStatsGrid();
   drawStatsGameScoresAt(SCREEN_STATS_SCORE_LEFT_X, SCREEN_STATS_SCORE_TOP_Y, THEM, runningPoints);
@@ -185,7 +188,7 @@ void YscoreView::drawScreenStats(bool runningPoints)
 // draw the playing time screen
 void YscoreView::drawScreenPlayingTime()
 {
-  drawFrame(&img_Time);
+  drawFrame(&img_IconTime);
   printTime(_model->getPlayingHours(), _model->getPlayingMinutes(), _model->getPlayingSeconds());
   drawRestart();
 }
@@ -193,49 +196,49 @@ void YscoreView::drawScreenPlayingTime()
 // draw the settings type of match screen
 void YscoreView::drawScreenSettingTypeOfMatch()
 {
-  drawFrame(&img_TypeOfMatch);
+  drawFrame(&img_IconSettingTypeOfMatch);
   _display.printCenteredAt(30, "TypeOfMatch");
 }
 
 // draw the settings languge
 void YscoreView::drawScreenSettingLanguage()
 {
-  drawFrame(&img_Language);
+  drawFrame(&img_IconSettingLanguage);
   _display.printCenteredAt(30, "Language");
 }
 
 // draw the settings Handedness
 void YscoreView::drawScreenSettingHandedness()
 {
-  drawFrame(&img_Handedness);
+  drawFrame(&img_IconSettingHandedness);
   _display.printCenteredAt(30, "Handedness");
 }
 
 // draw the settings Brightness
 void YscoreView::drawScreenSettingBrightness()
 {
-  drawFrame(&img_Language);
+  drawFrame(&img_IconSettingBrightness);
   _display.printCenteredAt(30, "Brightness");
 }
 
 // draw the about screen
 void YscoreView::drawScreenAbout()
 {
-  drawFrame(&img_Language);
+  drawFrame(&img_IconAbout);
   _display.printCenteredAt(30, "About");
 }
 
 // draw the ack screen
 void YscoreView::drawScreenAck()
 {
-  drawFrame(&img_Language);
+  drawFrame(&img_IconAck);
   _display.printCenteredAt(30, "Ack");
 }
 
 // draw the ack screen
 void YscoreView::drawScreenUpdate()
 {
-  drawFrame(&img_Language);
+  drawFrame(&img_IconUpdate);
   _display.printCenteredAt(30, "Update");
 }
 

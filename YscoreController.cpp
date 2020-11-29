@@ -269,6 +269,9 @@ void YscoreController::performAction()
   case APP_STATE_SETTING_TYPE_OF_MATCH:
     performActionSettingTypeOfMatch();
     break;
+  case APP_STATE_SETTING_BRIGHTNESS:
+    performActionSettingBrightness();
+    break;
   case APP_STATE_SETTING_LANGUAGE:
     performActionSettingLanguage();
     break;
@@ -292,8 +295,7 @@ void YscoreController::performActionDefault()
 {
 }
 
-// deform the action for the App_Starting state
-// must set modelChanged if the model is changed by this action
+// perform the action for the APP_STATE_STARTING
 void YscoreController::performActionStarting()
 {
   if (_buttonStateBack == BUT_STATE_PRESSED)
@@ -309,8 +311,7 @@ void YscoreController::performActionStarting()
   }
 }
 
-// peform the action for the app setting state
-// must set modelChanged if the model in changed by this action
+// peform the action for the APP_STATE_SETTING_SERVE
 void YscoreController::performActionSettingServe()
 {
   // check for go back
@@ -344,8 +345,7 @@ void YscoreController::performActionSettingServe()
   _model->setAppState(APP_STATE_PLAYING);
 }
 
-// perform the action for the app playing state
-// must set modelChanged if the model in changed by this action
+// perform the action for the APP_STATE_PLAYING
 void YscoreController::performActionPlaying()
 {
   if (_buttonStateMode == BUT_STATE_PRESSED)
@@ -405,8 +405,7 @@ bool YscoreController::checkDoNothing()
   return _buttonStateUs == _buttonStateThem;
 }
 
-// perform the action for the App_Winning state
-// must set modelChanged if the model in changed by this action
+// perform the action for the APP_STATE_WINNING
 void YscoreController::performActionWinning()
 {
   // show the stats
@@ -436,7 +435,7 @@ void YscoreController::performActionWinning()
   return;
 }
 
-// perform the action for the App_Stats state
+// perform the action for the APP_STATE_STATS
 void YscoreController::performActionStats()
 {
   if (_buttonStateBack == BUT_STATE_PRESSED)
@@ -460,7 +459,7 @@ void YscoreController::performActionStats()
   }
 }
 
-// perform the action for the App_Stats_time state
+// perform the action for the APP_STATE_STATS_TIME
 void YscoreController::performActionStatsTime()
 {
   if (_buttonStateBack == BUT_STATE_PRESSED)
@@ -478,7 +477,7 @@ void YscoreController::performActionStatsTime()
   }
 }
 
-// perform the action for the App_Pausing state
+// perform the action for the APP_STATE_PAUSING
 void YscoreController::performActionPausing()
 {
   if (_buttonStateBack == BUT_STATE_PRESSED)
@@ -502,7 +501,7 @@ void YscoreController::performActionPausing()
   }
 }
 
-// perform the action for the App_Pausing_Time state
+// perform the action for the APP_STATE_PAUSING_TIME
 void YscoreController::performActionPausingTime()
 {
   if (_buttonStateBack == BUT_STATE_PRESSED)
@@ -520,12 +519,12 @@ void YscoreController::performActionPausingTime()
   }
 }
 
-// perform the action for the App_setting_type_of_match
+// perform the action for the APP_STATE_SETTING_TYPE_OF_MATCH
 void YscoreController::performActionSettingTypeOfMatch()
 {
   if (_buttonStateBack == BUT_STATE_PRESSED)
   {
-    _model->setAppState(APP_STATE_SETTING_LANGUAGE);
+    _model->setAppState(APP_STATE_SETTING_BRIGHTNESS);
     return;
   }
 
@@ -542,7 +541,29 @@ void YscoreController::performActionSettingTypeOfMatch()
   }
 }
 
-// perform the action for the App_Stats_setting_language
+// perform the action for the APP_STATE_SETTING_BRIGHTNESS
+void YscoreController::performActionSettingBrightness()
+{
+  if (_buttonStateBack == BUT_STATE_PRESSED)
+  {
+    _model->setAppState(APP_STATE_SETTING_LANGUAGE);
+    return;
+  }
+
+  if (_buttonStateMode == BUT_STATE_PRESSED)
+  {
+    _model->setAppState(APP_STATE_SETTING_TYPE_OF_MATCH);
+    return;
+  }
+
+  // us or them restart
+  if (_buttonStateUs == BUT_STATE_PRESSED || _buttonStateThem == BUT_STATE_PRESSED)
+  {
+    return;
+  }
+}
+
+// perform the action for the APP_STATE_SETTING_LANGUAGE
 void YscoreController::performActionSettingLanguage()
 {
   if (_buttonStateBack == BUT_STATE_PRESSED)
@@ -553,7 +574,7 @@ void YscoreController::performActionSettingLanguage()
 
   if (_buttonStateMode == BUT_STATE_PRESSED)
   {
-    _model->setAppState(APP_STATE_SETTING_TYPE_OF_MATCH);
+    _model->setAppState(APP_STATE_SETTING_BRIGHTNESS);
     return;
   }
 

@@ -200,7 +200,7 @@ uint8_t TinyScreenExt::getPrintWidth(char *st)
     for (uint8_t i = 0; i < length; i++)
     {
         tChar c = _fontChars[st[i] - _fontFirstCh];
-        result += (c.image->width) + 1;
+        result += c.image->width;
     }
 
     return result;
@@ -303,7 +303,7 @@ size_t TinyScreenExt::write(uint8_t ch)
 
     // draw the image for the character
     tPoint pos = drawImageAt(_cursorX, _cursorY, image);
-    _cursorX += (image->width + 1);
+    _cursorX += (image->width);
     return 1;
 }
 

@@ -16,6 +16,9 @@ limitations under the License.
 */
 
 #include "images/images.h"
+
+#include "fonts/TinyFont.h"
+
 #include "fonts/SansSerif_8pt.h"
 #include "fonts/SansSerif_10pt.h"
 #include "fonts/SansSerif_12pt.h"
@@ -81,10 +84,23 @@ limitations under the License.
 #define SCREEN_MARGIN_OFFSET_Y 6
 
 // define the labels used in the application
+// copyright
 #define LBL_COPYRIGHT "1.0 © J. Hewitt"
 #define LBL_APP_NAME "yScore"
+
+// About
 #define LBL_FIND_US_AT "Find us at"
 #define LBL_WEB_ADDRESS "www.yscore.be"
+
+// Acknowledgement
+#define LBL_ACK_LINE1 "3rd party software"
+#define LBL_ACK_LINE2 "Tiny Matthew Welch"
+#define LBL_ACK_LINE3 "www.squaregear.net"
+#define LBL_ACK_LINE4 " "
+#define LBL_ACK_LINE5 "FlashStorage"
+#define LBL_ACK_LINE6 "Cristian. Maglie"
+#define LBL_ACK_LINE7 "www.github.com"
+#define LBL_ACK_LINE8 "/cmaglie/FlashStorage"
 
 //  Battery: 100%
 #define LBL_TO_START_PRESS "Press to start"

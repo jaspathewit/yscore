@@ -190,9 +190,14 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-TinyFont.h
 
-   Copyright (C) 2004 by Matthew Welch
+
+Martin Vogal Symbols Font
+
+MarVoSym.ttf is licensed under the SIL Open Font License, Version 1.1. 
+This license is available with a FAQ at http://scripts.sil.org/OFL
+
+Copyright (C) 2004 by Matthew Welch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this font software and associated documentation files (the "Software"), to deal
@@ -211,11 +216,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-
-Martin Vogal Symbols Font
-
-MarVoSym.ttf is licensed under the SIL Open Font License, Version 1.1. 
-This license is available with a FAQ at http://scripts.sil.org/OFL
 
 
 

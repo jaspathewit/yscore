@@ -227,9 +227,9 @@ void YscoreView::drawScreenAbout()
   drawFrame(&img_IconAbout);
 
   // draw the logo
-  _display.drawImageAt(10, 14, &img_BT22x22);
+  _display.drawImageAt(10, SCREEN_MENU_MARGIN_Y + 2, &img_BT22x22);
 
-  _display.drawImageAt(33, 15, &img_AppName54x20);
+  _display.drawImageAt(33, SCREEN_MENU_MARGIN_Y + 4, &img_AppName54x20);
 
   _display.setFont(SansSerif_12pt);
   tPoint pos = _display.printCenteredAt(36, LBL_FIND_US_AT);
@@ -242,7 +242,18 @@ void YscoreView::drawScreenAbout()
 void YscoreView::drawScreenAck()
 {
   drawFrame(&img_IconAck);
-  _display.printCenteredAt(30, "Ack");
+  _display.setFont(TinyFont);
+  uint8_t posx = SCREEN_BUTTON_LEFT_MARGIN_X + 2;
+  uint8_t posy = SCREEN_MENU_MARGIN_Y + 2;
+
+  tPoint pos = _display.printAt(posx, posy, LBL_ACK_LINE1);
+  pos = _display.printAt(posx, pos.y, LBL_ACK_LINE2);
+  pos = _display.printAt(posx, pos.y, LBL_ACK_LINE3);
+  pos = _display.printAt(posx, pos.y, LBL_ACK_LINE4);
+  pos = _display.printAt(posx, pos.y, LBL_ACK_LINE5);
+  pos = _display.printAt(posx, pos.y, LBL_ACK_LINE6);
+  pos = _display.printAt(posx, pos.y, LBL_ACK_LINE7);
+  pos = _display.printAt(posx, pos.y, LBL_ACK_LINE8);
 }
 
 // draw the ack screen

@@ -225,7 +225,17 @@ void YscoreView::drawScreenSettingBrightness()
 void YscoreView::drawScreenAbout()
 {
   drawFrame(&img_IconAbout);
-  _display.printCenteredAt(30, "About");
+
+  // draw the logo
+  _display.drawImageAt(10, 14, &img_BT22x22);
+
+  _display.drawImageAt(33, 15, &img_AppName54x20);
+
+  _display.setFont(SansSerif_12pt);
+  tPoint pos = _display.printCenteredAt(36, LBL_FIND_US_AT);
+
+  _display.setFont(SansSerif_8pt);
+  _display.printCenteredAt(pos.y, LBL_WEB_ADDRESS);
 }
 
 // draw the ack screen

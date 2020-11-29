@@ -51,7 +51,8 @@ void YscoreController::initilise()
   initButtons();
   resetButtonState();
   _model->resetScorepad();
-  _model->setAppState(APP_STATE_STARTING);
+  _model->setAppState(APP_STATE_ABOUT);
+  // _model->setAppState(APP_STATE_STARTING);
 }
 
 ///////////////////////////

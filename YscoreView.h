@@ -81,19 +81,21 @@ limitations under the License.
 #define SCREEN_MARGIN_OFFSET_Y 6
 
 // define the labels used in the application
-#define LBL_TITLE "iScore"
 #define LBL_COPYRIGHT "1.0 © J. Hewitt"
+#define LBL_APP_NAME "yScore"
+#define LBL_FIND_US_AT "Find us at"
+#define LBL_WEB_ADDRESS "www.yscore.be"
+
 //  Battery: 100%
 #define LBL_TO_START_PRESS "Press to start"
-#define LBL_BATTERY "Bat: "
 
 #define LBL_WHOSERVES "Who serves?"
 #define LBL_RESTART " Restart "
 
-#define LBL_SEPARATOR ":"
-#define LBL_SPACE " "
-#define LBL_ZERO "0"
-#define LBL_PERCENT "%"
+// #define LBL_SEPARATOR ":"
+// #define LBL_SPACE " "
+// #define LBL_ZERO "0"
+// #define LBL_PERCENT "%"
 
 // define the modifyable labels
 #define LBL_US " US  "

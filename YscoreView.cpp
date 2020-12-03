@@ -536,8 +536,8 @@ void YscoreView::drawButtonLabels()
 {
   _display.drawImageAt(_display.xMin, SCREEN_BUTTON_TOP_Y, &img_ArrowRight);
   _display.drawImageAt(_display.xMin, SCREEN_BUTTON_BOTTOM_Y, &img_ArrowLeft);
-  _display.drawImageAt(SCREEN_BUTTON_RIGHT_MARGIN_X + 3, SCREEN_BUTTON_TOP_Y, &img_ArrowUp);
-  _display.drawImageAt(SCREEN_BUTTON_RIGHT_MARGIN_X + 3, SCREEN_BUTTON_BOTTOM_Y, &img_ArrowDown);
+  _display.drawImageAt(SCREEN_BUTTON_RIGHT_MARGIN_X + 2, SCREEN_BUTTON_TOP_Y, &img_ArrowUp);
+  _display.drawImageAt(SCREEN_BUTTON_RIGHT_MARGIN_X + 2, SCREEN_BUTTON_BOTTOM_Y, &img_ArrowDown);
 }
 
 // draw the battery icon

@@ -47,9 +47,17 @@ limitations under the License.
 #define APP_STATE_UPDATE 15
 
 // values for settings
-#define TYPE_OF_MATCH_UNDEF 0
-#define TYPE_OF_MATCH_DOUBLES 1
-#define TYPE_OF_MATCH_SINGLES 2
+#define TYPE_OF_MATCH_DOUBLES 0
+#define TYPE_OF_MATCH_SINGLES 1
+
+#define BRIGHTNESS_VERY_DARK 0
+#define BRIGHTNESS_DARK 1
+#define BRIGHTNESS_NORMAL 2
+#define BRIGHTNESS_BRIGHT 3
+#define BRIGHTNESS_VERY_BRIGHT 4
+
+// map brightness levels to actual display brightness levels
+const uint8_t DISPLAY_BRIGHTNESS[] = {2, 6, 10, 12, 15};
 
 // The button states
 // pressed are odd values so that
@@ -57,9 +65,6 @@ limitations under the License.
 // the button was pressed
 #define BUT_STATE_UNPRESSED 0
 #define BUT_STATE_PRESSED 1
-
-// The number of milliseconds for a long press
-#define LONG_PRESS_TIME 500
 
 // The maximum number of scores that need to be stored
 #define SCOREPAD_MAX_SIZE 180
@@ -197,8 +202,13 @@ public:
   uint8_t getWinner();
 
   // settings
-  void setTypeOfMatch(uint8_t typeOfMatch);
+  void incTypeOfMatch();
+  void decTypeOfMatch();
   uint8_t getTypeOfMatch();
+
+  void incBrightness();
+  void decBrightness();
+  uint8_t getBrightness();
 
 private:
   // update the view
@@ -274,6 +284,8 @@ private:
   // Settings
   // type of match DOUBLES / SINGLES
   uint8_t _typeOfMatch = TYPE_OF_MATCH_DOUBLES;
+  // Brightness
+  uint8_t _brightness = BRIGHTNESS_NORMAL;
 
   TinyScreenExt &_display;
   IYscoreView *_view = NULL;

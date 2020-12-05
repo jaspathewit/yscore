@@ -493,12 +493,23 @@ void YscoreModel::createSummaryTable()
 // Settings
 //////////////////////////////////////////////////////////////////
 
-// sets the type of match being played
-void YscoreModel::setTypeOfMatch(uint8_t typeOfMatch)
+// increments the type of match being played
+void YscoreModel::incTypeOfMatch()
 {
-  if (_typeOfMatch != typeOfMatch)
+  if (_typeOfMatch < TYPE_OF_MATCH_SINGLES)
   {
-    _typeOfMatch = typeOfMatch;
+    _typeOfMatch++;
+    _view->update();
+  }
+  return;
+}
+
+// decrements the type of match being played
+void YscoreModel::decTypeOfMatch()
+{
+  if (_typeOfMatch > TYPE_OF_MATCH_DOUBLES)
+  {
+    _typeOfMatch--;
     _view->update();
   }
   return;
@@ -508,6 +519,39 @@ void YscoreModel::setTypeOfMatch(uint8_t typeOfMatch)
 uint8_t YscoreModel::getTypeOfMatch()
 {
   return _typeOfMatch;
+}
+
+// increments the brightness
+void YscoreModel::incBrightness()
+{
+  if (_brightness < BRIGHTNESS_VERY_BRIGHT)
+  {
+    _brightness++;
+
+    // alter the brightness of the display
+    _display.setBrightness(DISPLAY_BRIGHTNESS[_brightness]);
+    _view->update();
+  }
+  return;
+}
+
+// decrements the brightness
+void YscoreModel::decBrightness()
+{
+  if (_brightness > BRIGHTNESS_VERY_DARK)
+  {
+    _brightness--;
+    // alter the brightness of the display
+    _display.setBrightness(DISPLAY_BRIGHTNESS[_brightness]);
+    _view->update();
+  }
+  return;
+}
+
+// gets the brightness
+uint8_t YscoreModel::getBrightness()
+{
+  return _brightness;
 }
 
 //////////////////////////////////////////////////////////////////

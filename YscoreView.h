@@ -83,6 +83,16 @@ limitations under the License.
 #define SCREEN_MARGIN_OFFSET_X 4
 #define SCREEN_MARGIN_OFFSET_Y 6
 
+// Selection
+#define SCREEN_SELECTION_TOP_Y 13
+#define SCREEN_SELECTION_MIDDLE_Y 30
+#define SCREEN_SELECTION_BOTTOM_Y 46
+
+#define SCREEN_SELECTION_TL_X 10
+#define SCREEN_SELECTION_TL_Y 28
+#define SCREEN_SELECTION_WIDTH 76
+#define SCREEN_SELECTION_HEGHT 18
+
 // define the labels used in the application
 // copyright
 #define LBL_COPYRIGHT "1.0 © J. Hewitt"
@@ -153,6 +163,22 @@ static const tImage *IMG_STATS_PLAYER[][4] = {{&img_Happy_blue, &img_Happy_green
                                               {&img_Happy_blue, &img_Happy_green, &img_Happy_red, &img_Happy_yellow}};
 
 // static const char* LBL_SERVE[][2] = {{">", "<"}, {"<", ">"}};
+
+// type used to define a selection list
+typedef struct
+{
+  uint8_t length;
+  const char **list;
+} tSelectionList;
+
+// Settings
+// Type of match
+static const char *SETTING_TYPE_OF_MATCH[] = {"Doubles", "Singles"};
+static const tSelectionList selectionList_TypeOfMatch = {2, SETTING_TYPE_OF_MATCH};
+
+// Brightness
+static const char *SETTING_BRIGHTNESS[] = {"Very dark", "Dark", "Normal", "Bright", "Very Bright"};
+static const tSelectionList selectionList_Brightness = {5, SETTING_BRIGHTNESS};
 
 // Labels for the buttons
 #define LBL_BUT_MODE "MODE"
@@ -247,6 +273,12 @@ private:
 
   // draw a menu
   void drawMenu(const tImage *image);
+
+  // draw a selection list
+  void drawSelection(uint8_t index, const tSelectionList list);
+
+  // draw the selection frame
+  void drawSelectionFrame();
 
   // draw the restart
   void drawRestart();

@@ -188,7 +188,7 @@ uint8_t TinyScreenExt::getFontHeight()
 }
 
 // gets the total printed width
-uint8_t TinyScreenExt::getPrintWidth(char *st)
+uint8_t TinyScreenExt::getPrintWidth(const char *st)
 {
     if (!_fontFirstCh)
     {
@@ -207,7 +207,7 @@ uint8_t TinyScreenExt::getPrintWidth(char *st)
 }
 
 // prints the given char * at the given x, y on the display
-tPoint TinyScreenExt::printAt(uint8_t x, uint8_t y, char *str)
+tPoint TinyScreenExt::printAt(uint8_t x, uint8_t y, const char *str)
 {
     tPoint result = {x, y};
 
@@ -222,7 +222,7 @@ tPoint TinyScreenExt::printAt(uint8_t x, uint8_t y, char *str)
 
 // prints the given text vertically on the display
 // at the given x, y.
-tPoint TinyScreenExt::printVerticalAt(uint8_t x, uint8_t y, char *str)
+tPoint TinyScreenExt::printVerticalAt(uint8_t x, uint8_t y, const char *str)
 {
     char buffer[2];
 
@@ -252,7 +252,7 @@ tPoint TinyScreenExt::printVerticalAt(uint8_t x, uint8_t y, char *str)
 // prints the given text centered on the display
 // at the given y. If the given string is too large
 // then it is printed at column 0
-tPoint TinyScreenExt::printCenteredAt(uint8_t y, char *str)
+tPoint TinyScreenExt::printCenteredAt(uint8_t y, const char *str)
 {
     uint8_t width = getPrintWidth(str);
     int x = (xMax - width) / 2;
@@ -417,7 +417,7 @@ tPoint TinyScreenExt::drawImageAt(uint8_t x, uint8_t y, const tImage *image)
 }
 
 // prints debug info
-void TinyScreenExt::printDebug(char *buffer)
+void TinyScreenExt::printDebug(const char *buffer)
 {
     setFont(SansSerif_8pt);
     setCursor(10, 0);

@@ -82,12 +82,12 @@ public:
      void setFont(const tFont &);
      uint8_t getFontHeight(const tFont &);
      uint8_t getFontHeight(void);
-     uint8_t getPrintWidth(char *);
+     uint8_t getPrintWidth(const char *);
      void setCursor(uint8_t, uint8_t);
      void fontColor(uint16_t, uint16_t);
-     tPoint printAt(uint8_t x, uint8_t y, char *str);
-     tPoint printCenteredAt(uint8_t y, char *str);
-     tPoint printVerticalAt(uint8_t x, uint8_t y, char *str);
+     tPoint printAt(uint8_t x, uint8_t y, const char *str);
+     tPoint printCenteredAt(uint8_t y, const char *str);
+     tPoint printVerticalAt(uint8_t x, uint8_t y, const char *str);
      virtual size_t write(uint8_t);
 
      //drawing commands
@@ -100,7 +100,7 @@ public:
      void clearScreen(void);
 
      // Utility debug methods
-     void printDebug(char *buffer);
+     void printDebug(const char *buffer);
      // prints debug info
      void printDebug(uint32_t number);
 

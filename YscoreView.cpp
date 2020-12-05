@@ -196,8 +196,11 @@ void YscoreView::drawScreenPlayingTime()
 // draw the settings type of match screen
 void YscoreView::drawScreenSettingTypeOfMatch()
 {
+  _display.setFont(SansSerif_12pt);
   drawFrame(&img_IconSettingTypeOfMatch);
-  _display.printCenteredAt(30, "TypeOfMatch");
+  drawSelectionFrame();
+  uint8_t typeOfMatch = _model->getTypeOfMatch();
+  drawSelection(typeOfMatch, selectionList_TypeOfMatch);
 }
 
 // draw the settings languge
@@ -217,8 +220,11 @@ void YscoreView::drawScreenSettingHandedness()
 // draw the settings Brightness
 void YscoreView::drawScreenSettingBrightness()
 {
+  _display.setFont(SansSerif_12pt);
   drawFrame(&img_IconSettingBrightness);
-  _display.printCenteredAt(30, "Brightness");
+  drawSelectionFrame();
+  uint8_t brightness = _model->getBrightness();
+  drawSelection(brightness, selectionList_Brightness);
 }
 
 // draw the about screen
@@ -517,6 +523,30 @@ void YscoreView::drawMenu(const tImage *image)
   _display.drawLine(SCREEN_BUTTON_LEFT_MARGIN_X, _display.yMax, SCREEN_BUTTON_RIGHT_MARGIN_X, _display.yMax, TS_8b_Gray);
   _display.drawLine(SCREEN_BUTTON_LEFT_MARGIN_X, SCREEN_MENU_MARGIN_Y, SCREEN_BUTTON_LEFT_MARGIN_X, _display.yMax, TS_8b_Gray);
   _display.drawLine(SCREEN_BUTTON_RIGHT_MARGIN_X, SCREEN_MENU_MARGIN_Y, SCREEN_BUTTON_RIGHT_MARGIN_X, _display.yMax, TS_8b_Gray);
+}
+
+// draw the settings list
+void YscoreView::drawSelection(uint8_t index, const tSelectionList list)
+{
+  _display.printCenteredAt(SCREEN_SELECTION_MIDDLE_Y, list.list[index]);
+
+  if (index - 1 > -1)
+  {
+    _display.printCenteredAt(SCREEN_SELECTION_TOP_Y, list.list[index - 1]);
+  }
+
+  if (index + 1 < list.length)
+  {
+    _display.printCenteredAt(SCREEN_SELECTION_BOTTOM_Y, list.list[index + 1]);
+  }
+}
+
+// draw the selection frame
+void YscoreView::drawSelectionFrame()
+{
+  // draw a box round the selected text
+  _display.drawRect(SCREEN_SELECTION_TL_X, SCREEN_SELECTION_TL_Y,
+                    SCREEN_SELECTION_WIDTH, SCREEN_SELECTION_HEGHT, 0, TS_8b_Gray);
 }
 
 // draw the restart

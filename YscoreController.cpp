@@ -535,10 +535,15 @@ void YscoreController::performActionSettingTypeOfMatch()
     return;
   }
 
-  // us or them restart
-  if (_buttonStateUs == BUT_STATE_PRESSED || _buttonStateThem == BUT_STATE_PRESSED)
+  // them
+  if (_buttonStateUs == BUT_STATE_PRESSED)
   {
-    return;
+    _model->incTypeOfMatch();
+  }
+
+  if (_buttonStateThem == BUT_STATE_PRESSED)
+  {
+    _model->decTypeOfMatch();
   }
 }
 
@@ -557,10 +562,15 @@ void YscoreController::performActionSettingBrightness()
     return;
   }
 
-  // us or them restart
-  if (_buttonStateUs == BUT_STATE_PRESSED || _buttonStateThem == BUT_STATE_PRESSED)
+  // them
+  if (_buttonStateUs == BUT_STATE_PRESSED)
   {
-    return;
+    _model->incBrightness();
+  }
+  // us
+  if (_buttonStateThem == BUT_STATE_PRESSED)
+  {
+    _model->decBrightness();
   }
 }
 

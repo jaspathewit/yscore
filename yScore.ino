@@ -80,7 +80,7 @@ void setupDisplay()
   display.on();
 
   //setBrightness(brightness);//sets main current level, valid levels are 0-15
-  display.setBrightness(10);
+  display.setBrightness(DISPLAY_BRIGHTNESS[model.getBrightness()]);
   // set the font to be used
   display.setFont(SansSerif_8pt);
   // set white text on black background

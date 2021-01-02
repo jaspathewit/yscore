@@ -49,6 +49,18 @@ const char *YscoreResourceProvider::getFindUsAt(uint8_t local)
   return LBL_FIND_US_AT[local];
 }
 
+// get the Playing Title
+const char *YscoreResourceProvider::getTitlePlaying(uint8_t local)
+{
+  return LBL_TITLE_PLAYING[local];
+}
+
+// get the Winning Title
+const char *YscoreResourceProvider::getTitleWinning(uint8_t local)
+{
+  return LBL_TITLE_WINNING[local];
+}
+
 // get the WhoServes Title
 const char *YscoreResourceProvider::getTitleWhoServes(uint8_t local)
 {

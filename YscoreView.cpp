@@ -151,7 +151,7 @@ void YscoreView::drawScreenStart()
 // draw the playing screen
 void YscoreView::drawScreenPlaying()
 {
-  drawFrame("Playing");
+  drawFrame(_resource.getTitlePlaying(_model->getLocal()));
   drawPlayingGrid();
   drawPlayingServe();
   drawPlayingPlayers();
@@ -161,7 +161,7 @@ void YscoreView::drawScreenPlaying()
 // draw the winningscreen
 void YscoreView::drawScreenWinning()
 {
-  drawFrame("Winner!");
+  drawFrame(_resource.getTitleWinning(_model->getLocal()));
   drawWinningPlayers();
   drawRestart();
 }

@@ -125,6 +125,27 @@ static const tImage *IMG_STATS_PLAYER[][4] = {{&img_Happy_blue, &img_Happy_green
 
 // static const char* LBL_SERVE[][2] = {{">", "<"}, {"<", ">"}};
 
+// Titles
+#define LBL_EN_TITLE_PLAYING "Playing"
+#define LBL_NL_TITLE_PLAYING "Spelen"
+#define LBL_FR_TITLE_PLAYING "En jouant"
+#define LBL_DE_TITLE_PLAYING "Spielen"
+
+static const char *LBL_TITLE_PLAYING[] = {LBL_EN_TITLE_PLAYING,
+                                          LBL_NL_TITLE_PLAYING,
+                                          LBL_FR_TITLE_PLAYING,
+                                          LBL_DE_TITLE_PLAYING};
+
+#define LBL_EN_TITLE_WINNING "Winner!"
+#define LBL_NL_TITLE_WINNING "Winnaar!"
+#define LBL_FR_TITLE_WINNING "Gagnant!"
+#define LBL_DE_TITLE_WINNING "Gewinner!"
+
+static const char *LBL_TITLE_WINNING[] = {LBL_EN_TITLE_WINNING,
+                                          LBL_NL_TITLE_WINNING,
+                                          LBL_FR_TITLE_WINNING,
+                                          LBL_DE_TITLE_WINNING};
+
 // type used to define a selection list
 typedef struct
 {
@@ -248,6 +269,8 @@ public:
   const char *getPressAButton(uint8_t local);
   const char *getFindUsAt(uint8_t local);
 
+  const char *getTitlePlaying(uint8_t local);
+  const char *getTitleWinning(uint8_t local);
 
   const char *getTitleWhoServes(uint8_t local);
   const tSelectionList getSelectionListWhoServes(uint8_t local);

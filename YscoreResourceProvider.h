@@ -198,7 +198,7 @@ static const char **SETTING_BRIGHTNESS[] = {SETTING_EN_BRIGHTNESS,
 // Handedness
 #define LBL_EN_TITLE_HANDEDNESS "Handedness"
 #define LBL_NL_TITLE_HANDEDNESS "handigheid"
-#define LBL_FR_TITLE_HANDEDNESS "Main de préférence?"
+#define LBL_FR_TITLE_HANDEDNESS "Main de préférence"
 #define LBL_DE_TITLE_HANDEDNESS "Händigkeit"
 
 static const char *LBL_TITLE_HANDEDNESS[] = {LBL_EN_TITLE_HANDEDNESS,
@@ -247,6 +247,7 @@ public:
   const char *getCopyright(uint8_t local);
   const char *getPressAButton(uint8_t local);
   const char *getFindUsAt(uint8_t local);
+
 
   const char *getTitleWhoServes(uint8_t local);
   const tSelectionList getSelectionListWhoServes(uint8_t local);

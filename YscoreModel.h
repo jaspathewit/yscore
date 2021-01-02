@@ -39,7 +39,7 @@ limitations under the License.
 #define APP_STATE_STATS 7
 #define APP_STATE_STATS_TIME 8
 #define APP_STATE_SETTING_TYPE_OF_MATCH 9
-#define APP_STATE_SETTING_LANGUAGE 10
+#define APP_STATE_SETTING_LOCAL 10
 #define APP_STATE_SETTING_BRIGHTNESS 11
 #define APP_STATE_SETTING_HANDEDNESS 12
 #define APP_STATE_ABOUT 13
@@ -47,6 +47,10 @@ limitations under the License.
 #define APP_STATE_UPDATE 15
 
 // values for settings
+#define WHO_SERVES_THEM 0
+#define WHO_SERVES_US 1
+#define WHO_SERVES_RANDOM 2
+
 #define TYPE_OF_MATCH_DOUBLES 0
 #define TYPE_OF_MATCH_SINGLES 1
 
@@ -55,6 +59,14 @@ limitations under the License.
 #define BRIGHTNESS_NORMAL 2
 #define BRIGHTNESS_BRIGHT 3
 #define BRIGHTNESS_VERY_BRIGHT 4
+
+#define LOCAL_ENGLISH 0
+#define LOCAL_DUTCH 1
+#define LOCAL_FRENCH 2
+#define LOCAL_GERMAN 3
+
+#define HANDEDNESS_RIGHT 0
+#define HANDEDNESS_LEFT 1
 
 // map brightness levels to actual display brightness levels
 const uint8_t DISPLAY_BRIGHTNESS[] = {2, 6, 10, 12, 15};
@@ -202,6 +214,10 @@ public:
   uint8_t getWinner();
 
   // settings
+  void incWhoServes();
+  void decWhoServes();
+  uint8_t getWhoServes();
+
   void incTypeOfMatch();
   void decTypeOfMatch();
   uint8_t getTypeOfMatch();
@@ -209,6 +225,14 @@ public:
   void incBrightness();
   void decBrightness();
   uint8_t getBrightness();
+
+  void incHandedness();
+  void decHandedness();
+  uint8_t getHandedness();
+
+  void incLocal();
+  void decLocal();
+  uint8_t getLocal();
 
 private:
   // update the view
@@ -282,10 +306,16 @@ private:
   uint8_t _winner = NONE;
 
   // Settings
+  // whoServes
+  uint8_t _whoServes = WHO_SERVES_THEM;
   // type of match DOUBLES / SINGLES
   uint8_t _typeOfMatch = TYPE_OF_MATCH_DOUBLES;
   // Brightness
   uint8_t _brightness = BRIGHTNESS_NORMAL;
+  // local
+  uint8_t _local = LOCAL_ENGLISH;
+  // handedness
+  uint8_t _handedness = HANDEDNESS_RIGHT;
 
   TinyScreenExt &_display;
   IYscoreView *_view = NULL;

@@ -80,7 +80,7 @@ private:
   void performActionPausingTime();
   void performActionSettingTypeOfMatch();
   void performActionSettingBrightness();
-  void performActionSettingLanguage();
+  void performActionSettingLocal();
   void performActionSettingHandedness();
   void performActionAbout();
   void performActionAck();

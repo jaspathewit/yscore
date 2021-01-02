@@ -49,7 +49,7 @@ void YscoreView::update()
     drawScreenStart();
     break;
   case APP_STATE_SETTING_SERVE:
-    drawScreenSettingsServe();
+    drawScreenSettingServe();
     break;
   case APP_STATE_PLAYING:
     drawScreenPlaying();
@@ -79,8 +79,8 @@ void YscoreView::update()
   case APP_STATE_SETTING_BRIGHTNESS:
     drawScreenSettingBrightness();
     break;
-  case APP_STATE_SETTING_LANGUAGE:
-    drawScreenSettingLanguage();
+  case APP_STATE_SETTING_LOCAL:
+    drawScreenSettingLocal();
     break;
   case APP_STATE_SETTING_HANDEDNESS:
     drawScreenSettingHandedness();
@@ -135,7 +135,7 @@ void YscoreView::updateTime()
 void YscoreView::drawScreenStart()
 {
   _display.setFont(SansSerif_8pt);
-  _display.printAt(0, 0, LBL_COPYRIGHT);
+  _display.printAt(0, 0, _resource.getCopyright(_model->getLocal()));
 
   // draw the logo
   _display.drawImageAt(0, 14, &img_BT32x32);
@@ -145,20 +145,13 @@ void YscoreView::drawScreenStart()
 
   // draw the press to start
   _display.setFont(SansSerif_12pt);
-  _display.printCenteredAt(50, LBL_TO_START_PRESS);
-}
-
-// draw the setting serve screen
-void YscoreView::drawScreenSettingsServe()
-{
-  drawFrame(&img_IconPlay);
-  drawWhoServes();
+  _display.printCenteredAt(50, _resource.getPressAButton(_model->getLocal()));
 }
 
 // draw the playing screen
 void YscoreView::drawScreenPlaying()
 {
-  drawFrame(&img_IconPlay);
+  drawFrame("Playing");
   drawPlayingGrid();
   drawPlayingServe();
   drawPlayingPlayers();
@@ -168,7 +161,7 @@ void YscoreView::drawScreenPlaying()
 // draw the winningscreen
 void YscoreView::drawScreenWinning()
 {
-  drawFrame(&img_IconPlay);
+  drawFrame("Winner!");
   drawWinningPlayers();
   drawRestart();
 }
@@ -176,7 +169,7 @@ void YscoreView::drawScreenWinning()
 // draw the stats screen
 void YscoreView::drawScreenStats(bool runningPoints)
 {
-  drawFrame(&img_IconStats);
+  drawFrame("Statistics");
   drawStatsPlayers();
   drawStatsGrid();
   drawStatsGameScoresAt(SCREEN_STATS_SCORE_LEFT_X, SCREEN_STATS_SCORE_TOP_Y, THEM, runningPoints);
@@ -188,49 +181,67 @@ void YscoreView::drawScreenStats(bool runningPoints)
 // draw the playing time screen
 void YscoreView::drawScreenPlayingTime()
 {
-  drawFrame(&img_IconTime);
+  drawFrame("Playing Time");
   printTime(_model->getPlayingHours(), _model->getPlayingMinutes(), _model->getPlayingSeconds());
   drawRestart();
+}
+
+// draw the setting serve screen
+void YscoreView::drawScreenSettingServe()
+{
+  uint8_t local = _model->getLocal();
+  drawFrame(_resource.getTitleWhoServes(local));
+  drawSelectionFrame();
+  _display.setFont(SansSerif_12pt);
+  drawSelection(_model->getWhoServes(), _resource.getSelectionListWhoServes(local));
+  // drawWhoServes();
 }
 
 // draw the settings type of match screen
 void YscoreView::drawScreenSettingTypeOfMatch()
 {
-  _display.setFont(SansSerif_12pt);
-  drawFrame(&img_IconSettingTypeOfMatch);
+  uint8_t local = _model->getLocal();
+  drawFrame(_resource.getTitleTypeOfMatch(local));
   drawSelectionFrame();
-  uint8_t typeOfMatch = _model->getTypeOfMatch();
-  drawSelection(typeOfMatch, selectionList_TypeOfMatch);
+  _display.setFont(SansSerif_12pt);
+  drawSelection(_model->getTypeOfMatch(), _resource.getSelectionListTypeOfMatch(local));
 }
 
 // draw the settings languge
-void YscoreView::drawScreenSettingLanguage()
+void YscoreView::drawScreenSettingLocal()
 {
-  drawFrame(&img_IconSettingLanguage);
-  _display.printCenteredAt(30, "Language");
+  uint8_t local = _model->getLocal();
+  drawFrame(_resource.getTitleLocal(local));
+  drawSelectionFrame();
+  _display.setFont(SansSerif_12pt);
+  drawSelection(local, _resource.getSelectionListLocal(local));
 }
 
 // draw the settings Handedness
 void YscoreView::drawScreenSettingHandedness()
 {
-  drawFrame(&img_IconSettingHandedness);
-  _display.printCenteredAt(30, "Handedness");
+  uint8_t local = _model->getLocal();
+  drawFrame(_resource.getTitleHandedness(local));
+  drawSelectionFrame();
+  _display.setFont(SansSerif_12pt);
+  uint8_t handedness = _model->getHandedness();
+  drawSelection(handedness, _resource.getSelectionListHandedness(local));
 }
 
 // draw the settings Brightness
 void YscoreView::drawScreenSettingBrightness()
 {
-  _display.setFont(SansSerif_12pt);
-  drawFrame(&img_IconSettingBrightness);
+  uint8_t local = _model->getLocal();
+  drawFrame(_resource.getTitleBrightness(local));
   drawSelectionFrame();
-  uint8_t brightness = _model->getBrightness();
-  drawSelection(brightness, selectionList_Brightness);
+  _display.setFont(SansSerif_12pt);
+  drawSelection(_model->getBrightness(), _resource.getSelectionListBrightness(local));
 }
 
 // draw the about screen
 void YscoreView::drawScreenAbout()
 {
-  drawFrame(&img_IconAbout);
+  drawFrame("About");
 
   // draw the logo
   _display.drawImageAt(10, SCREEN_MENU_MARGIN_Y + 2, &img_BT22x22);
@@ -238,7 +249,7 @@ void YscoreView::drawScreenAbout()
   _display.drawImageAt(33, SCREEN_MENU_MARGIN_Y + 4, &img_AppName54x20);
 
   _display.setFont(SansSerif_12pt);
-  tPoint pos = _display.printCenteredAt(36, LBL_FIND_US_AT);
+  tPoint pos = _display.printCenteredAt(36, _resource.getFindUsAt(_model->getLocal()));
 
   _display.setFont(SansSerif_8pt);
   _display.printCenteredAt(pos.y, LBL_WEB_ADDRESS);
@@ -247,7 +258,7 @@ void YscoreView::drawScreenAbout()
 // draw the ack screen
 void YscoreView::drawScreenAck()
 {
-  drawFrame(&img_IconAck);
+  drawFrame("Acknowledgements");
   _display.setFont(TinyFont);
   uint8_t posx = SCREEN_BUTTON_LEFT_MARGIN_X + 2;
   uint8_t posy = SCREEN_MENU_MARGIN_Y + 2;
@@ -265,7 +276,7 @@ void YscoreView::drawScreenAck()
 // draw the ack screen
 void YscoreView::drawScreenUpdate()
 {
-  drawFrame(&img_IconUpdate);
+  drawFrame("Update");
   _display.printCenteredAt(30, "Update");
 }
 
@@ -509,16 +520,17 @@ void YscoreView::drawStatsGrid()
 // Screen "widgits"
 ///////////////////////////////////////////////
 // draw a frame
-void YscoreView::drawFrame(const tImage *image)
+void YscoreView::drawFrame(const char *title)
 {
-  drawMenu(image);
+  drawMenu(title);
   drawButtonLabels();
 }
 
 // draw a menu
-void YscoreView::drawMenu(const tImage *image)
+void YscoreView::drawMenu(const char *title)
 {
-  _display.drawImageAt(_display.xMin, _display.yMin, image);
+  _display.setFont(SansSerif_8pt);
+  _display.printAt(0, 0, title);
   _display.drawLine(_display.xMin, SCREEN_MENU_MARGIN_Y, _display.xMax, SCREEN_MENU_MARGIN_Y, TS_8b_Gray);
   _display.drawLine(SCREEN_BUTTON_LEFT_MARGIN_X, _display.yMax, SCREEN_BUTTON_RIGHT_MARGIN_X, _display.yMax, TS_8b_Gray);
   _display.drawLine(SCREEN_BUTTON_LEFT_MARGIN_X, SCREEN_MENU_MARGIN_Y, SCREEN_BUTTON_LEFT_MARGIN_X, _display.yMax, TS_8b_Gray);

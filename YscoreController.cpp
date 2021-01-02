@@ -51,8 +51,8 @@ void YscoreController::initilise()
   initButtons();
   resetButtonState();
   _model->resetScorepad();
-  _model->setAppState(APP_STATE_ABOUT);
-  // _model->setAppState(APP_STATE_STARTING);
+  // _model->setAppState(APP_STATE_ABOUT);
+  _model->setAppState(APP_STATE_STARTING);
 }
 
 ///////////////////////////
@@ -273,8 +273,8 @@ void YscoreController::performAction()
   case APP_STATE_SETTING_BRIGHTNESS:
     performActionSettingBrightness();
     break;
-  case APP_STATE_SETTING_LANGUAGE:
-    performActionSettingLanguage();
+  case APP_STATE_SETTING_LOCAL:
+    performActionSettingLocal();
     break;
   case APP_STATE_SETTING_HANDEDNESS:
     performActionSettingHandedness();
@@ -310,40 +310,6 @@ void YscoreController::performActionStarting()
     _model->setAppState(APP_STATE_SETTING_SERVE);
     return;
   }
-}
-
-// peform the action for the APP_STATE_SETTING_SERVE
-void YscoreController::performActionSettingServe()
-{
-  // check for go back
-  if (_buttonStateBack == BUT_STATE_PRESSED)
-  {
-    _model->setAppState(APP_STATE_STARTING);
-    return;
-  }
-
-  // check for do nothing
-  bool doNothing = checkDoNothing();
-  if (doNothing)
-  {
-    return;
-  }
-
-  uint8_t whoToUpdate = NONE;
-
-  if (_buttonStateUs == BUT_STATE_PRESSED)
-  {
-    whoToUpdate = US;
-  }
-
-  if (_buttonStateThem == BUT_STATE_PRESSED)
-  {
-    whoToUpdate = THEM;
-  }
-
-  _model->setServe(whoToUpdate);
-  _model->startPlayingTime();
-  _model->setAppState(APP_STATE_PLAYING);
 }
 
 // perform the action for the APP_STATE_PLAYING
@@ -520,6 +486,36 @@ void YscoreController::performActionPausingTime()
   }
 }
 
+// peform the action for the APP_STATE_SETTING_SERVE
+void YscoreController::performActionSettingServe()
+{
+  // we have decided who serves
+  if (_buttonStateMode == BUT_STATE_PRESSED)
+  {
+    _model->setServe(_model->getWhoServes());
+    _model->startPlayingTime();
+    _model->setAppState(APP_STATE_PLAYING);
+    return;
+  }
+
+  // check for go back
+  if (_buttonStateBack == BUT_STATE_PRESSED)
+  {
+    _model->setAppState(APP_STATE_STARTING);
+    return;
+  }
+
+  if (_buttonStateUs == BUT_STATE_PRESSED)
+  {
+    _model->incWhoServes();
+  }
+
+  if (_buttonStateThem == BUT_STATE_PRESSED)
+  {
+    _model->decWhoServes();
+  }
+}
+
 // perform the action for the APP_STATE_SETTING_TYPE_OF_MATCH
 void YscoreController::performActionSettingTypeOfMatch()
 {
@@ -552,7 +548,7 @@ void YscoreController::performActionSettingBrightness()
 {
   if (_buttonStateBack == BUT_STATE_PRESSED)
   {
-    _model->setAppState(APP_STATE_SETTING_LANGUAGE);
+    _model->setAppState(APP_STATE_SETTING_LOCAL);
     return;
   }
 
@@ -574,8 +570,8 @@ void YscoreController::performActionSettingBrightness()
   }
 }
 
-// perform the action for the APP_STATE_SETTING_LANGUAGE
-void YscoreController::performActionSettingLanguage()
+// perform the action for the APP_STATE_SETTING_LOCAL
+void YscoreController::performActionSettingLocal()
 {
   if (_buttonStateBack == BUT_STATE_PRESSED)
   {
@@ -589,9 +585,15 @@ void YscoreController::performActionSettingLanguage()
     return;
   }
 
-  if (_buttonStateUs == BUT_STATE_PRESSED || _buttonStateThem == BUT_STATE_PRESSED)
+  // them
+  if (_buttonStateUs == BUT_STATE_PRESSED)
   {
-    return;
+    _model->incLocal();
+  }
+  // us
+  if (_buttonStateThem == BUT_STATE_PRESSED)
+  {
+    _model->decLocal();
   }
 }
 
@@ -606,13 +608,19 @@ void YscoreController::performActionSettingHandedness()
 
   if (_buttonStateMode == BUT_STATE_PRESSED)
   {
-    _model->setAppState(APP_STATE_SETTING_LANGUAGE);
+    _model->setAppState(APP_STATE_SETTING_LOCAL);
     return;
   }
 
-  if (_buttonStateUs == BUT_STATE_PRESSED || _buttonStateThem == BUT_STATE_PRESSED)
+  // them
+  if (_buttonStateUs == BUT_STATE_PRESSED)
   {
-    return;
+    _model->incHandedness();
+  }
+  // us
+  if (_buttonStateThem == BUT_STATE_PRESSED)
+  {
+    _model->decHandedness();
   }
 }
 

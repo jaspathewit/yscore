@@ -32,6 +32,7 @@ limitations under the License.
 
 #include "YscoreModel.h"
 #include "YscoreViewInterface.h"
+#include "YscoreResourceProvider.h"
 
 #ifndef YScoreView_h
 #define YScoreView_h
@@ -95,28 +96,28 @@ limitations under the License.
 
 // define the labels used in the application
 // copyright
-#define LBL_COPYRIGHT "1.0 © J. Hewitt"
-#define LBL_APP_NAME "yScore"
+// #define LBL_COPYRIGHT "1.0 © J. Hewitt"
+// #define LBL_APP_NAME "yScore"
 
-// About
-#define LBL_FIND_US_AT "Find us at"
-#define LBL_WEB_ADDRESS "www.yscore.be"
+// // About
+// #define LBL_FIND_US_AT "Find us at"
+// #define LBL_WEB_ADDRESS "www.yscore.be"
 
-// Acknowledgement
-#define LBL_ACK_LINE1 "3rd party software"
-#define LBL_ACK_LINE2 "Tiny Matthew Welch"
-#define LBL_ACK_LINE3 "www.squaregear.net"
-#define LBL_ACK_LINE4 " "
-#define LBL_ACK_LINE5 "FlashStorage"
-#define LBL_ACK_LINE6 "Cristian. Maglie"
-#define LBL_ACK_LINE7 "www.github.com"
-#define LBL_ACK_LINE8 "/cmaglie/FlashStorage"
+// // Acknowledgement
+// #define LBL_ACK_LINE1 "3rd party software"
+// #define LBL_ACK_LINE2 "Tiny Matthew Welch"
+// #define LBL_ACK_LINE3 "www.squaregear.net"
+// #define LBL_ACK_LINE4 " "
+// #define LBL_ACK_LINE5 "FlashStorage"
+// #define LBL_ACK_LINE6 "Cristian. Maglie"
+// #define LBL_ACK_LINE7 "www.github.com"
+// #define LBL_ACK_LINE8 "/cmaglie/FlashStorage"
 
-//  Battery: 100%
-#define LBL_TO_START_PRESS "Press to start"
+// //  Battery: 100%
+// #define LBL_TO_START_PRESS "Press to start"
 
-#define LBL_WHOSERVES "Who serves?"
-#define LBL_RESTART " Restart "
+// #define LBL_WHOSERVES "Who serves?"
+// #define LBL_RESTART " Restart "
 
 // #define LBL_SEPARATOR ":"
 // #define LBL_SPACE " "
@@ -124,12 +125,12 @@ limitations under the License.
 // #define LBL_PERCENT "%"
 
 // define the modifyable labels
-#define LBL_US " US  "
-#define LBL_THEM " THEM"
-#define LBL_NONE " NONE"
+// #define LBL_US " US  "
+// #define LBL_THEM " THEM"
+// #define LBL_NONE " NONE"
 
-#define LBL_YOU "YOU "
-#define LBL_PLAYING_TIME "Time Played"
+// #define LBL_YOU "YOU "
+// #define LBL_PLAYING_TIME "Time Played"
 
 // "text" when it is in MarVoSym font are the
 // Up Down left and right arrows
@@ -141,55 +142,55 @@ limitations under the License.
 #define LBL_UPDOWN_ARROW "CD"
 
 // Player Names
-static char *LBL_PLAYER[] = {LBL_THEM, LBL_US, LBL_NONE};
+// static char *LBL_PLAYER[] = {LBL_THEM, LBL_US, LBL_NONE};
 
-static const tImage *IMG_SERVE[][2] = {{&img_Serve_BR, &img_Serve_BL},
-                                       {&img_Serve_TL, &img_Serve_TR}};
+// static const tImage *IMG_SERVE[][2] = {{&img_Serve_BR, &img_Serve_BL},
+//                                        {&img_Serve_TL, &img_Serve_TR}};
 
-static const tImage *IMG_PLAYER_DOUBLES[][4] = {{&img_Happy_blue, &img_Happy_green, &img_Sad_red, &img_Sad_yellow},
-                                                {&img_Sad_blue, &img_Sad_green, &img_Happy_red, &img_Happy_yellow},
-                                                {&img_Happy_blue, &img_Happy_green, &img_Sad_yellow, &img_Sad_red},
-                                                {&img_Sad_blue, &img_Sad_green, &img_Happy_yellow, &img_Happy_red},
-                                                {&img_Happy_green, &img_Happy_blue, &img_Sad_red, &img_Sad_yellow},
-                                                {&img_Sad_green, &img_Sad_blue, &img_Happy_red, &img_Happy_yellow},
-                                                {&img_Happy_green, &img_Happy_blue, &img_Sad_yellow, &img_Sad_red},
-                                                {&img_Sad_green, &img_Sad_blue, &img_Happy_yellow, &img_Happy_red}};
+// static const tImage *IMG_PLAYER_DOUBLES[][4] = {{&img_Happy_blue, &img_Happy_green, &img_Sad_red, &img_Sad_yellow},
+//                                                 {&img_Sad_blue, &img_Sad_green, &img_Happy_red, &img_Happy_yellow},
+//                                                 {&img_Happy_blue, &img_Happy_green, &img_Sad_yellow, &img_Sad_red},
+//                                                 {&img_Sad_blue, &img_Sad_green, &img_Happy_yellow, &img_Happy_red},
+//                                                 {&img_Happy_green, &img_Happy_blue, &img_Sad_red, &img_Sad_yellow},
+//                                                 {&img_Sad_green, &img_Sad_blue, &img_Happy_red, &img_Happy_yellow},
+//                                                 {&img_Happy_green, &img_Happy_blue, &img_Sad_yellow, &img_Sad_red},
+//                                                 {&img_Sad_green, &img_Sad_blue, &img_Happy_yellow, &img_Happy_red}};
 
-static const tImage *IMG_WINNING_PLAYER[][2] = {{&img_Happy_blue, &img_Happy_green},
-                                                {&img_Happy_red, &img_Happy_yellow}};
+// static const tImage *IMG_WINNING_PLAYER[][2] = {{&img_Happy_blue, &img_Happy_green},
+//                                                 {&img_Happy_red, &img_Happy_yellow}};
 
-static const tImage *IMG_STATS_PLAYER[][4] = {{&img_Happy_blue, &img_Happy_green, &img_Sad_red, &img_Sad_yellow},
-                                              {&img_Sad_blue, &img_Sad_green, &img_Happy_red, &img_Happy_yellow},
-                                              {&img_Happy_blue, &img_Happy_green, &img_Happy_red, &img_Happy_yellow}};
+// static const tImage *IMG_STATS_PLAYER[][4] = {{&img_Happy_blue, &img_Happy_green, &img_Sad_red, &img_Sad_yellow},
+//                                               {&img_Sad_blue, &img_Sad_green, &img_Happy_red, &img_Happy_yellow},
+//                                               {&img_Happy_blue, &img_Happy_green, &img_Happy_red, &img_Happy_yellow}};
 
 // static const char* LBL_SERVE[][2] = {{">", "<"}, {"<", ">"}};
 
 // type used to define a selection list
-typedef struct
-{
-  uint8_t length;
-  const char **list;
-} tSelectionList;
+// typedef struct
+// {
+//   uint8_t length;
+//   const char **list;
+// } tSelectionList;
 
 // Settings
 // Type of match
-static const char *SETTING_TYPE_OF_MATCH[] = {"Doubles", "Singles"};
-static const tSelectionList selectionList_TypeOfMatch = {2, SETTING_TYPE_OF_MATCH};
+// static const char *SETTING_TYPE_OF_MATCH[] = {"Doubles", "Singles"};
+// static const tSelectionList selectionList_TypeOfMatch = {2, SETTING_TYPE_OF_MATCH};
 
-// Brightness
-static const char *SETTING_BRIGHTNESS[] = {"Very dark", "Dark", "Normal", "Bright", "Very Bright"};
-static const tSelectionList selectionList_Brightness = {5, SETTING_BRIGHTNESS};
+// // Brightness
+// static const char *SETTING_BRIGHTNESS[] = {"Very dark", "Dark", "Normal", "Bright", "Very Bright"};
+// static const tSelectionList selectionList_Brightness = {5, SETTING_BRIGHTNESS};
 
 // Labels for the buttons
-#define LBL_BUT_MODE "MODE"
-#define LBL_BUT_BACK "BACK"
-#define LBL_BUT_THEM "THEM"
-#define LBL_BUT_US "US"
+// #define LBL_BUT_MODE "MODE"
+// #define LBL_BUT_BACK "BACK"
+// #define LBL_BUT_THEM "THEM"
+// #define LBL_BUT_US "US"
 
 // create the labels for the
-#define LBL_MENU_PLAY "Play"
-#define LBL_MENU_STATS "Stats"
-#define LBL_MENU_RESTART "Restart"
+// #define LBL_MENU_PLAY "Play"
+// #define LBL_MENU_STATS "Stats"
+// #define LBL_MENU_RESTART "Restart"
 
 // Class provides the view functionality.
 class YscoreView : public IYscoreView
@@ -212,7 +213,7 @@ private:
   // draw the start screen
   void drawScreenStart();
   // drow the setting the serve screen
-  void drawScreenSettingsServe();
+  void drawScreenSettingServe();
   // draw the playing screen
   void drawScreenPlaying();
   // draw the winningscreen
@@ -223,8 +224,8 @@ private:
   void drawScreenPlayingTime();
   // draw the settings type of match screen
   void drawScreenSettingTypeOfMatch();
-  // draw the settings language
-  void drawScreenSettingLanguage();
+  // draw the settings local
+  void drawScreenSettingLocal();
   // draw the settings brightness
   void drawScreenSettingBrightness();
   // draw the settings handedness
@@ -269,10 +270,10 @@ private:
   // Screen "Widgets"
   ///////////////////////////////////////////////
   // draw the frame (Menu + button labels)
-  void drawFrame(const tImage *image);
+  void drawFrame(const char *title);
 
   // draw a menu
-  void drawMenu(const tImage *image);
+  void drawMenu(const char *title);
 
   // draw a selection list
   void drawSelection(uint8_t index, const tSelectionList list);
@@ -301,6 +302,8 @@ private:
 
   TinyScreenExt &_display;
   YscoreModel *_model = NULL;
+
+  YscoreResourceProvider _resource;
 };
 
 #endif

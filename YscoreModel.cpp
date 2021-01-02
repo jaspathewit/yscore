@@ -493,6 +493,34 @@ void YscoreModel::createSummaryTable()
 // Settings
 //////////////////////////////////////////////////////////////////
 
+// increments who serves
+void YscoreModel::incWhoServes()
+{
+  if (_whoServes < WHO_SERVES_RANDOM)
+  {
+    _whoServes++;
+    _view->update();
+  }
+  return;
+}
+
+// decrements who serves
+void YscoreModel::decWhoServes()
+{
+  if (_whoServes > WHO_SERVES_THEM)
+  {
+    _whoServes--;
+    _view->update();
+  }
+  return;
+}
+
+// gets who serves
+uint8_t YscoreModel::getWhoServes()
+{
+  return _whoServes;
+}
+
 // increments the type of match being played
 void YscoreModel::incTypeOfMatch()
 {
@@ -552,6 +580,62 @@ void YscoreModel::decBrightness()
 uint8_t YscoreModel::getBrightness()
 {
   return _brightness;
+}
+
+// increments the current local
+void YscoreModel::incLocal()
+{
+  if (_local < LOCAL_GERMAN)
+  {
+    _local++;
+    _view->update();
+  }
+  return;
+}
+
+// decrements the local
+void YscoreModel::decLocal()
+{
+  if (_local > LOCAL_ENGLISH)
+  {
+    _local--;
+    _view->update();
+  }
+  return;
+}
+
+// gets the current local
+uint8_t YscoreModel::getLocal()
+{
+  return _local;
+}
+
+// increments the current handedness
+void YscoreModel::incHandedness()
+{
+  if (_handedness < HANDEDNESS_LEFT)
+  {
+    _handedness++;
+    _view->update();
+  }
+  return;
+}
+
+// decrements the local
+void YscoreModel::decHandedness()
+{
+  if (_handedness > HANDEDNESS_RIGHT)
+  {
+    _handedness--;
+    _view->update();
+  }
+  return;
+}
+
+// gets the current handedness
+uint8_t YscoreModel::getHandedness()
+{
+  return _handedness;
 }
 
 //////////////////////////////////////////////////////////////////

@@ -218,10 +218,10 @@ private:
   void drawScreenPlaying();
   // draw the winningscreen
   void drawScreenWinning();
-  // draw the stats screen
-  void drawScreenStats(bool runningPoints);
+  // draw the match score screen
+  void drawScreenMatchScore(bool runningPoints);
   // draw the playing time screen
-  void drawScreenPlayingTime();
+  void drawScreenMatchTime();
   // draw the settings type of match screen
   void drawScreenSettingTypeOfMatch();
   // draw the settings local
@@ -286,6 +286,8 @@ private:
 
   // draw the button labels
   void drawButtonLabels();
+  void drawButtonLabelsLeft();
+  void drawButtonLabelsRight();
 
   // draw the battery icon
   void drawBatteryIcon(uint8_t x, uint8_t y);

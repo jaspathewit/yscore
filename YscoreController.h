@@ -74,10 +74,10 @@ private:
   bool checkDoNothing();
 
   void performActionWinning();
-  void performActionStats();
-  void performActionStatsTime();
-  void performActionPausing();
-  void performActionPausingTime();
+  void performActionMatchScore();
+  void performActionMatchTime();
+  void performActionCurrentScore();
+  void performActionCurrentTime();
   void performActionSettingTypeOfMatch();
   void performActionSettingBrightness();
   void performActionSettingLocal();

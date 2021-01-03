@@ -113,7 +113,7 @@ void YscoreModel::startPlayingTime()
 void YscoreModel::updateTime()
 {
   // only update the playing time if not in
-  if (_appState == APP_STATE_WINNING || _appState == APP_STATE_STATS || _appState == APP_STATE_STATS_TIME)
+  if (_appState == APP_STATE_WINNING || _appState == APP_STATE_MATCH_SCORE || _appState == APP_STATE_MATCH_TIME || _appState == APP_STATE_MATCH_BRIGHTNESS)
   {
     return;
   }
@@ -151,7 +151,7 @@ uint8_t YscoreModel::getPlayingHours()
 {
   // if we are in the stats time state
   // return the match playing time
-  if (_appState == APP_STATE_STATS_TIME)
+  if (_appState == APP_STATE_MATCH_TIME)
   {
     return _hours;
   }
@@ -163,7 +163,7 @@ uint8_t YscoreModel::getPlayingMinutes()
 {
   // if we are in the stats time state
   // return the match playing time
-  if (_appState == APP_STATE_STATS_TIME)
+  if (_appState == APP_STATE_MATCH_TIME)
   {
     return _minutes;
   }
@@ -175,7 +175,7 @@ uint8_t YscoreModel::getPlayingSeconds()
 {
   // if we are in the stats time state
   // return the match playing time
-  if (_appState == APP_STATE_STATS_TIME)
+  if (_appState == APP_STATE_MATCH_TIME)
   {
     return _seconds;
   }

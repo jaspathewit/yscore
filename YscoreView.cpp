@@ -54,24 +54,24 @@ void YscoreView::update()
   case APP_STATE_PLAYING:
     drawScreenPlaying();
     break;
-  case APP_STATE_PAUSING:
-    // draw the stats screen with the running
+  case APP_STATE_CURRENT_SCORE:
+    // draw the Match score screen with the running
     // points
-    drawScreenStats(true);
+    drawScreenMatchScore(true);
     break;
-  case APP_STATE_PAUSING_TIME:
-    drawScreenPlayingTime();
+  case APP_STATE_CURRENT_TIME:
+    drawScreenMatchTime();
     break;
   case APP_STATE_WINNING:
     drawScreenWinning();
     break;
-  case APP_STATE_STATS:
-    // draw the stats screen without the running
+  case APP_STATE_MATCH_SCORE:
+    // draw the match score screen without the running
     // points
-    drawScreenStats(false);
+    drawScreenMatchScore(false);
     break;
-  case APP_STATE_STATS_TIME:
-    drawScreenPlayingTime();
+  case APP_STATE_MATCH_TIME:
+    drawScreenMatchTime();
     break;
   case APP_STATE_SETTING_TYPE_OF_MATCH:
     drawScreenSettingTypeOfMatch();
@@ -121,9 +121,9 @@ void YscoreView::updateTime()
     return;
   }
 
-  if (_model->getAppState() == APP_STATE_PAUSING_TIME)
+  if (_model->getAppState() == APP_STATE_CURRENT_TIME)
   {
-    drawScreenPlayingTime();
+    drawScreenMatchTime();
   }
 }
 
@@ -138,14 +138,40 @@ void YscoreView::drawScreenStart()
   _display.printAt(0, 0, _resource.getCopyright(_model->getLocal()));
 
   // draw the logo
-  _display.drawImageAt(0, 14, &img_BT32x32);
+  _display.drawImageAt(0, 10, &img_BT32x32);
 
   // draw the name appname
-  _display.drawImageAt(32, 16, &img_AppName63x22);
+  _display.drawImageAt(32, 14, &img_AppName63x22);
 
   // draw the press to start
-  _display.setFont(SansSerif_12pt);
-  _display.printCenteredAt(50, _resource.getPressAButton(_model->getLocal()));
+  // calculate the total width
+  // uint8_t totalWidth;
+  // _display.setFont(MarVoSym_10pt);
+  // totalWidth += _display.getPrintWidth(LBL_LEFTRIGHT_ARROW);
+  // _display.setFont(SansSerif_10pt);
+  // totalWidth += _display.getPrintWidth("Commencer")
+  // totalWidth += _display.getPrintWidth("Paramètres")
+  // _display.setFont(MarVoSym_10pt);
+  // uint8_t y = (_display.yMax - 2) - _display.getFontHeight();
+  // tPoint pos = _display.printAt(SCREEN_BUTTON_LEFT_MARGIN_X + SCREEN_MARGIN_OFFSET_X,
+  //                               50, LBL_UPDOWN_ARROW);
+
+  _display.setFont(MarVoSym_8pt);
+  tPoint pos = _display.printAt(30, 43, LBL_RIGHT_ARROW);
+  _display.setFont(SansSerif_8pt);
+  pos = _display.printAt(pos.x, 43, " Commencer");
+  _display.setFont(MarVoSym_8pt);
+  uint8_t y = pos.y;
+  pos = _display.printAt(30, y, LBL_LEFT_ARROW);
+  _display.setFont(SansSerif_8pt);
+  pos = _display.printAt(pos.x, y, " Reglages");
+
+  // _display.printCenteredAt(pos.y, _resource.getPressAButton(_model->getLocal()));
+
+  // _display.setFont(SansSerif_10pt);
+  // _display.printCenteredAt(50, _resource.getPressAButton(_model->getLocal()));
+
+  drawButtonLabelsLeft();
 }
 
 // draw the playing screen
@@ -166,10 +192,10 @@ void YscoreView::drawScreenWinning()
   drawRestart();
 }
 
-// draw the stats screen
-void YscoreView::drawScreenStats(bool runningPoints)
+// draw the match score screen
+void YscoreView::drawScreenMatchScore(bool runningPoints)
 {
-  drawFrame("Statistics");
+  drawFrame(_resource.getTitleMatchScore(_model->getLocal()));
   drawStatsPlayers();
   drawStatsGrid();
   drawStatsGameScoresAt(SCREEN_STATS_SCORE_LEFT_X, SCREEN_STATS_SCORE_TOP_Y, THEM, runningPoints);
@@ -178,10 +204,10 @@ void YscoreView::drawScreenStats(bool runningPoints)
   drawRestart();
 }
 
-// draw the playing time screen
-void YscoreView::drawScreenPlayingTime()
+// draw the match time screen
+void YscoreView::drawScreenMatchTime()
 {
-  drawFrame("Playing Time");
+  drawFrame(_resource.getTitleMatchTime(_model->getLocal()));
   printTime(_model->getPlayingHours(), _model->getPlayingMinutes(), _model->getPlayingSeconds());
   drawRestart();
 }
@@ -193,8 +219,7 @@ void YscoreView::drawScreenSettingServe()
   drawFrame(_resource.getTitleWhoServes(local));
   drawSelectionFrame();
   _display.setFont(SansSerif_12pt);
-  drawSelection(_model->getWhoServes(), _resource.getSelectionListWhoServes(local));
-  // drawWhoServes();
+  drawSelection(_model->getWhoServes(), _resource.getSelectionListWhoServes(local, _model->getTypeOfMatch()));
 }
 
 // draw the settings type of match screen
@@ -241,7 +266,7 @@ void YscoreView::drawScreenSettingBrightness()
 // draw the about screen
 void YscoreView::drawScreenAbout()
 {
-  drawFrame("About");
+  drawFrame(_resource.getTitleAbout(_model->getLocal()));
 
   // draw the logo
   _display.drawImageAt(10, SCREEN_MENU_MARGIN_Y + 2, &img_BT22x22);
@@ -258,7 +283,7 @@ void YscoreView::drawScreenAbout()
 // draw the ack screen
 void YscoreView::drawScreenAck()
 {
-  drawFrame("Acknowledgements");
+  drawFrame(_resource.getTitleAcknowledgement(_model->getLocal()));
   _display.setFont(TinyFont);
   uint8_t posx = SCREEN_BUTTON_LEFT_MARGIN_X + 2;
   uint8_t posy = SCREEN_MENU_MARGIN_Y + 2;
@@ -276,37 +301,14 @@ void YscoreView::drawScreenAck()
 // draw the ack screen
 void YscoreView::drawScreenUpdate()
 {
-  drawFrame("Update");
-  _display.printCenteredAt(30, "Update");
+  drawFrame(_resource.getTitleUpdate(_model->getLocal()));
+  _display.setFont(SansSerif_12pt);
+  _display.printCenteredAt(30, _resource.getTitleUpdate(_model->getLocal()));
 }
 
 ///////////////////////////////////////////
 // elements of screens
 ///////////////////////////////////////////
-
-// draw the who serves
-void YscoreView::drawWhoServes()
-{
-  _display.setFont(SansSerif_10pt);
-  tPoint pos = _display.printAt(SCREEN_BUTTON_LEFT_MARGIN_X + SCREEN_MARGIN_OFFSET_X,
-                                SCREEN_MENU_MARGIN_Y + SCREEN_MARGIN_OFFSET_Y, LBL_WHOSERVES);
-
-  _display.setFont(MarVoSym_10pt);
-  uint8_t y = pos.y;
-  pos = _display.printAt(SCREEN_BUTTON_LEFT_MARGIN_X + SCREEN_MARGIN_OFFSET_X,
-                         y, LBL_UP_ARROW);
-
-  _display.setFont(SansSerif_10pt);
-  pos = _display.printAt(pos.x, y, LBL_THEM);
-
-  _display.setFont(MarVoSym_10pt);
-  y = pos.y;
-  pos = _display.printAt(SCREEN_BUTTON_LEFT_MARGIN_X + SCREEN_MARGIN_OFFSET_X,
-                         y, LBL_DOWN_ARROW);
-
-  _display.setFont(SansSerif_12pt);
-  _display.printAt(pos.x, y, LBL_US);
-}
 
 // draw the game scores for the given player
 // if the running Points is true the last value
@@ -479,7 +481,7 @@ void YscoreView::drawWinningPlayers()
   _display.setFont(SansSerif_12pt);
   _display.printAt(trophyPos.x + SCREEN_MARGIN_OFFSET_X,
                    pos.y + SCREEN_MARGIN_OFFSET_Y,
-                   LBL_PLAYER[winner]);
+                   _resource.getPlayer(_model->getLocal(), _model->getTypeOfMatch(), winner));
 }
 
 // draw the Stats grid
@@ -570,14 +572,26 @@ void YscoreView::drawRestart()
                                 50, LBL_UPDOWN_ARROW);
 
   _display.setFont(SansSerif_10pt);
-  _display.printAt(pos.x, 50, LBL_RESTART);
+  _display.printAt(pos.x, 50, _resource.getRestart(_model->getLocal()));
 }
 
 // draw the button labels
 void YscoreView::drawButtonLabels()
 {
+  drawButtonLabelsLeft();
+  drawButtonLabelsRight();
+}
+
+// draw the button labels
+void YscoreView::drawButtonLabelsLeft()
+{
   _display.drawImageAt(_display.xMin, SCREEN_BUTTON_TOP_Y, &img_ArrowRight);
   _display.drawImageAt(_display.xMin, SCREEN_BUTTON_BOTTOM_Y, &img_ArrowLeft);
+}
+
+// draw the button labels
+void YscoreView::drawButtonLabelsRight()
+{
   _display.drawImageAt(SCREEN_BUTTON_RIGHT_MARGIN_X + 2, SCREEN_BUTTON_TOP_Y, &img_ArrowUp);
   _display.drawImageAt(SCREEN_BUTTON_RIGHT_MARGIN_X + 2, SCREEN_BUTTON_BOTTOM_Y, &img_ArrowDown);
 }

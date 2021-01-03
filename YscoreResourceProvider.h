@@ -42,15 +42,10 @@ limitations under the License.
 // #define LBL_APP_NAME "yScore"
 
 // About
-#define LBL_EN_FIND_US_AT "Find us @"
-#define LBL_NL_FIND_US_AT "Vind ons @"
-#define LBL_FR_FIND_US_AT "Trouve nous @"
-#define LBL_DE_FIND_US_AT "Finde uns @"
-
-static const char *LBL_FIND_US_AT[] = {LBL_EN_FIND_US_AT,
-                                       LBL_NL_FIND_US_AT,
-                                       LBL_FR_FIND_US_AT,
-                                       LBL_DE_FIND_US_AT};
+static const char *LBL_FIND_US_AT[] = {"Find us @",     // EN
+                                       "Vind ons @",    // NL
+                                       "Trouve nous @", // FR
+                                       "Finde uns @"};  // DE
 
 #define LBL_WEB_ADDRESS "www.yscore.be"
 
@@ -65,18 +60,12 @@ static const char *LBL_FIND_US_AT[] = {LBL_EN_FIND_US_AT,
 #define LBL_ACK_LINE8 "/cmaglie/FlashStorage"
 
 //  start
-#define LBL_EN_PRESS_A_BUTTON "Press a button"
-#define LBL_NL_PRESS_A_BUTTON "Druk een knop"
-#define LBL_FR_PRESS_A_BUTTON "Appuyer un bouton"
-#define LBL_DE_PRESS_A_BUTTON "Drücke einen Knopf"
+static const char *LBL_PRESS_A_BUTTON[] = {"Press a button",
+                                           "Druk een knop",
+                                           "Appuyer un bouton",
+                                           "Drücke einen Knopf"};
 
-static const char *LBL_PRESS_A_BUTTON[] = {LBL_EN_PRESS_A_BUTTON,
-                                           LBL_NL_PRESS_A_BUTTON,
-                                           LBL_FR_PRESS_A_BUTTON,
-                                           LBL_DE_PRESS_A_BUTTON};
-
-#define LBL_WHOSERVES "Who serves?"
-#define LBL_RESTART " Restart "
+// #define LBL_RESTART " Restart "
 
 // #define LBL_SEPARATOR ":"
 // #define LBL_SPACE " "
@@ -98,11 +87,14 @@ static const char *LBL_PRESS_A_BUTTON[] = {LBL_EN_PRESS_A_BUTTON,
 #define LBL_LEFT_ARROW "A"
 #define LBL_RIGHT_ARROW "B"
 
+#define LBL_ALL_ARROW "CDAB"
+
 #define LBL_UPDOWN_ARROW "CD"
+#define LBL_LEFTRIGHT_ARROW "AB"
 
 // Player Names
-static char *
-    LBL_PLAYER[] = {LBL_THEM, LBL_US, LBL_NONE};
+// static char *
+//     LBL_PLAYER[] = {LBL_THEM, LBL_US, LBL_NONE};
 
 static const tImage *IMG_SERVE[][2] = {{&img_Serve_BR, &img_Serve_BL},
                                        {&img_Serve_TL, &img_Serve_TR}};
@@ -126,25 +118,63 @@ static const tImage *IMG_STATS_PLAYER[][4] = {{&img_Happy_blue, &img_Happy_green
 // static const char* LBL_SERVE[][2] = {{">", "<"}, {"<", ">"}};
 
 // Titles
-#define LBL_EN_TITLE_PLAYING "Playing"
-#define LBL_NL_TITLE_PLAYING "Spelen"
-#define LBL_FR_TITLE_PLAYING "En jouant"
-#define LBL_DE_TITLE_PLAYING "Spielen"
+static const char *LBL_TITLE_PLAYING[] = {"Playing",
+                                          "Spelen",
+                                          "En jouant",
+                                          "Spielen"};
 
-static const char *LBL_TITLE_PLAYING[] = {LBL_EN_TITLE_PLAYING,
-                                          LBL_NL_TITLE_PLAYING,
-                                          LBL_FR_TITLE_PLAYING,
-                                          LBL_DE_TITLE_PLAYING};
+static const char *LBL_TITLE_WINNING[] = {"Winner!",
+                                          "Winnaar!",
+                                          "Gagnant!",
+                                          "Gewinner!"};
 
-#define LBL_EN_TITLE_WINNING "Winner!"
-#define LBL_NL_TITLE_WINNING "Winnaar!"
-#define LBL_FR_TITLE_WINNING "Gagnant!"
-#define LBL_DE_TITLE_WINNING "Gewinner!"
+static const char *LBL_TITLE_MATCH_SCORE[] = {"Game score",
+                                              "Spel score",
+                                              "Score du jeu",
+                                              "Spielstand"};
 
-static const char *LBL_TITLE_WINNING[] = {LBL_EN_TITLE_WINNING,
-                                          LBL_NL_TITLE_WINNING,
-                                          LBL_FR_TITLE_WINNING,
-                                          LBL_DE_TITLE_WINNING};
+static const char *LBL_TITLE_MATCH_TIME[] = {"Game time",
+                                             "Spel tijd",
+                                             "Jeu temps",
+                                             "Spielzeit"};
+
+static const char *LBL_TITLE_ABOUT[] = {"About",
+                                        "Over",
+                                        "À propos",
+                                        "Über"};
+
+static const char *LBL_TITLE_ACKNOWLEDGEMENT[] = {"Acknowledgement",
+                                                  "Erkenning",
+                                                  "Reconnaissance",
+                                                  "Anerkennung"};
+
+static const char *LBL_TITLE_UPDATE[] = {"Update",
+                                         "Bijwerken",
+                                         "Metter",
+                                         "Aktualisieren"};
+
+static const char *LBL_EN_PLAYER_SINGLES[] = {"Them", "Me"};
+static const char *LBL_NL_PLAYER_SINGLES[] = {"Hen", "Mij"};
+static const char *LBL_FR_PLAYER_SINGLES[] = {"Eux", "Moi"};
+static const char *LBL_DE_PLAYER_SINGLES[] = {"Sie", "Mich"};
+static const char **LBL_PLAYER_SINGLES[] = {LBL_EN_PLAYER_SINGLES,
+                                            LBL_NL_PLAYER_SINGLES,
+                                            LBL_FR_PLAYER_SINGLES,
+                                            LBL_DE_PLAYER_SINGLES};
+
+static const char *LBL_EN_PLAYER_DOUBLES[] = {"Them", "Us"};
+static const char *LBL_NL_PLAYER_DOUBLES[] = {"Hen", "Wij"};
+static const char *LBL_FR_PLAYER_DOUBLES[] = {"Eux", "Nous"};
+static const char *LBL_DE_PLAYER_DOUBLES[] = {"Sie", "Wir"};
+static const char **LBL_PLAYER_DOUBLES[] = {LBL_EN_PLAYER_DOUBLES,
+                                            LBL_NL_PLAYER_DOUBLES,
+                                            LBL_FR_PLAYER_DOUBLES,
+                                            LBL_DE_PLAYER_DOUBLES};
+
+static const char *LBL_RESTART[] = {" Restart ",
+                                    " Herstarten ",
+                                    " Redémarrer ",
+                                    " Neu starten "};
 
 // type used to define a selection list
 typedef struct
@@ -165,15 +195,25 @@ static const char *LBL_TITLE_WHO_SERVES[] = {LBL_EN_TITLE_WHO_SERVES,
                                              LBL_FR_TITLE_WHO_SERVES,
                                              LBL_DE_TITLE_WHO_SERVES};
 
-static const char *SETTING_EN_WHO_SERVES[] = {"Them", "Us", "Random"};
-static const char *SETTING_NL_WHO_SERVES[] = {"Hen", "Wij", "Willekeurig"};
-static const char *SETTING_FR_WHO_SERVES[] = {"Eux", "Nous", "Aléatoire"};
-static const char *SETTING_DE_WHO_SERVES[] = {"Sie", "Wir", "Zufällig"};
+static const char *SETTING_EN_WHO_SERVES_SINGLES[] = {"Them", "Me", "Random"};
+static const char *SETTING_NL_WHO_SERVES_SINGLES[] = {"Hen", "Mij", "Willekeurig"};
+static const char *SETTING_FR_WHO_SERVES_SINGLES[] = {"Eux", "Moi", "Aléatoire"};
+static const char *SETTING_DE_WHO_SERVES_SINGLES[] = {"Sie", "Mich", "Zufällig"};
 
-static const char **SETTING_WHO_SERVES[] = {SETTING_EN_WHO_SERVES,
-                                            SETTING_NL_WHO_SERVES,
-                                            SETTING_FR_WHO_SERVES,
-                                            SETTING_DE_WHO_SERVES};
+static const char **SETTING_WHO_SERVES_SINGLES[] = {SETTING_EN_WHO_SERVES_SINGLES,
+                                                    SETTING_NL_WHO_SERVES_SINGLES,
+                                                    SETTING_FR_WHO_SERVES_SINGLES,
+                                                    SETTING_DE_WHO_SERVES_SINGLES};
+
+static const char *SETTING_EN_WHO_SERVES_DOUBLES[] = {"Them", "Us", "Random"};
+static const char *SETTING_NL_WHO_SERVES_DOUBLES[] = {"Hen", "Wij", "Willekeurig"};
+static const char *SETTING_FR_WHO_SERVES_DOUBLES[] = {"Eux", "Nous", "Aléatoire"};
+static const char *SETTING_DE_WHO_SERVES_DOUBLES[] = {"Sie", "Wir", "Zufällig"};
+
+static const char **SETTING_WHO_SERVES_DOUBLES[] = {SETTING_EN_WHO_SERVES_DOUBLES,
+                                                    SETTING_NL_WHO_SERVES_DOUBLES,
+                                                    SETTING_FR_WHO_SERVES_DOUBLES,
+                                                    SETTING_DE_WHO_SERVES_DOUBLES};
 
 // Type of match
 #define LBL_EN_TITLE_TYPE_OF_MATCH "Type of match?"
@@ -268,12 +308,20 @@ public:
   const char *getCopyright(uint8_t local);
   const char *getPressAButton(uint8_t local);
   const char *getFindUsAt(uint8_t local);
+  const char *getRestart(uint8_t local);
+
+  const char *getPlayer(uint8_t local, uint8_t typeOfMatch, uint8_t winner);
 
   const char *getTitlePlaying(uint8_t local);
   const char *getTitleWinning(uint8_t local);
+  const char *getTitleMatchScore(uint8_t local);
+  const char *getTitleMatchTime(uint8_t local);
+  const char *getTitleAbout(uint8_t local);
+  const char *getTitleAcknowledgement(uint8_t local);
+  const char *getTitleUpdate(uint8_t local);
 
   const char *getTitleWhoServes(uint8_t local);
-  const tSelectionList getSelectionListWhoServes(uint8_t local);
+  const tSelectionList getSelectionListWhoServes(uint8_t local, uint8_t typeOfMatch);
   const char *getTitleTypeOfMatch(uint8_t local);
   const tSelectionList getSelectionListTypeOfMatch(uint8_t local);
   const char *getTitleBrightness(uint8_t local);

@@ -15,6 +15,7 @@ limitations under the License.
 
 */
 
+#include "YscoreModel.h"
 #include "YscoreResourceProvider.h"
 
 /*
@@ -49,6 +50,22 @@ const char *YscoreResourceProvider::getFindUsAt(uint8_t local)
   return LBL_FIND_US_AT[local];
 }
 
+// get the Restart message
+const char *YscoreResourceProvider::getRestart(uint8_t local)
+{
+  return LBL_RESTART[local];
+}
+
+const char *YscoreResourceProvider::getPlayer(uint8_t local, uint8_t typeOfMatch, uint8_t winner)
+{
+  if (typeOfMatch == TYPE_OF_MATCH_DOUBLES)
+  {
+    return LBL_PLAYER_DOUBLES[local][winner];
+  }
+
+  return LBL_PLAYER_SINGLES[local][winner];
+}
+
 // get the Playing Title
 const char *YscoreResourceProvider::getTitlePlaying(uint8_t local)
 {
@@ -61,6 +78,36 @@ const char *YscoreResourceProvider::getTitleWinning(uint8_t local)
   return LBL_TITLE_WINNING[local];
 }
 
+// get the Match score Title
+const char *YscoreResourceProvider::getTitleMatchScore(uint8_t local)
+{
+  return LBL_TITLE_MATCH_SCORE[local];
+}
+
+// get the Match time Title
+const char *YscoreResourceProvider::getTitleMatchTime(uint8_t local)
+{
+  return LBL_TITLE_MATCH_TIME[local];
+}
+
+// get the Abount Title
+const char *YscoreResourceProvider::getTitleAbout(uint8_t local)
+{
+  return LBL_TITLE_ABOUT[local];
+}
+
+// get the Acknowledgement Title
+const char *YscoreResourceProvider::getTitleAcknowledgement(uint8_t local)
+{
+  return LBL_TITLE_ACKNOWLEDGEMENT[local];
+}
+
+// get the Update Title
+const char *YscoreResourceProvider::getTitleUpdate(uint8_t local)
+{
+  return LBL_TITLE_UPDATE[local];
+}
+
 // get the WhoServes Title
 const char *YscoreResourceProvider::getTitleWhoServes(uint8_t local)
 {
@@ -68,9 +115,15 @@ const char *YscoreResourceProvider::getTitleWhoServes(uint8_t local)
 }
 
 // get the selectionListWhoServes
-const tSelectionList YscoreResourceProvider::getSelectionListWhoServes(uint8_t local)
+const tSelectionList YscoreResourceProvider::getSelectionListWhoServes(uint8_t local, uint8_t typeOfMatch)
 {
-  tSelectionList result = {3, SETTING_WHO_SERVES[local]};
+  if (typeOfMatch == TYPE_OF_MATCH_DOUBLES)
+  {
+    tSelectionList result = {3, SETTING_WHO_SERVES_DOUBLES[local]};
+    return result;
+  }
+
+  tSelectionList result = {3, SETTING_WHO_SERVES_SINGLES[local]};
   return result;
 }
 

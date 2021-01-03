@@ -216,8 +216,8 @@ void YscoreController::performAction()
 
     //_display.printDebug(_performActionCount);
 
-    // we need to go to sleep
-    if (_performActionCount > SLEEP_THRESHHOLD)
+    // we need to go to sleep if we are not updating
+    if (_model->getAppState() != APP_STATE_UPDATE && _performActionCount > SLEEP_THRESHHOLD)
     {
       _performActionCount = 0;
       // turn off the display and go to sleep
@@ -252,20 +252,20 @@ void YscoreController::performAction()
   case APP_STATE_PLAYING:
     performActionPlaying();
     break;
-  case APP_STATE_PAUSING:
-    performActionPausing();
+  case APP_STATE_CURRENT_SCORE:
+    performActionCurrentScore();
     break;
-  case APP_STATE_PAUSING_TIME:
-    performActionPausingTime();
+  case APP_STATE_CURRENT_TIME:
+    performActionCurrentTime();
     break;
   case APP_STATE_WINNING:
     performActionWinning();
     break;
-  case APP_STATE_STATS:
-    performActionStats();
+  case APP_STATE_MATCH_SCORE:
+    performActionMatchScore();
     break;
-  case APP_STATE_STATS_TIME:
-    performActionStatsTime();
+  case APP_STATE_MATCH_TIME:
+    performActionMatchTime();
     break;
   case APP_STATE_SETTING_TYPE_OF_MATCH:
     performActionSettingTypeOfMatch();
@@ -318,7 +318,7 @@ void YscoreController::performActionPlaying()
   if (_buttonStateMode == BUT_STATE_PRESSED)
   {
     _model->createSummaryTable();
-    _model->setAppState(APP_STATE_PAUSING);
+    _model->setAppState(APP_STATE_CURRENT_SCORE);
     return;
   }
 
@@ -378,7 +378,7 @@ void YscoreController::performActionWinning()
   // show the stats
   if (_buttonStateMode == BUT_STATE_PRESSED)
   {
-    _model->setAppState(APP_STATE_STATS);
+    _model->setAppState(APP_STATE_MATCH_SCORE);
     return;
   }
 
@@ -402,8 +402,8 @@ void YscoreController::performActionWinning()
   return;
 }
 
-// perform the action for the APP_STATE_STATS
-void YscoreController::performActionStats()
+// perform the action for the APP_STATE_MATCH_SCORE
+void YscoreController::performActionMatchScore()
 {
   if (_buttonStateBack == BUT_STATE_PRESSED)
   {
@@ -413,7 +413,7 @@ void YscoreController::performActionStats()
 
   if (_buttonStateMode == BUT_STATE_PRESSED)
   {
-    _model->setAppState(APP_STATE_STATS_TIME);
+    _model->setAppState(APP_STATE_MATCH_TIME);
     return;
   }
 
@@ -426,12 +426,12 @@ void YscoreController::performActionStats()
   }
 }
 
-// perform the action for the APP_STATE_STATS_TIME
-void YscoreController::performActionStatsTime()
+// perform the action for the APP_STATE_MATCH_TIME
+void YscoreController::performActionMatchTime()
 {
   if (_buttonStateBack == BUT_STATE_PRESSED)
   {
-    _model->setAppState(APP_STATE_STATS);
+    _model->setAppState(APP_STATE_MATCH_SCORE);
     return;
   }
 
@@ -444,8 +444,8 @@ void YscoreController::performActionStatsTime()
   }
 }
 
-// perform the action for the APP_STATE_PAUSING
-void YscoreController::performActionPausing()
+// perform the action for the APP_STATE_CURRENT_SCORE
+void YscoreController::performActionCurrentScore()
 {
   if (_buttonStateBack == BUT_STATE_PRESSED)
   {
@@ -455,7 +455,7 @@ void YscoreController::performActionPausing()
 
   if (_buttonStateMode == BUT_STATE_PRESSED)
   {
-    _model->setAppState(APP_STATE_PAUSING_TIME);
+    _model->setAppState(APP_STATE_CURRENT_TIME);
     return;
   }
 
@@ -468,12 +468,12 @@ void YscoreController::performActionPausing()
   }
 }
 
-// perform the action for the APP_STATE_PAUSING_TIME
-void YscoreController::performActionPausingTime()
+// perform the action for the APP_STATE_CURRENT_TIME
+void YscoreController::performActionCurrentTime()
 {
   if (_buttonStateBack == BUT_STATE_PRESSED)
   {
-    _model->setAppState(APP_STATE_PAUSING);
+    _model->setAppState(APP_STATE_CURRENT_SCORE);
     return;
   }
 

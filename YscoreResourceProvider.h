@@ -42,10 +42,10 @@ limitations under the License.
 // #define LBL_APP_NAME "yScore"
 
 // About
-static const char *LBL_FIND_US_AT[] = {"Find us @",     // EN
-                                       "Vind ons @",    // NL
-                                       "Trouve nous @", // FR
-                                       "Finde uns @"};  // DE
+static const char *LBL_FIND_US_AT[] = {"Find us",     // EN
+                                       "Vind ons",    // NL
+                                       "Trouve nous", // FR
+                                       "Finde uns"};  // DE
 
 #define LBL_WEB_ADDRESS "www.yscore.be"
 
@@ -60,10 +60,15 @@ static const char *LBL_FIND_US_AT[] = {"Find us @",     // EN
 #define LBL_ACK_LINE8 "/cmaglie/FlashStorage"
 
 //  start
-static const char *LBL_PRESS_A_BUTTON[] = {"Press a button",
-                                           "Druk een knop",
-                                           "Appuyer un bouton",
-                                           "Drücke einen Knopf"};
+static const char *LBL_PLAY[] = {" Play",
+                                 " Speel",
+                                 " Jouer",
+                                 " Spielen"};
+
+static const char *LBL_SETTINGS[] = {" Settings",
+                                     " Instellingen",
+                                     " Réglages",
+                                     " Einstellungen"};
 
 // #define LBL_RESTART " Restart "
 
@@ -305,12 +310,13 @@ class YscoreResourceProvider
 {
 public:
   // YscoreResourceProvider();
-  const char *getCopyright(uint8_t local);
-  const char *getPressAButton(uint8_t local);
-  const char *getFindUsAt(uint8_t local);
-  const char *getRestart(uint8_t local);
+  const char *getLblCopyright(uint8_t local);
+  const char *getLblPlay(uint8_t local);
+  const char *getLblSettings(uint8_t local);
+  const char *getLblFindUsAt(uint8_t local);
+  const char *getLblRestart(uint8_t local);
 
-  const char *getPlayer(uint8_t local, uint8_t typeOfMatch, uint8_t winner);
+  const char *getLblPlayer(uint8_t local, uint8_t typeOfMatch, uint8_t winner);
 
   const char *getTitlePlaying(uint8_t local);
   const char *getTitleWinning(uint8_t local);

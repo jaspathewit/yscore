@@ -33,30 +33,36 @@ limitations under the License.
 // }
 
 // get the copyright message
-const char *YscoreResourceProvider::getCopyright(uint8_t local)
+const char *YscoreResourceProvider::getLblCopyright(uint8_t local)
 {
   return LBL_COPYRIGHT;
 }
 
-// get the PressButton message
-const char *YscoreResourceProvider::getPressAButton(uint8_t local)
+// get the play message
+const char *YscoreResourceProvider::getLblPlay(uint8_t local)
 {
-  return LBL_PRESS_A_BUTTON[local];
+  return LBL_PLAY[local];
+}
+
+// get the settings message
+const char *YscoreResourceProvider::getLblSettings(uint8_t local)
+{
+  return LBL_SETTINGS[local];
 }
 
 // get the FindUsAt message
-const char *YscoreResourceProvider::getFindUsAt(uint8_t local)
+const char *YscoreResourceProvider::getLblFindUsAt(uint8_t local)
 {
   return LBL_FIND_US_AT[local];
 }
 
 // get the Restart message
-const char *YscoreResourceProvider::getRestart(uint8_t local)
+const char *YscoreResourceProvider::getLblRestart(uint8_t local)
 {
   return LBL_RESTART[local];
 }
 
-const char *YscoreResourceProvider::getPlayer(uint8_t local, uint8_t typeOfMatch, uint8_t winner)
+const char *YscoreResourceProvider::getLblPlayer(uint8_t local, uint8_t typeOfMatch, uint8_t winner)
 {
   if (typeOfMatch == TYPE_OF_MATCH_DOUBLES)
   {

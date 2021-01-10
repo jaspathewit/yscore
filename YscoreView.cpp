@@ -135,41 +135,23 @@ void YscoreView::updateTime()
 void YscoreView::drawScreenStart()
 {
   _display.setFont(SansSerif_8pt);
-  _display.printAt(0, 0, _resource.getCopyright(_model->getLocal()));
+  _display.printAt(_display.xMin, _display.yMin, _resource.getLblCopyright(_model->getLocal()));
 
   // draw the logo
-  _display.drawImageAt(0, 10, &img_BT32x32);
+  _display.drawImageAt(_display.xMin, SCREEN_START_IMAGE_Y, &img_BT32x32);
 
   // draw the name appname
-  _display.drawImageAt(32, 14, &img_AppName63x22);
-
-  // draw the press to start
-  // calculate the total width
-  // uint8_t totalWidth;
-  // _display.setFont(MarVoSym_10pt);
-  // totalWidth += _display.getPrintWidth(LBL_LEFTRIGHT_ARROW);
-  // _display.setFont(SansSerif_10pt);
-  // totalWidth += _display.getPrintWidth("Commencer")
-  // totalWidth += _display.getPrintWidth("Paramètres")
-  // _display.setFont(MarVoSym_10pt);
-  // uint8_t y = (_display.yMax - 2) - _display.getFontHeight();
-  // tPoint pos = _display.printAt(SCREEN_BUTTON_LEFT_MARGIN_X + SCREEN_MARGIN_OFFSET_X,
-  //                               50, LBL_UPDOWN_ARROW);
+  _display.drawImageAt(SCREEN_START_TEXT_X, 14, &img_AppName63x22);
 
   _display.setFont(MarVoSym_8pt);
-  tPoint pos = _display.printAt(30, 43, LBL_RIGHT_ARROW);
+  tPoint pos = _display.printAt(SCREEN_START_TEXT_X, SCREEN_START_TEXT_Y, LBL_RIGHT_ARROW);
   _display.setFont(SansSerif_8pt);
-  pos = _display.printAt(pos.x, 43, " Commencer");
+  pos = _display.printAt(pos.x, SCREEN_START_TEXT_Y, _resource.getLblPlay(_model->getLocal()));
+  uint8_t y = pos.y + SCREEN_START_TEXT_OFFSET_Y;
   _display.setFont(MarVoSym_8pt);
-  uint8_t y = pos.y;
-  pos = _display.printAt(30, y, LBL_LEFT_ARROW);
+  pos = _display.printAt(SCREEN_START_TEXT_X, y, LBL_LEFT_ARROW);
   _display.setFont(SansSerif_8pt);
-  pos = _display.printAt(pos.x, y, " Reglages");
-
-  // _display.printCenteredAt(pos.y, _resource.getPressAButton(_model->getLocal()));
-
-  // _display.setFont(SansSerif_10pt);
-  // _display.printCenteredAt(50, _resource.getPressAButton(_model->getLocal()));
+  pos = _display.printAt(pos.x, y, _resource.getLblSettings(_model->getLocal()));
 
   drawButtonLabelsLeft();
 }
@@ -274,7 +256,7 @@ void YscoreView::drawScreenAbout()
   _display.drawImageAt(33, SCREEN_MENU_MARGIN_Y + 4, &img_AppName54x20);
 
   _display.setFont(SansSerif_12pt);
-  tPoint pos = _display.printCenteredAt(36, _resource.getFindUsAt(_model->getLocal()));
+  tPoint pos = _display.printCenteredAt(36, _resource.getLblFindUsAt(_model->getLocal()));
 
   _display.setFont(SansSerif_8pt);
   _display.printCenteredAt(pos.y, LBL_WEB_ADDRESS);
@@ -481,7 +463,7 @@ void YscoreView::drawWinningPlayers()
   _display.setFont(SansSerif_12pt);
   _display.printAt(trophyPos.x + SCREEN_MARGIN_OFFSET_X,
                    pos.y + SCREEN_MARGIN_OFFSET_Y,
-                   _resource.getPlayer(_model->getLocal(), _model->getTypeOfMatch(), winner));
+                   _resource.getLblPlayer(_model->getLocal(), _model->getTypeOfMatch(), winner));
 }
 
 // draw the Stats grid
@@ -572,7 +554,7 @@ void YscoreView::drawRestart()
                                 50, LBL_UPDOWN_ARROW);
 
   _display.setFont(SansSerif_10pt);
-  _display.printAt(pos.x, 50, _resource.getRestart(_model->getLocal()));
+  _display.printAt(pos.x, 50, _resource.getLblRestart(_model->getLocal()));
 }
 
 // draw the button labels

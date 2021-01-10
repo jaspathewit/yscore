@@ -37,6 +37,12 @@ limitations under the License.
 #ifndef YScoreView_h
 #define YScoreView_h
 
+// start screen
+#define SCREEN_START_IMAGE_Y 14
+#define SCREEN_START_TEXT_X 32
+#define SCREEN_START_TEXT_Y 40
+#define SCREEN_START_TEXT_OFFSET_Y 2
+
 // Screen dimensions and locations
 #define SCREEN_MENU_MARGIN_Y 9
 

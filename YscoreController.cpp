@@ -209,15 +209,21 @@ void YscoreController::performAction()
 
   // update the current state of the buttons
   int8_t changed = updateButtonStates();
+
+  // if there was no button state change
   if (BUTTONS_STATE_NO_CHANGE == changed)
   {
+    // update the _performActionCounter if we are not in the Update app state
     // check if no button has been pressed for a while
-    _performActionCount++;
+    if (_model->getAppState() != APP_STATE_UPDATE)
+    {
+      _performActionCount++;
+    }
 
-    //_display.printDebug(_performActionCount);
+    // _display.printDebug(_performActionCount);
 
     // we need to go to sleep if we are not updating
-    if (_model->getAppState() != APP_STATE_UPDATE && _performActionCount > SLEEP_THRESHHOLD)
+    if (_performActionCount > SLEEP_THRESHHOLD)
     {
       _performActionCount = 0;
       // turn off the display and go to sleep

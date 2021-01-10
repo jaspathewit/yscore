@@ -231,6 +231,7 @@ public:
   void incHandedness();
   void decHandedness();
   uint8_t getHandedness();
+  void setHandedness(uint8_t handedness);
 
   void incLocal();
   void decLocal();

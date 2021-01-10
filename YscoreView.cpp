@@ -153,7 +153,15 @@ void YscoreView::drawScreenStart()
   _display.setFont(SansSerif_8pt);
   pos = _display.printAt(pos.x, y, _resource.getLblSettings(_model->getLocal()));
 
-  drawButtonLabelsLeft();
+  // take into account the handedness
+  if (_model->getHandedness() == HANDEDNESS_RIGHT)
+  {
+    drawButtonLabelsLeft();
+  }
+  else
+  {
+    drawButtonLabelsRight();
+  }
 }
 
 // draw the playing screen
@@ -567,15 +575,31 @@ void YscoreView::drawButtonLabels()
 // draw the button labels
 void YscoreView::drawButtonLabelsLeft()
 {
-  _display.drawImageAt(_display.xMin, SCREEN_BUTTON_TOP_Y, &img_ArrowRight);
-  _display.drawImageAt(_display.xMin, SCREEN_BUTTON_BOTTOM_Y, &img_ArrowLeft);
+  if (_model->getHandedness() == HANDEDNESS_RIGHT)
+  {
+    _display.drawImageAt(_display.xMin, SCREEN_BUTTON_TOP_Y, &img_ArrowRight);
+    _display.drawImageAt(_display.xMin, SCREEN_BUTTON_BOTTOM_Y, &img_ArrowLeft);
+  }
+  else
+  {
+    _display.drawImageAt(_display.xMin, SCREEN_BUTTON_TOP_Y, &img_ArrowUp);
+    _display.drawImageAt(_display.xMin, SCREEN_BUTTON_BOTTOM_Y, &img_ArrowDown);
+  }
 }
 
 // draw the button labels
 void YscoreView::drawButtonLabelsRight()
 {
-  _display.drawImageAt(SCREEN_BUTTON_RIGHT_MARGIN_X + 2, SCREEN_BUTTON_TOP_Y, &img_ArrowUp);
-  _display.drawImageAt(SCREEN_BUTTON_RIGHT_MARGIN_X + 2, SCREEN_BUTTON_BOTTOM_Y, &img_ArrowDown);
+  if (_model->getHandedness() == HANDEDNESS_RIGHT)
+  {
+    _display.drawImageAt(SCREEN_BUTTON_RIGHT_MARGIN_X + 2, SCREEN_BUTTON_TOP_Y, &img_ArrowUp);
+    _display.drawImageAt(SCREEN_BUTTON_RIGHT_MARGIN_X + 2, SCREEN_BUTTON_BOTTOM_Y, &img_ArrowDown);
+  }
+  else
+  {
+    _display.drawImageAt(SCREEN_BUTTON_RIGHT_MARGIN_X + 2, SCREEN_BUTTON_TOP_Y, &img_ArrowRight);
+    _display.drawImageAt(SCREEN_BUTTON_RIGHT_MARGIN_X + 2, SCREEN_BUTTON_BOTTOM_Y, &img_ArrowLeft);
+  }
 }
 
 // draw the battery icon

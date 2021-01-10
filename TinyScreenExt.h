@@ -55,6 +55,7 @@ public:
      void off(void);
      void standByMode(void);
      void setFlip(uint8_t flip);
+     void setSwap(uint8_t swap);
      void setBrightness(uint8_t);
 
      // hardware Buttons
@@ -116,6 +117,9 @@ private:
 
      // info about the _display
      uint8_t _cursorX, _cursorY;
+
+     // are the buttons swapped vertically
+     uint8_t _swapButtons = 0;
 
      // info about the current font
      uint8_t _fontHeight, _fontFirstCh, _fontLastCh;

@@ -613,10 +613,10 @@ uint8_t YscoreModel::getLocal()
 // increments the current handedness
 void YscoreModel::incHandedness()
 {
-  if (_handedness < HANDEDNESS_LEFT)
+  uint8_t h = getHandedness();
+  if (h < HANDEDNESS_LEFT)
   {
-    _handedness++;
-    _view->update();
+    setHandedness(h + 1);
   }
   return;
 }
@@ -624,10 +624,10 @@ void YscoreModel::incHandedness()
 // decrements the local
 void YscoreModel::decHandedness()
 {
-  if (_handedness > HANDEDNESS_RIGHT)
+  uint8_t h = getHandedness();
+  if (h > HANDEDNESS_RIGHT)
   {
-    _handedness--;
-    _view->update();
+    setHandedness(h - 1);
   }
   return;
 }
@@ -636,6 +636,20 @@ void YscoreModel::decHandedness()
 uint8_t YscoreModel::getHandedness()
 {
   return _handedness;
+}
+
+// sets the handedness
+void YscoreModel::setHandedness(uint8_t handedness)
+{
+  if (_handedness == handedness)
+  {
+    return;
+  }
+
+  _handedness = handedness;
+  // set the button swap if required
+  _display.setSwap(_handedness == HANDEDNESS_LEFT);
+  _view->update();
 }
 
 //////////////////////////////////////////////////////////////////

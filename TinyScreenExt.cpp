@@ -125,9 +125,16 @@ void TinyScreenExt::detachInterupts(void)
 }
 
 // Sets if the Screen of the TinyScreen is fliped vertically
+// This also flips the "horisontal" sense of the buttons
 void TinyScreenExt::setFlip(uint8_t f)
 {
     _display.setFlip(f);
+}
+
+// Sets if the buttons of the TinyScreen are swapped vertically
+void TinyScreenExt::setSwap(uint8_t f)
+{
+    _swapButtons = f;
 }
 
 //sets main current level, valid levels are 0-15
@@ -312,7 +319,18 @@ size_t TinyScreenExt::write(uint8_t ch)
 // get the state of all the buttons
 uint8_t TinyScreenExt::getButtons(void)
 {
-    return _display.getButtons();
+    uint8_t buttons = _display.getButtons();
+
+    if (_swapButtons)
+    {
+        uint8_t swapped = 0;
+        swapped |= ((buttons & TSButtonUpperLeft) << 1);
+        swapped |= ((buttons & TSButtonUpperRight) >> 1);
+        swapped |= ((buttons & TSButtonLowerLeft) << 3);
+        swapped |= ((buttons & TSButtonLowerRight) >> 3);
+        buttons = swapped;
+    }
+    return buttons;
 }
 
 // Get the battery voltage as a scaled value

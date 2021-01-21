@@ -186,6 +186,50 @@ const tSelectionList YscoreResourceProvider::getSelectionListHandedness(uint8_t 
   return result;
 }
 
+/////////////////////////
+// Images
+/////////////////////////
+
+// get the image for the direction of serve
+// who US THEM
+// Side 0 right 1 left
+const tImage *YscoreResourceProvider::getImgServe(uint8_t who, uint8_t side)
+{
+  return IMG_SERVE[who][side];
+}
+
+// get the 4 images for the players
+// Type of game
+// Position
+// images are;
+// 0 1
+// 2 3
+const tImage **YscoreResourceProvider::getImgPlayers(uint8_t typeOfMatch, uint8_t position)
+{
+  return IMG_PLAYER_DOUBLES[position];
+}
+
+// get the 4 images for the stats players
+// Type of game
+// winner
+// images are;
+// 0 1
+// 2 3
+const tImage **YscoreResourceProvider::getImgStatsPlayers(uint8_t typeOfMatch, uint8_t winner)
+{
+  return IMG_STATS_PLAYER_DOUBLES[winner];
+}
+
+// get the 2 images for the winner players
+// Type of game
+// winner
+// images are;
+// 0 1
+const tImage **YscoreResourceProvider::getImgWiningPlayers(uint8_t typeOfMatch, uint8_t winner)
+{
+  return IMG_WINNING_PLAYER_DOUBLES[winner];
+}
+
 // update the view according to the state
 // void YscoreView::update()
 // {

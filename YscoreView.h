@@ -140,12 +140,12 @@ limitations under the License.
 
 // "text" when it is in MarVoSym font are the
 // Up Down left and right arrows
-#define LBL_UP_ARROW "C"
-#define LBL_DOWN_ARROW "D"
-#define LBL_LEFT_ARROW "A"
-#define LBL_RIGHT_ARROW "B"
+// #define LBL_UP_ARROW "C"
+// #define LBL_DOWN_ARROW "D"
+// #define LBL_LEFT_ARROW "A"
+// #define LBL_RIGHT_ARROW "B"
 
-#define LBL_UPDOWN_ARROW "CD"
+// #define LBL_UPDOWN_ARROW "CD"
 
 // Player Names
 // static char *LBL_PLAYER[] = {LBL_THEM, LBL_US, LBL_NONE};

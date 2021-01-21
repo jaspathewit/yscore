@@ -408,44 +408,44 @@ void YscoreView::drawPlayingServe()
 
   // get the points of the team playing
   uint8_t points = _model->getPoints(serving);
-  _display.drawImageAt(SCREEN_SERVE_X, SCREEN_SERVE_Y, IMG_SERVE[serving][points % 2]);
+  _display.drawImageAt(SCREEN_SERVE_X, SCREEN_SERVE_Y, _resource.getImgServe(serving, points % 2));
 }
 
 // draw the players playing the game
 void YscoreView::drawPlayingPlayers()
 {
-  // get the Player details
-  uint8_t playerImges = _model->getPlayerPosition();
+  // get the Player images
+  const tImage **playerImages = _resource.getImgPlayers(_model->getTypeOfMatch(), _model->getPlayerPosition());
 
   _display.drawImageAt(SCREEN_PLAYER_LEFT_X,
-                       SCREEN_PLAYER_TOP_Y, IMG_PLAYER_DOUBLES[playerImges][0]);
+                       SCREEN_PLAYER_TOP_Y, playerImages[0]);
 
   _display.drawImageAt(SCREEN_PLAYER_RIGHT_X,
-                       SCREEN_PLAYER_TOP_Y, IMG_PLAYER_DOUBLES[playerImges][1]);
+                       SCREEN_PLAYER_TOP_Y, playerImages[1]);
 
   _display.drawImageAt(SCREEN_PLAYER_LEFT_X,
-                       SCREEN_PLAYER_BOTTOM_Y, IMG_PLAYER_DOUBLES[playerImges][2]);
+                       SCREEN_PLAYER_BOTTOM_Y, playerImages[2]);
 
   _display.drawImageAt(SCREEN_PLAYER_RIGHT_X,
-                       SCREEN_PLAYER_BOTTOM_Y, IMG_PLAYER_DOUBLES[playerImges][3]);
+                       SCREEN_PLAYER_BOTTOM_Y, playerImages[3]);
 }
 
 // draw the players stats
 void YscoreView::drawStatsPlayers()
 {
-  uint8_t winner = _model->getWinner();
+  const tImage **playerImages = _resource.getImgStatsPlayers(_model->getTypeOfMatch(), _model->getWinner());
 
   _display.drawImageAt(SCREEN_STATS_PLAYER_LEFT_X,
-                       SCREEN_STATS_PLAYER_TOP_Y, IMG_STATS_PLAYER[winner][0]);
+                       SCREEN_STATS_PLAYER_TOP_Y, playerImages[0]);
 
   _display.drawImageAt(SCREEN_STATS_PLAYER_RIGHT_X,
-                       SCREEN_STATS_PLAYER_TOP_Y, IMG_STATS_PLAYER[winner][1]);
+                       SCREEN_STATS_PLAYER_TOP_Y, playerImages[1]);
 
   _display.drawImageAt(SCREEN_STATS_PLAYER_LEFT_X,
-                       SCREEN_STATS_PLAYER_BOTTOM_Y, IMG_STATS_PLAYER[winner][2]);
+                       SCREEN_STATS_PLAYER_BOTTOM_Y, playerImages[2]);
 
   _display.drawImageAt(SCREEN_STATS_PLAYER_RIGHT_X,
-                       SCREEN_STATS_PLAYER_BOTTOM_Y, IMG_STATS_PLAYER[winner][3]);
+                       SCREEN_STATS_PLAYER_BOTTOM_Y, playerImages[3]);
 }
 
 // draw the winning players of the match
@@ -458,15 +458,17 @@ void YscoreView::drawWinningPlayers()
                                           &img_Trophy);
 
   uint8_t winner = _model->getWinner();
+  const tImage **winnerPlayers = _resource.getImgWiningPlayers(_model->getTypeOfMatch(), winner);
+
   // draw the players
   tPoint pos = _display.drawImageAt(trophyPos.x + SCREEN_MARGIN_OFFSET_X,
                                     SCREEN_MENU_MARGIN_Y + SCREEN_MARGIN_OFFSET_Y,
-                                    IMG_WINNING_PLAYER[winner][0]);
+                                    winnerPlayers[0]);
 
   // draw the players
   pos = _display.drawImageAt(pos.x + SCREEN_MARGIN_OFFSET_X,
                              SCREEN_MENU_MARGIN_Y + SCREEN_MARGIN_OFFSET_Y,
-                             IMG_WINNING_PLAYER[winner][1]);
+                             winnerPlayers[1]);
 
   _display.setFont(SansSerif_12pt);
   _display.printAt(trophyPos.x + SCREEN_MARGIN_OFFSET_X,

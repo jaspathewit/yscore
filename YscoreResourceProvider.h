@@ -113,12 +113,12 @@ static const tImage *IMG_PLAYER_DOUBLES[][4] = {{&img_Happy_blue, &img_Happy_gre
                                                 {&img_Happy_green, &img_Happy_blue, &img_Sad_yellow, &img_Sad_red},
                                                 {&img_Sad_green, &img_Sad_blue, &img_Happy_yellow, &img_Happy_red}};
 
-static const tImage *IMG_WINNING_PLAYER[][2] = {{&img_Happy_blue, &img_Happy_green},
-                                                {&img_Happy_red, &img_Happy_yellow}};
+static const tImage *IMG_WINNING_PLAYER_DOUBLES[][2] = {{&img_Happy_blue, &img_Happy_green},
+                                                        {&img_Happy_red, &img_Happy_yellow}};
 
-static const tImage *IMG_STATS_PLAYER[][4] = {{&img_Happy_blue, &img_Happy_green, &img_Sad_red, &img_Sad_yellow},
-                                              {&img_Sad_blue, &img_Sad_green, &img_Happy_red, &img_Happy_yellow},
-                                              {&img_Happy_blue, &img_Happy_green, &img_Happy_red, &img_Happy_yellow}};
+static const tImage *IMG_STATS_PLAYER_DOUBLES[][4] = {{&img_Happy_blue, &img_Happy_green, &img_Sad_red, &img_Sad_yellow},
+                                                      {&img_Sad_blue, &img_Sad_green, &img_Happy_red, &img_Happy_yellow},
+                                                      {&img_Happy_blue, &img_Happy_green, &img_Happy_red, &img_Happy_yellow}};
 
 // static const char* LBL_SERVE[][2] = {{">", "<"}, {"<", ">"}};
 
@@ -336,6 +336,11 @@ public:
   const tSelectionList getSelectionListLocal(uint8_t local);
   const char *getTitleHandedness(uint8_t local);
   const tSelectionList getSelectionListHandedness(uint8_t local);
+
+  const tImage *getImgServe(uint8_t who, uint8_t side);
+  const tImage **getImgPlayers(uint8_t typeOfMatch, uint8_t position);
+  const tImage **getImgStatsPlayers(uint8_t typeOfMatch, uint8_t winnar);
+  const tImage **getImgWiningPlayers(uint8_t typeOfMatch, uint8_t winnar);
 
 private:
 };

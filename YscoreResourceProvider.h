@@ -113,6 +113,15 @@ static const tImage *IMG_PLAYER_DOUBLES[][4] = {{&img_Happy_blue, &img_Happy_gre
                                                 {&img_Happy_green, &img_Happy_blue, &img_Sad_yellow, &img_Sad_red},
                                                 {&img_Sad_green, &img_Sad_blue, &img_Happy_yellow, &img_Happy_red}};
 
+static const tImage *IMG_PLAYER_SINGLES[][4] = {{&img_Happy_green, &img_Blank_player, &img_Blank_player, &img_Sad_yellow},
+                                                {&img_Sad_green, &img_Blank_player, &img_Blank_player, &img_Happy_yellow},
+                                                {&img_Happy_green, &img_Blank_player, &img_Blank_player, &img_Sad_yellow},
+                                                {&img_Blank_player, &img_Sad_green, &img_Happy_yellow, &img_Blank_player},
+                                                {&img_Blank_player, &img_Happy_green, &img_Sad_yellow, &img_Blank_player},
+                                                {&img_Sad_green, &img_Blank_player, &img_Blank_player, &img_Happy_yellow},
+                                                {&img_Blank_player, &img_Happy_green, &img_Sad_yellow, &img_Blank_player},
+                                                {&img_Blank_player, &img_Sad_green, &img_Happy_yellow, &img_Blank_player}};
+
 static const tImage *IMG_WINNING_PLAYER_DOUBLES[][2] = {{&img_Happy_blue, &img_Happy_green},
                                                         {&img_Happy_red, &img_Happy_yellow}};
 
@@ -293,17 +302,6 @@ static const char *LBL_TITLE_LOCAL[] = {LBL_EN_TITLE_LOCAL,
                                         LBL_DE_TITLE_LOCAL};
 
 static const char *SETTING_LOCAL[] = {"English", "Nederlands", "Français", "Deutsch"};
-
-// Labels for the buttons
-// #define LBL_BUT_MODE "MODE"
-// #define LBL_BUT_BACK "BACK"
-// #define LBL_BUT_THEM "THEM"
-// #define LBL_BUT_US "US"
-
-// create the labels for the
-// #define LBL_MENU_PLAY "Play"
-// #define LBL_MENU_STATS "Stats"
-// #define LBL_MENU_RESTART "Restart"
 
 // Class provides the resource provider functionality.
 class YscoreResourceProvider

@@ -302,15 +302,34 @@ inline bool YscoreModel::hasServe(uint8_t who, uint8_t index)
 }
 
 // sets the uint8_t serve bit of the scorepad row at the given index off or on
-// depending on who has the serve
+// depending on who has the serve and the type of match
 void YscoreModel::setServe(uint8_t who)
+{
+  if (_typeOfMatch == TYPE_OF_MATCH_SINGLES)
+  {
+    setServeSingles(who);
+  }
+  else
+  {
+    setServeDoubles(who);
+  }
+  return;
+}
+
+// sets the uint8_t serve bit of the scorepad row at the given index off or on
+// depending on who has the serve
+void YscoreModel::setServeDoubles(uint8_t who)
 {
   if (who == US)
   {
     // record that US now has the serve
     _scorepad[_scorepadIdx][PLAYER] |= MASK_1ST_BIT_ON;
-    // if we are not at the start of the match
-    if (_scorepadIdx != 0)
+    // if we are at the start of the match or game
+    if (_scorepadIdx == 0 || isEndOfGame(_scorepadIdx - 1))
+    {
+      _scorepad[_scorepadIdx][PLAYER] &= MASK_2ND_BIT_OFF;
+    }
+    else
     {
       // check if we had the serve on the previous point
       bool hadServe = hasServe(US, _scorepadIdx - 1);
@@ -324,8 +343,12 @@ void YscoreModel::setServe(uint8_t who)
   else
   {
     _scorepad[_scorepadIdx][PLAYER] &= MASK_1ST_BIT_OFF;
-    // if we are not at the start of the match
-    if (_scorepadIdx != 0)
+    // if we are at the start of the match or game
+    if (_scorepadIdx == 0 || isEndOfGame(_scorepadIdx - 1))
+    {
+      _scorepad[_scorepadIdx][PLAYER] &= MASK_3RD_BIT_OFF;
+    }
+    else
     {
       // check if they had the serve on the previous point
       bool hadServe = hasServe(THEM, _scorepadIdx - 1);
@@ -334,6 +357,42 @@ void YscoreModel::setServe(uint8_t who)
         // toggle the position of the players
         _scorepad[_scorepadIdx][PLAYER] ^= MASK_3RD_BIT_ON;
       }
+    }
+  }
+}
+
+// sets the uint8_t serve bit of the scorepad row at the given index off or on
+// depending on who has the serve, basically the possition of the players
+// always switches
+void YscoreModel::setServeSingles(uint8_t who)
+{
+  if (who == US)
+  {
+    // record that US now has the serve
+    _scorepad[_scorepadIdx][PLAYER] |= MASK_1ST_BIT_ON;
+    // if we are at the start of the match or game
+    if (_scorepadIdx == 0 || isEndOfGame(_scorepadIdx - 1))
+    {
+      _scorepad[_scorepadIdx][PLAYER] &= MASK_2ND_BIT_OFF;
+    }
+    else
+    {
+      // toggle the position of the players
+      _scorepad[_scorepadIdx][PLAYER] ^= MASK_2ND_BIT_ON;
+    }
+  }
+  else
+  {
+    _scorepad[_scorepadIdx][PLAYER] &= MASK_1ST_BIT_OFF;
+    // if we at the start of the match or game
+    if (_scorepadIdx == 0 || isEndOfGame(_scorepadIdx - 1))
+    {
+      _scorepad[_scorepadIdx][PLAYER] &= MASK_3RD_BIT_OFF;
+    }
+    else
+    {
+      // toggle the position of the players
+      _scorepad[_scorepadIdx][PLAYER] ^= MASK_3RD_BIT_ON;
     }
   }
 }
@@ -361,12 +420,16 @@ void YscoreModel::checkGameWon()
   {
     // mark the current scorepad as an end of game
     endOfGameOn(_scorepadIdx);
+
     // create a new scorepad entry for the start of the game
     copyScorepadNewGameRowTo(_scorepadIdx, _scorepadIdx + 1);
-    // increment the number of games in the new row
-    incGames(_scorepadIdx + 1, whoToUpdate);
     // move to the new score pad entry
     _scorepadIdx++;
+
+    setServe(whoToUpdate);
+
+    // increment the number of games in the new row
+    incGames(_scorepadIdx, whoToUpdate);
 
     checkMatchWon();
   }

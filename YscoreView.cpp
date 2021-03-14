@@ -408,12 +408,15 @@ void YscoreView::drawPlayingServe()
 
   // get the points of the team playing
   uint8_t points = _model->getPoints(serving);
+
   _display.drawImageAt(SCREEN_SERVE_X, SCREEN_SERVE_Y, _resource.getImgServe(serving, points % 2));
 }
 
 // draw the players playing the game
 void YscoreView::drawPlayingPlayers()
 {
+  _display.printDebug(_model->getPlayerPosition());
+
   // get the Player images
   const tImage **playerImages = _resource.getImgPlayers(_model->getTypeOfMatch(), _model->getPlayerPosition());
 

@@ -206,6 +206,11 @@ const tImage *YscoreResourceProvider::getImgServe(uint8_t who, uint8_t side)
 // 2 3
 const tImage **YscoreResourceProvider::getImgPlayers(uint8_t typeOfMatch, uint8_t position)
 {
+  if (typeOfMatch == TYPE_OF_MATCH_SINGLES)
+  {
+    return IMG_PLAYER_SINGLES[position];
+  }
+
   return IMG_PLAYER_DOUBLES[position];
 }
 

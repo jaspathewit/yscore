@@ -206,6 +206,7 @@ public:
 
   // set the serve for the given player
   void setServe(uint8_t who);
+
   // gets the serve status for the given player
   bool hasServe(uint8_t who);
 
@@ -244,6 +245,12 @@ private:
   void updateViewBattery();
   // update the time view
   void updateViewTime();
+
+  // set the serve for the given players
+  void setServeDoubles(uint8_t who);
+
+  // set the serve for the given player
+  void setServeSingles(uint8_t who);
 
   // check if a game was won
   void checkGameWon();

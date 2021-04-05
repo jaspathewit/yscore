@@ -362,7 +362,7 @@ void YscoreModel::setServeDoubles(uint8_t who)
 }
 
 // sets the uint8_t serve bit of the scorepad row at the given index off or on
-// depending on who has the serve, basically the possition of the players
+// depending on who has the serve, basically the position of the players
 // always switches
 void YscoreModel::setServeSingles(uint8_t who)
 {

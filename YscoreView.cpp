@@ -636,28 +636,17 @@ void YscoreView::printTime(uint8_t hours, uint8_t minutes, uint8_t seconds)
 {
   char buffer[12];
 
-  _display.setFont(SansSerif_10pt);
-
-  tPoint pos = _display.printAt(SCREEN_TIME_X, SCREEN_TIME_Y, LBL_PLAYING_TIME);
-
-  uint8_t days = _display.getDay() - 1;
-
-  // temp for measuring standby time
-  //if (days != 0) {
-  snprintf(buffer, sizeof(buffer), "%02d:%02d:%02d:%02d", days, hours, minutes, seconds);
-  //}
-
-  // if (hours != 0)
-  // {
-  //   snprintf(buffer, sizeof(buffer), "%02d:%02d:%02d", hours, minutes, seconds);
-  // }
-  // else
-  // {
-  //   snprintf(buffer, sizeof(buffer), "%02d:%02d", minutes, seconds);
-  // }
+  if (hours != 0)
+  {
+    snprintf(buffer, sizeof(buffer), "%02d:%02d:%02d", hours, minutes, seconds);
+  }
+  else
+  {
+    snprintf(buffer, sizeof(buffer), "%02d:%02d", minutes, seconds);
+  }
 
   _display.setFont(SansSerif_12pt);
-  _display.printCenteredAt(pos.y + 4, buffer);
+  _display.printCenteredAt(SCREEN_TIME_Y, buffer);
 }
 
 ///////////////////////////////////////////////

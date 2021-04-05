@@ -70,19 +70,6 @@ static const char *LBL_SETTINGS[] = {" Settings",
                                      " Réglages",
                                      " Einstellungen"};
 
-// #define LBL_RESTART " Restart "
-
-// #define LBL_SEPARATOR ":"
-// #define LBL_SPACE " "
-// #define LBL_ZERO "0"
-// #define LBL_PERCENT "%"
-
-// define the modifyable labels
-#define LBL_US " US  "
-#define LBL_THEM " THEM"
-#define LBL_NONE " NONE"
-
-#define LBL_YOU "YOU "
 #define LBL_PLAYING_TIME "Time Played"
 
 // "text" when it is in MarVoSym font are the
@@ -96,10 +83,6 @@ static const char *LBL_SETTINGS[] = {" Settings",
 
 #define LBL_UPDOWN_ARROW "CD"
 #define LBL_LEFTRIGHT_ARROW "AB"
-
-// Player Names
-// static char *
-//     LBL_PLAYER[] = {LBL_THEM, LBL_US, LBL_NONE};
 
 static const tImage *IMG_SERVE[][2] = {{&img_Serve_BR, &img_Serve_BL},
                                        {&img_Serve_TL, &img_Serve_TR}};
@@ -209,20 +192,20 @@ static const char *LBL_TITLE_WHO_SERVES[] = {LBL_EN_TITLE_WHO_SERVES,
                                              LBL_FR_TITLE_WHO_SERVES,
                                              LBL_DE_TITLE_WHO_SERVES};
 
-static const char *SETTING_EN_WHO_SERVES_SINGLES[] = {"Them", "Me", "Random"};
-static const char *SETTING_NL_WHO_SERVES_SINGLES[] = {"Hen", "Mij", "Willekeurig"};
-static const char *SETTING_FR_WHO_SERVES_SINGLES[] = {"Eux", "Moi", "Aléatoire"};
-static const char *SETTING_DE_WHO_SERVES_SINGLES[] = {"Sie", "Mich", "Zufällig"};
+static const char *SETTING_EN_WHO_SERVES_SINGLES[] = {"Them", "Me"};
+static const char *SETTING_NL_WHO_SERVES_SINGLES[] = {"Zij", "Mij"};
+static const char *SETTING_FR_WHO_SERVES_SINGLES[] = {"Eux", "Moi"};
+static const char *SETTING_DE_WHO_SERVES_SINGLES[] = {"Sie", "Mich"};
 
 static const char **SETTING_WHO_SERVES_SINGLES[] = {SETTING_EN_WHO_SERVES_SINGLES,
                                                     SETTING_NL_WHO_SERVES_SINGLES,
                                                     SETTING_FR_WHO_SERVES_SINGLES,
                                                     SETTING_DE_WHO_SERVES_SINGLES};
 
-static const char *SETTING_EN_WHO_SERVES_DOUBLES[] = {"Them", "Us", "Random"};
-static const char *SETTING_NL_WHO_SERVES_DOUBLES[] = {"Hen", "Wij", "Willekeurig"};
-static const char *SETTING_FR_WHO_SERVES_DOUBLES[] = {"Eux", "Nous", "Aléatoire"};
-static const char *SETTING_DE_WHO_SERVES_DOUBLES[] = {"Sie", "Wir", "Zufällig"};
+static const char *SETTING_EN_WHO_SERVES_DOUBLES[] = {"Them", "Us"};
+static const char *SETTING_NL_WHO_SERVES_DOUBLES[] = {"Zij", "Wij"};
+static const char *SETTING_FR_WHO_SERVES_DOUBLES[] = {"Eux", "Nous"};
+static const char *SETTING_DE_WHO_SERVES_DOUBLES[] = {"Sie", "Wir"};
 
 static const char **SETTING_WHO_SERVES_DOUBLES[] = {SETTING_EN_WHO_SERVES_DOUBLES,
                                                     SETTING_NL_WHO_SERVES_DOUBLES,

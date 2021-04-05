@@ -51,7 +51,6 @@ limitations under the License.
 // values for settings
 #define WHO_SERVES_THEM 0
 #define WHO_SERVES_US 1
-#define WHO_SERVES_RANDOM 2
 
 #define TYPE_OF_MATCH_DOUBLES 0
 #define TYPE_OF_MATCH_SINGLES 1

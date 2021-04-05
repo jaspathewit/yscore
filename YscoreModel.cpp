@@ -596,7 +596,7 @@ void YscoreModel::saveSettings()
 // increments who serves
 void YscoreModel::incWhoServes()
 {
-  if (_whoServes < WHO_SERVES_RANDOM)
+  if (_whoServes < WHO_SERVES_US)
   {
     _whoServes++;
     _view->update();

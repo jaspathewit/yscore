@@ -50,6 +50,7 @@ void YscoreController::initilise()
 {
   initButtons();
   resetButtonState();
+  _model->loadSettings();
   _model->resetScorepad();
   // _model->setAppState(APP_STATE_ABOUT);
   _model->setAppState(APP_STATE_STARTING);
@@ -587,6 +588,8 @@ void YscoreController::performActionSettingLocal()
 
   if (_buttonStateMode == BUT_STATE_PRESSED)
   {
+    // save any change to the settings
+    _model->saveSettings();
     _model->setAppState(APP_STATE_SETTING_BRIGHTNESS);
     return;
   }
@@ -608,6 +611,8 @@ void YscoreController::performActionSettingHandedness()
 {
   if (_buttonStateBack == BUT_STATE_PRESSED)
   {
+    // save any change to the settings
+    _model->saveSettings();
     _model->setAppState(APP_STATE_ABOUT);
     return;
   }

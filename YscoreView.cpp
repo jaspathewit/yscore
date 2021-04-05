@@ -415,8 +415,6 @@ void YscoreView::drawPlayingServe()
 // draw the players playing the game
 void YscoreView::drawPlayingPlayers()
 {
-  _display.printDebug(_model->getPlayerPosition());
-
   // get the Player images
   const tImage **playerImages = _resource.getImgPlayers(_model->getTypeOfMatch(), _model->getPlayerPosition());
 

@@ -15,7 +15,7 @@ limitations under the License.
 
 */
 
-// #include "IYscoreView.h"
+#include <FlashStorage.h>
 #include "TinyScreenExt.h"
 #include "YscoreViewInterface.h"
 
@@ -149,6 +149,13 @@ const uint8_t DISPLAY_BRIGHTNESS[] = {2, 6, 10, 12, 15};
 // uint8_t buttonStateUs = BUT_STATE_UNPRESSED;
 // uint8_t buttonStateThem = BUT_STATE_UNPRESSED;
 
+// struct for the pesistent storage of the settings
+typedef struct
+{
+  uint8_t handedness;
+  uint8_t local;
+} PersistedSettings;
+
 // Class provides the model functionality.
 class YscoreModel
 {
@@ -217,6 +224,9 @@ public:
   uint8_t getWinner();
 
   // settings
+  void loadSettings();
+  void saveSettings();
+
   void incWhoServes();
   void decWhoServes();
   uint8_t getWhoServes();
@@ -237,6 +247,7 @@ public:
   void incLocal();
   void decLocal();
   uint8_t getLocal();
+  void setLocal(uint8_t local);
 
 private:
   // update the view

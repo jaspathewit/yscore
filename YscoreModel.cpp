@@ -20,6 +20,10 @@ limitations under the License.
 
 #include "YscoreModel.h"
 
+// Reserve a portion of flash memory to store the PersistedSettings and
+// call it "flash_store".
+FlashStorage(flash_store, PersistedSettings);
+
 /*
   Constructor
 */
@@ -556,6 +560,39 @@ void YscoreModel::createSummaryTable()
 // Settings
 //////////////////////////////////////////////////////////////////
 
+// loadSettings loads the settings for the Local and the Handedness from flash storage
+void YscoreModel::loadSettings()
+{
+  // load the settings from the flash storage
+  PersistedSettings settings;
+  settings = flash_store.read();
+
+  setHandedness(settings.handedness);
+  setLocal(settings.local);
+}
+
+// saveSettings saves the settings for the Local and the Handedness to flash storage
+// if the values are different to the values already in the flash storage
+void YscoreModel::saveSettings()
+{
+  // load the persisted settings from the flash storage
+  PersistedSettings settings;
+  settings = flash_store.read();
+
+  uint8_t handedness = getHandedness();
+  uint8_t local = getLocal();
+
+  // if at least one of the settings has changed
+  if (!(settings.handedness == handedness && settings.local == local))
+  {
+    settings.handedness = handedness;
+    settings.local = local;
+
+    // save the settings
+    flash_store.write(settings);
+  }
+}
+
 // increments who serves
 void YscoreModel::incWhoServes()
 {
@@ -671,6 +708,19 @@ void YscoreModel::decLocal()
 uint8_t YscoreModel::getLocal()
 {
   return _local;
+}
+
+// sets the local
+void YscoreModel::setLocal(uint8_t local)
+{
+  if (_local == local)
+  {
+    return;
+  }
+
+  _local = local;
+  // set the button swap if required
+  _view->update();
 }
 
 // increments the current handedness

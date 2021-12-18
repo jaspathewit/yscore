@@ -76,8 +76,10 @@ private:
   void performActionWinning();
   void performActionMatchScore();
   void performActionMatchTime();
+  void performActionMatchBrightness();
   void performActionCurrentScore();
   void performActionCurrentTime();
+  void performActionCurrentBrightness();
   void performActionSettingTypeOfMatch();
   void performActionSettingBrightness();
   void performActionSettingLocal();

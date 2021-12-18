@@ -265,6 +265,9 @@ void YscoreController::performAction()
   case APP_STATE_CURRENT_TIME:
     performActionCurrentTime();
     break;
+  case APP_STATE_CURRENT_BRIGHTNESS:
+    performActionCurrentBrightness();
+    break;
   case APP_STATE_WINNING:
     performActionWinning();
     break;
@@ -273,6 +276,9 @@ void YscoreController::performAction()
     break;
   case APP_STATE_MATCH_TIME:
     performActionMatchTime();
+    break;
+  case APP_STATE_MATCH_BRIGHTNESS:
+    performActionMatchBrightness();
     break;
   case APP_STATE_SETTING_TYPE_OF_MATCH:
     performActionSettingTypeOfMatch();
@@ -442,12 +448,39 @@ void YscoreController::performActionMatchTime()
     return;
   }
 
+  if (_buttonStateMode == BUT_STATE_PRESSED)
+  {
+    _model->setAppState(APP_STATE_MATCH_BRIGHTNESS);
+    return;
+  }
+
   // us or them restart
   if (_buttonStateUs == BUT_STATE_PRESSED || _buttonStateThem == BUT_STATE_PRESSED)
   {
     _model->setAppState(APP_STATE_SETTING_SERVE);
     _model->resetScorepad();
     return;
+  }
+}
+
+// perform the action for the APP_STATE_MATCH_BRIGHTNESS
+void YscoreController::performActionMatchBrightness()
+{
+  if (_buttonStateBack == BUT_STATE_PRESSED)
+  {
+    _model->setAppState(APP_STATE_MATCH_TIME);
+    return;
+  }
+
+  // them
+  if (_buttonStateUs == BUT_STATE_PRESSED)
+  {
+    _model->incBrightness();
+  }
+  // us
+  if (_buttonStateThem == BUT_STATE_PRESSED)
+  {
+    _model->decBrightness();
   }
 }
 
@@ -478,9 +511,16 @@ void YscoreController::performActionCurrentScore()
 // perform the action for the APP_STATE_CURRENT_TIME
 void YscoreController::performActionCurrentTime()
 {
+
   if (_buttonStateBack == BUT_STATE_PRESSED)
   {
     _model->setAppState(APP_STATE_CURRENT_SCORE);
+    return;
+  }
+
+  if (_buttonStateMode == BUT_STATE_PRESSED)
+  {
+    _model->setAppState(APP_STATE_CURRENT_BRIGHTNESS);
     return;
   }
 
@@ -490,6 +530,27 @@ void YscoreController::performActionCurrentTime()
     _model->setAppState(APP_STATE_SETTING_SERVE);
     _model->resetScorepad();
     return;
+  }
+}
+
+// perform the action for the APP_STATE_CURRENT_BRIGHTNESS
+void YscoreController::performActionCurrentBrightness()
+{
+  if (_buttonStateBack == BUT_STATE_PRESSED)
+  {
+    _model->setAppState(APP_STATE_CURRENT_TIME);
+    return;
+  }
+
+  // them
+  if (_buttonStateUs == BUT_STATE_PRESSED)
+  {
+    _model->incBrightness();
+  }
+  // us
+  if (_buttonStateThem == BUT_STATE_PRESSED)
+  {
+    _model->decBrightness();
   }
 }
 

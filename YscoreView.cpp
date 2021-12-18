@@ -62,6 +62,9 @@ void YscoreView::update()
   case APP_STATE_CURRENT_TIME:
     drawScreenMatchTime();
     break;
+  case APP_STATE_CURRENT_BRIGHTNESS:
+    drawScreenSettingBrightness();
+    break;
   case APP_STATE_WINNING:
     drawScreenWinning();
     break;
@@ -72,6 +75,9 @@ void YscoreView::update()
     break;
   case APP_STATE_MATCH_TIME:
     drawScreenMatchTime();
+    break;
+  case APP_STATE_MATCH_BRIGHTNESS:
+    drawScreenSettingBrightness();
     break;
   case APP_STATE_SETTING_TYPE_OF_MATCH:
     drawScreenSettingTypeOfMatch();

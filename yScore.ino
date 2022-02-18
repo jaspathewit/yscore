@@ -22,12 +22,12 @@ limitations under the License.
 // #include <Wire.h>
 // #include <SPI.h>
 #include <stdlib.h>
+#include <TinyScreen.h>
 
 #include "yScore.h"
 #include "YscoreView.h"
 #include "YscoreModel.h"
 #include "YscoreController.h"
-#include "TinyScreen.h"
 #include "TinyScreenExt.h"
 
 //Get the display to be used
